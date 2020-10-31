@@ -31,8 +31,5 @@ navigation = ['navigation', 'go to', 'add stop', 'guidance']
 
 ac = ['a/c', 'temperature', 'climate control', 'defroster', 'air', 'fan']
 
-total = 0
-for row in sheet.rows:
-    total += 1
-
-print(total)
+#determine the cases of the media center
+for 
