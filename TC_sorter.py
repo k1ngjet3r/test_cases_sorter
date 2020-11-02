@@ -92,3 +92,4 @@ for row in sheet.rows:
 
 # Save the file with the name
 wb.save('Sorted_cases_W45.xlsx')
+print('DONE')
