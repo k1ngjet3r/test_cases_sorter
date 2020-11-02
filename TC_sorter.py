@@ -8,8 +8,18 @@ def matcher(keywords, sentance):
     for key in keywords:
         num_slices = int(len(sentance.value)) + 1 - int(len(key))
         for i in range(num_slices):
-            if sentance.value[i: i + len(key)] == key:
+            if (sentance.value[i: i + len(key)]).lower() == key:
                 return True
+    return False
+
+# Matcher_2 matching the word by spliting the string on whitespace
+
+
+def matcher_2(keywords, sentance):
+    word_list = sentance.split()
+    for key in keywords:
+        if key in word_list:
+            return True
     return False
 
 

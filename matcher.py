@@ -7,7 +7,17 @@ def matcher(keywords, sentance):
     return False
 
 
-sen = 'hello, my name is jeter'
-keywords = ['I', 'you']
+def matcher_2(keywords, sentance):
+    word_list = sentance.split()
+    for key in keywords:
+        if key in word_list:
+            return True
+    return False
+
+
+sen = 'hello, my name is Pair'
+keywords = ['I', 'air']
 
 print(matcher(keywords, sen))
+
+print(matcher_2(keywords, sen))
