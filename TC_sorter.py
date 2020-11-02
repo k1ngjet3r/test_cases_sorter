@@ -27,7 +27,7 @@ wb = Workbook()
 sorted_cases = wb.active
 # Adding worksheets for different categories
 categories = ['Button', 'Call(Sign Out)', 'CallSMS', 'Media Center',
-               , 'Navigation', 'HVAC', 'Others']
+              'Navigation', 'HVAC', 'Others']
 for category in categories:
     wb.create_sheet(category, int(categories.index(category)))
 
@@ -36,7 +36,7 @@ sign_out = ["user is signed out",
             "signout the google account", "sign out the google account"]
 
 call_SMS = ['call', 'phone', 'message',
-            'reply', 'text', 'sms', 'dial', 'Message', 'Text', 'Send', 'Call', 'Dial']
+            'reply', 'text', 'sms', 'dial', 'Message', 'Text', 'Send', 'Call', 'Dial', 'Dail', 'dail']
 
 media = ['play', 'pause', 'next', 'previous',
          'volume', 'music', 'AM', 'FM', 'radio', 'news', 'Tune', 'Play', 'Bluetooth']
@@ -46,7 +46,7 @@ projection = ['projection', 'Projection']
 hotspot = ['hotspot']
 
 navigation = ['navigation', 'go to', 'add stop', 'guidance',
-              'how far', 'take me', 'navigate', 'address', 'traffic', 'add stop']
+              'how far', 'take me', 'navigate', 'address', 'traffic', 'add stop', 'add stop', 'Navigation']
 
 ac = ['a/c', 'temperature', 'climate control',
       'defroster', 'air', 'fan', 'A/C', 'Air', 'Temperature']
@@ -91,4 +91,4 @@ for row in sheet.rows:
         wb['Others'].append(cell_data)
 
 # Save the file with the name
-wb.save('sorted_test_cases.xlsx')
+wb.save('Sorted_cases_W45.xlsx')
