@@ -27,7 +27,7 @@ wb = Workbook()
 sorted_cases = wb.active
 # Adding worksheets for different categories
 categories = ['Button', 'Call(Sign Out)', 'CallSMS', 'Media Center',
-              'Projection', 'Phone as Hotspot', 'Navigation', 'HVAC', 'Others']
+               , 'Navigation', 'HVAC', 'Others']
 for category in categories:
     wb.create_sheet(category, int(categories.index(category)))
 
@@ -36,7 +36,7 @@ sign_out = ["user is signed out",
             "signout the google account", "sign out the google account"]
 
 call_SMS = ['call', 'phone', 'message',
-            'reply', 'text', 'sms', 'dail', 'Message', 'Text', 'Send', 'Call', 'Dail']
+            'reply', 'text', 'sms', 'dial', 'Message', 'Text', 'Send', 'Call', 'Dial']
 
 media = ['play', 'pause', 'next', 'previous',
          'volume', 'music', 'AM', 'FM', 'radio', 'news', 'Tune', 'Play', 'Bluetooth']
@@ -67,6 +67,14 @@ for row in sheet.rows:
     if matcher(press_button, row[2]) == True:
         wb['Button'].append(cell_data)
 
+    # For callsms-related cases
+    elif (matcher(call_SMS, row[1]) == True or matcher(call_SMS, row[2]) == True) and matcher(sign_out, row[1]) != True:
+        wb['CallSMS'].append(cell_data)
+
+    # For call(sign out)-related cases
+    elif (matcher(call_SMS, row[1]) == True or matcher(call_SMS, row[2]) == True) and matcher(sign_out, row[1]) == True:
+        wb['Call(Sign Out)'].append(cell_data)
+
     # For HVAC-related cases
     elif (matcher(ac, row[1]) == True or matcher(ac, row[2]) == True) and matcher(sign_out, row[1]) != True:
         wb['HVAC'].append(cell_data)
@@ -75,25 +83,9 @@ for row in sheet.rows:
     elif (matcher(media, row[1]) == True or matcher(media, row[2]) == True) and matcher(sign_out, row[1]) != True:
         wb["Media Center"].append(cell_data)
 
-    # For projection-related cases
-    elif (matcher(projection, row[1]) == True or matcher(projection, row[2]) == True) and matcher(sign_out, row[1]) != True:
-        wb['Projection'].append(cell_data)
-
-    # For hotspot-related cases
-    elif (matcher(hotspot, row[1]) == True or matcher(hotspot, row[2]) == True) and matcher(sign_out, row[1]) != True:
-        wb['Phone as Hotspot'].append(cell_data)
-
     # For navigation-related cases
     elif (matcher(navigation, row[1]) == True or matcher(navigation, row[2]) == True) and matcher(sign_out, row[1]) != True:
         wb['Navigation'].append(cell_data)
-
-    # For callsms-related cases
-    elif (matcher(call_SMS, row[1]) == True or matcher(call_SMS, row[2]) == True) and matcher(sign_out, row[1]) != True:
-        wb['CallSMS'].append(cell_data)
-
-    # For call(sign out)-related cases
-    elif (matcher(call_SMS, row[1]) == True or matcher(call_SMS, row[2]) == True) and matcher(sign_out, row[1]) == True:
-        wb['Call(Sign Out)'].append(cell_data)
 
     else:
         wb['Others'].append(cell_data)
