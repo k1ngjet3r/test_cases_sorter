@@ -14,7 +14,7 @@ def matcher(keywords, sentance):
 
 
 # Load the unsorted cases file
-workbook = load_workbook('Taipei_W45_SelectedCaseList_1030.xlsx')
+workbook = load_workbook('Taipei_CaseList.xlsx')
 sheet = workbook.active
 # Saving the titles of every column in to a list and delete it for categories determination
 titles = []
@@ -76,7 +76,7 @@ for row in sheet.rows:
         wb['Call(Sign Out)'].append(cell_data)
 
     # For HVAC-related cases
-    elif (matcher(ac, row[1]) == True or matcher(ac, row[2]) == True) and matcher(sign_out, row[1]) != True:
+    elif (matcher(ac, row[1]) == True or matcher(ac, row[2]) == True):
         wb['HVAC'].append(cell_data)
 
     # For media-related cases
@@ -84,7 +84,7 @@ for row in sheet.rows:
         wb["Media Center"].append(cell_data)
 
     # For navigation-related cases
-    elif (matcher(navigation, row[1]) == True or matcher(navigation, row[2]) == True) and matcher(sign_out, row[1]) != True:
+    elif (matcher(navigation, row[1]) == True or matcher(navigation, row[2]) == True):
         wb['Navigation'].append(cell_data)
 
     else:
