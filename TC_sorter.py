@@ -51,6 +51,8 @@ navigation = ['navigation', 'go to', 'add stop', 'guidance',
 ac = ['a/c', 'temperature', 'climate control',
       'defroster', 'air', 'fan', 'A/C', 'Air', 'Temperature']
 
+invalid = ['Audiobook']
+
 # iterate through the row
 for row in sheet.rows:
     # Since the cell cannot to copy to other sheet directly, we have to store the data in a list and transfer to other sheet
