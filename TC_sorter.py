@@ -4,7 +4,7 @@ from openpyxl import Workbook
 # Defining the word matcher function
 
 
-def matcher(keywords, sentance):
+def matcher_slice(keywords, sentance):
     for key in keywords:
         num_slices = int(len(sentance.value)) + 1 - int(len(key))
         for i in range(num_slices):
@@ -15,8 +15,8 @@ def matcher(keywords, sentance):
 # Matcher_2 matching the word by spliting the string on whitespace
 
 
-def matcher_2(keywords, sentance):
-    word_list = sentance.split()
+def matcher_split(keywords, sentance):
+    word_list = (sentance.value).lower().split()
     for key in keywords:
         if key in word_list:
             return True
@@ -37,7 +37,7 @@ wb = Workbook()
 sorted_cases = wb.active
 # Adding worksheets for different categories
 categories = ['Button', 'Call(Sign Out)', 'CallSMS', 'Media Center',
-              'Navigation', 'HVAC', 'Others']
+              'Navigation', 'HVAC','Invalid cases', 'Others']
 for category in categories:
     wb.create_sheet(category, int(categories.index(category)))
 
@@ -45,26 +45,22 @@ for category in categories:
 sign_out = ["user is signed out",
             "signout the google account", "sign out the google account"]
 
+navigation = ['navigation', 'go to', 'add stop', 'guidance',
+              'how far', 'take me', 'navigate', 'address', 'traffic', 'add stop', 'add stop']
+
 call_SMS = ['call', 'phone', 'message',
             'reply', 'text', 'sms', 'dial', 'Message', 'Text', 'Send', 'Call', 'Dial', 'Dail', 'dail']
 
 media = ['play', 'pause', 'next', 'previous',
-         'volume', 'music', 'AM', 'FM', 'radio', 'news', 'Tune', 'Play', 'Bluetooth']
+         'volume', 'music', 'am', 'fm', 'radio', 'news', 'tune', 'tuned', 'plays', 'bluetooth', 'station', 'album', 'podcast', 'pauses', 'media', 'songs', 'playback', 'bt']
 
-projection = ['projection', 'Projection']
 
-hotspot = ['hotspot']
-
-navigation = ['navigation', 'go to', 'add stop', 'guidance',
-              'how far', 'take me', 'navigate', 'address', 'traffic', 'add stop', 'add stop', 'Navigation']
-
-ac = ['a/c', 'temperature', 'climate control',
+ac = ['a/c', 'temperature', 'climate',
       'defroster', 'air', 'fan', 'A/C', 'Air', 'Temperature']
 
-invalid = ['Audiobook']
+invalid = ['audiobook']
 
-press_button = ['long press', 'short press',
-                'Long press', 'Short press', 'press "End" Key', 'press "End" key']
+press_button = ['long press', 'short press', 'press "end" key']
 
 # iterate through the row
 for row in sheet.rows:
@@ -74,28 +70,32 @@ for row in sheet.rows:
         cell_data.append(cell.value)
 
     # For buttom press related cases
-    if matcher(press_button, row[2]) == True:
+    if matcher_slice(press_button, row[2]) == True:
         wb['Button'].append(cell_data)
 
     # For callsms-related cases
-    elif (matcher(call_SMS, row[1]) == True or matcher(call_SMS, row[2]) == True) and matcher(sign_out, row[1]) != True:
+    elif (matcher_split(call_SMS, row[1]) == True or matcher_split(call_SMS, row[2]) == True or matcher_split(call_SMS, row[3])) and matcher_slice(sign_out, row[1]) != True:
         wb['CallSMS'].append(cell_data)
 
     # For call(sign out)-related cases
-    elif (matcher(call_SMS, row[1]) == True or matcher(call_SMS, row[2]) == True) and matcher(sign_out, row[1]) == True:
+    elif (matcher_split(call_SMS, row[1]) == True or matcher_split(call_SMS, row[2]) == True) and matcher_slice(sign_out, row[1]) == True:
         wb['Call(Sign Out)'].append(cell_data)
 
     # For HVAC-related cases
-    elif (matcher(ac, row[1]) == True or matcher(ac, row[2]) == True):
+    elif (matcher_split(ac, row[1]) == True or matcher_split(ac, row[2]) == True):
         wb['HVAC'].append(cell_data)
 
     # For media-related cases
-    elif (matcher(media, row[1]) == True or matcher(media, row[2]) == True) and matcher(sign_out, row[1]) != True:
+    elif (matcher_split(media, row[1]) == True or matcher_split(media, row[2]) == True or matcher_split(media, row[3])) and matcher_slice(sign_out, row[1]) != True:
         wb["Media Center"].append(cell_data)
 
     # For navigation-related cases
-    elif (matcher(navigation, row[1]) == True or matcher(navigation, row[2]) == True):
+    elif (matcher_slice(navigation, row[1]) == True or matcher_slice(navigation, row[2]) == True or matcher_slice(navigation, row[3])):
         wb['Navigation'].append(cell_data)
+
+    # Determine the invalid cases
+    elif matcher_slice(invalid, row[1])==True or matcher_slice(invalid, row[2])==True or matcher_slice(invalid, row[3])==True:
+        wb['Invalid cases'].append(cell_data)
 
     else:
         wb['Others'].append(cell_data)
