@@ -18,7 +18,7 @@ def matcher_slice(keywords, sentance):
 
 def matcher_split(keywords, sentance):
     # Remove symbols from the lowercased sentance by replace it with a whitespace
-    clean_sentance = re.sub(r'[^\w]', ' ', sentance.lower())
+    clean_sentance = re.sub(r'[^\w]', ' ', (sentance.value).lower())
     # Split the clean_sentance on whitespace and make it into a list
     word_list = clean_sentance.split()
     for key in keywords:
