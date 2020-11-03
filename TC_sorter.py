@@ -1,5 +1,6 @@
 from openpyxl import load_workbook
 from openpyxl import Workbook
+import re
 
 # Defining the word matcher function
 
@@ -16,7 +17,10 @@ def matcher_slice(keywords, sentance):
 
 
 def matcher_split(keywords, sentance):
-    word_list = (sentance.value).lower().split()
+    # Remove symbols from the lowercased sentance by replace it with a whitespace
+    clean_sentance = re.sub(r'[^\w]', ' ', sentance.lower())
+    # Split the clean_sentance on whitespace and make it into a list
+    word_list = clean_sentance.split()
     for key in keywords:
         if key in word_list:
             return True
@@ -37,7 +41,7 @@ wb = Workbook()
 sorted_cases = wb.active
 # Adding worksheets for different categories
 categories = ['Button', 'Call(Sign Out)', 'CallSMS', 'Media Center',
-              'Navigation', 'HVAC','Invalid cases', 'Others']
+              'Navigation', 'HVAC', 'Invalid cases', 'Others']
 for category in categories:
     wb.create_sheet(category, int(categories.index(category)))
 
@@ -94,7 +98,7 @@ for row in sheet.rows:
         wb['Navigation'].append(cell_data)
 
     # Determine the invalid cases
-    elif matcher_slice(invalid, row[1])==True or matcher_slice(invalid, row[2])==True or matcher_slice(invalid, row[3])==True:
+    elif matcher_slice(invalid, row[1]) == True or matcher_slice(invalid, row[2]) == True or matcher_slice(invalid, row[3]) == True:
         wb['Invalid cases'].append(cell_data)
 
     else:
