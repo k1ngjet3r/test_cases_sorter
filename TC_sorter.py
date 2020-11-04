@@ -6,7 +6,7 @@ import re
 
 
 def matcher_slice(keywords, sentance):
-    sen = sentance.value().lower()
+    sen = (sentance.value).lower()
     for key in keywords:
         if re.search(key, sen):
             return True
