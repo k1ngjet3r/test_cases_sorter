@@ -6,11 +6,10 @@ import re
 
 
 def matcher_slice(keywords, sentance):
+    sen = sentance.value().lower()
     for key in keywords:
-        num_slices = int(len(sentance.value)) + 1 - int(len(key))
-        for i in range(num_slices):
-            if (sentance.value[i: i + len(key)]).lower() == key:
-                return True
+        if re.search(key, sen):
+            return True
     return False
 
 # Matcher_2 matching the word by spliting the string on whitespace
@@ -49,8 +48,8 @@ for category in categories:
 sign_out = ["user is signed out",
             "signout the google account", "sign out the google account"]
 
-navigation = ['navigation', 'go to', 'add stop', 'guidance',
-              'how far', 'take me', 'navigate', 'address', 'traffic', 'add stop', 'add stop']
+navigation = ['navigat', 'go to', 'add stop', 'guidance',
+              'how far', 'take me', 'address', 'traffic', 'add stop']
 
 call_SMS = ['call', 'phone', 'message',
             'reply', 'text', 'sms', 'dial', 'Message', 'Text', 'Send', 'Call', 'Dial', 'Dail', 'dail']
@@ -59,8 +58,7 @@ media = ['play', 'pause', 'next', 'previous',
          'volume', 'music', 'am', 'fm', 'radio', 'news', 'tune', 'tuned', 'plays', 'bluetooth', 'station', 'album', 'podcast', 'pauses', 'media', 'songs', 'playback', 'bt']
 
 
-ac = ['a/c', 'temperature', 'climate',
-      'defroster', 'air', 'fan', 'A/C', 'Air', 'Temperature']
+ac = ['a/c', 'temperature', 'climate', 'defroster', 'air', 'fan']
 
 invalid = ['audiobook']
 
