@@ -50,7 +50,7 @@ for category in categories:
 flash_user = ['flash']
 mulit_user = ['multi', 'primary' 'secondary']
 press_button = ['long press', 'short press', 'press "end" key']
-user = ['guest', 'driver']
+guest = ['guest']
 invalid = ['audiobook']
 
 # Layer 2
@@ -92,37 +92,40 @@ for row in sheet.rows:
 
     elif matcher_split(invalid, row):
         wb['Invalid Cases'].append(cell_data)
-    # # For buttom press related cases
-    # if matcher_slice(press_button, row[2]) == True:
-    #     wb['Button'].append(cell_data)
 
-    # # For callsms-related cases
-    # elif (matcher_split(call_SMS, row[1]) == True or matcher_split(call_SMS, row[2]) == True or matcher_split(call_SMS, row[3])) and matcher_slice(sign_out, row[1]) != True:
-    #     wb['CallSMS'].append(cell_data)
+    # for guest user cases
+    elif matcher_split(guest, row):
+        # # For buttom press related cases
+        # if matcher_slice(press_button, row[2]) == True:
+        #     wb['Button'].append(cell_data)
 
-    # # For call(sign out)-related cases
-    # elif (matcher_split(call_SMS, row[1]) == True or matcher_split(call_SMS, row[2]) == True) and matcher_slice(sign_out, row[1]) == True:
-    #     wb['Call(Sign Out)'].append(cell_data)
+        # # For callsms-related cases
+        # elif (matcher_split(call_SMS, row[1]) == True or matcher_split(call_SMS, row[2]) == True or matcher_split(call_SMS, row[3])) and matcher_slice(sign_out, row[1]) != True:
+        #     wb['CallSMS'].append(cell_data)
 
-    # # For HVAC-related cases
-    # elif (matcher_split(ac, row[1]) == True or matcher_split(ac, row[2]) == True):
-    #     wb['HVAC'].append(cell_data)
+        # # For call(sign out)-related cases
+        # elif (matcher_split(call_SMS, row[1]) == True or matcher_split(call_SMS, row[2]) == True) and matcher_slice(sign_out, row[1]) == True:
+        #     wb['Call(Sign Out)'].append(cell_data)
 
-    # # For media-related cases
-    # elif (matcher_split(media, row[1]) == True or matcher_split(media, row[2]) == True or matcher_split(media, row[3])) and matcher_slice(sign_out, row[1]) != True:
-    #     wb["Media Center"].append(cell_data)
+        # # For HVAC-related cases
+        # elif (matcher_split(ac, row[1]) == True or matcher_split(ac, row[2]) == True):
+        #     wb['HVAC'].append(cell_data)
 
-    # # For navigation-related cases
-    # elif (matcher_slice(navigation, row[1]) == True or matcher_slice(navigation, row[2]) == True or matcher_slice(navigation, row[3])):
-    #     wb['Navigation'].append(cell_data)
+        # # For media-related cases
+        # elif (matcher_split(media, row[1]) == True or matcher_split(media, row[2]) == True or matcher_split(media, row[3])) and matcher_slice(sign_out, row[1]) != True:
+        #     wb["Media Center"].append(cell_data)
 
-    # # Determine the invalid cases
-    # elif matcher_slice(invalid, row[1]) == True or matcher_slice(invalid, row[2]) == True or matcher_slice(invalid, row[3]) == True:
-    #     wb['Invalid cases'].append(cell_data)
+        # # For navigation-related cases
+        # elif (matcher_slice(navigation, row[1]) == True or matcher_slice(navigation, row[2]) == True or matcher_slice(navigation, row[3])):
+        #     wb['Navigation'].append(cell_data)
 
-    # else:
-    #     wb['Others'].append(cell_data)
+        # # Determine the invalid cases
+        # elif matcher_slice(invalid, row[1]) == True or matcher_slice(invalid, row[2]) == True or matcher_slice(invalid, row[3]) == True:
+        #     wb['Invalid cases'].append(cell_data)
 
-# Save the file with the name
+        # else:
+        #     wb['Others'].append(cell_data)
+
+        # Save the file with the name
 wb.save('Sorted_cases_W45.xlsx')
 print('DONE')
