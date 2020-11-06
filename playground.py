@@ -10,4 +10,4 @@ expts = ['flash_user', 'multi_user', 'press_button', 'invalid']
 exp_dict = {name: item for name, item in zip(expts, exceptions)}
 
 for i in exp_dict:
-    print(i)
+    print(type(exp_dict[i]))
