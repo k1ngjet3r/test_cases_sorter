@@ -95,6 +95,7 @@ for row in sheet.rows:
 
     # for guest user cases
     elif matcher_split(guest, row):
+        continue
         # # For buttom press related cases
         # if matcher_slice(press_button, row[2]) == True:
         #     wb['Button'].append(cell_data)
