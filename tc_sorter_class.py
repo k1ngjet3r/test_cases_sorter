@@ -9,7 +9,7 @@ categories = ['Flash User', 'Multi User', 'Button', 'Invalid Cases',
 # keyword for layer 1
 flash_user = ['flash']
 mulit_user = ['multi', 'primary' 'secondary']
-press_button = ['long press', 'short press', 'press "end" key']
+press_button = ['long press', 'short press', 'press "end" key', 'press ptt']
 invalid = ['audiobook']
 
 exceptions_names = ['flash_user', 'mulit_user', 'press_button', 'invalid']
@@ -18,13 +18,10 @@ exceptions_items = [flash_user, mulit_user, press_button, invalid]
 exp_dict = {name: item for name,
             item in zip(exceptions_names, exceptions_items)}
 
-driver = ['driver']
+guset = ['guest']
 
 # Layer 2
-sign_out = ["user is signed out",
-            "signout the google account", "sign out the google account"]
-
-online = ['online', 'internet']
+offline = ['offline']
 
 # keyword for determining the function-related categories
 navigation = ['navigat', 'go to', 'add stop', 'guidance',
@@ -46,18 +43,18 @@ function_names = ['navigation', 'call_SMS', 'media', 'ac']
 functions = {name: item for name, item in zip(function_names, function_items)}
 
 
-def matcher_slice(keywords, cell_data):
-    for i in range(len(cell_data)):
-        sen = (cell_data[i]).lower()
-        for key in keywords:
-            if re.search(key, sen):
-                return True
+def matcher_slice(keywords, cell_data, index_range):
+    for i in index_range:
+        sen = cell_data[i]
+        for item in keywords:
+            if re.search(item, sen)
+            return True
     return False
 
 
-def matcher_split(keywords, cell_data):
-    for i in range(len(cell_data)):
-        clean_sentance = re.sub(r'[^\w]', ' ', (cell_data[i]).lower())
+def matcher_split(keywords, cell_data, index_range):
+    for i in index_range:
+        clean_sentance = re.sub(r'[^\w]', ' ', cell_data[i])
         word_list = clean_sentance.split()
         for key in keywords:
             if key in word_list:
@@ -92,7 +89,7 @@ class Tc_sorter:
     #     return sorted_cases
 
     def cell_data(self, row):
-        return [cell.value for cell in row]
+        return [cell.value.lower() for cell in row]
 
     def sorting_exceptions(self, cell_data, exceptions):
         wb = self.wb
