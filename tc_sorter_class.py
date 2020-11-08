@@ -10,7 +10,7 @@ categories = ['Flash User', 'Multi User', 'Button', 'Invalid Cases',
 flash_user = ['flash']
 mulit_user = ['multi', 'primary' 'secondary']
 press_button = ['long press', 'short press', 'press "end" key', 'press ptt']
-invalid = ['audiobook']
+invalid = ['audiobook', 'sxm']
 
 exceptions_names = ['flash_user', 'mulit_user', 'press_button', 'invalid']
 exceptions_items = [flash_user, mulit_user, press_button, invalid]
@@ -18,9 +18,10 @@ exceptions_items = [flash_user, mulit_user, press_button, invalid]
 exp_dict = {name: item for name,
             item in zip(exceptions_names, exceptions_items)}
 
-guset = ['guest']
+guest = ['guest']
 
 # Layer 2
+sign_out = ['sign out', 'sign-out', 'signout']
 offline = ['offline']
 
 # keyword for determining the function-related categories
@@ -46,9 +47,9 @@ functions = {name: item for name, item in zip(function_names, function_items)}
 def matcher_slice(keywords, cell_data, index_range):
     for i in index_range:
         sen = cell_data[i]
-        for item in keywords:
-            if re.search(item, sen)
-            return True
+        for key in keywords:
+            if re.search(key, sen):
+                return True
     return False
 
 
@@ -93,44 +94,40 @@ class Tc_sorter:
 
     def sorting_exceptions(self, cell_data, exceptions):
         wb = self.wb
+        index_range = [1, 2]
         for name in exceptions:
-            for i in range(len(cell_data)):
-                if name != 'press_button':
-                    if matcher_split(exceptions[name], cell_data[i]):
-                        wb[name].append(cell_data)
-                else:
-                    if matcher_slice(exceptions[name], cell_data[i]):
-                        wb[name].append(cell_data)
+            if name != 'press_button':
+                if matcher_split(exceptions[name], cell_data, index_range):
+                    wb[name].append(cell_data)
+            else:
+                if matcher_slice(exceptions[name], cell_data, index_range):
+                    wb[name].append(cell_data)
         return
 
     def phone_type(self, cell_data):
-        for i in range(len(cell_data)):
-            if matcher_split(['iphone'], cell_data[i]):
-                return "iPhone"
-            elif matcher_split(['android'], cell_data[i]):
-                return 'Android'
-            else:
-                return ' '
+        if matcher_split(['iphone'], cell_data, [1]):
+            return "iPhone"
+        elif matcher_slice(['android phone'], cell_data, [1]):
+            return 'Android'
+        else:
+            return ' '
 
     def projection_type(self, cell_data):
-        for j in range(len(cell_data)):
-            if matcher_split(['carplay'], cell_data[j]):
-                return "Apple CarPlay"
-            elif matcher_slice(['android auto', 'waa'], cell_data[j]):
-                return "Android Auto"
-            else:
-                return ' '
+        if matcher_split(['carplay'], cell_data, [1]):
+            return "Apple CarPlay"
+        elif matcher_slice(['android auto', 'waa'], cell_data, [1]):
+            return "Android Auto"
+        else:
+            return ' '
 
     def function_determaination(self, cell_data, functions):
         for name in functions:
             if name == 'navigation':
-                for i in range(1, 4):
-                    if matcher_slice(functions[name], cell_data[i]):
-                        return name
+                if matcher_slice(functions[name], cell_data, [2, 3]):
+                    return name
             else:
-                for j in range(1, 4):
-                    if matcher_split(functions[name], cell_data[j]):
-                        return name
+                if matcher_split(functions[name], cell_data, [2, 3]):
+                    return name
 
     def appending(self, name, cell_data):
         function = self.function_determaination(cell_data, functions)
@@ -142,46 +139,92 @@ class Tc_sorter:
 
     def sorting(self):
         for row in (self.sheet).rows:
-            cell_data = [cell.value for cell in row]
-            # sort the exception cases first
+            cell_data = self.cell_data(row)
+
+            # Filter out the exception cases
             self.sorting_exceptions(cell_data, exp_dict)
-            # differentiate Driver/Guest, sign-in/sign-out and online/offline
 
-            # Driver
-            # for 'Driver/In/Off'
-            if matcher_split(driver, cell_data) and matcher_slice(sign_out, cell_data) != True and matcher_split(online, cell_data) != True:
-                self.appending('Driver_In_Off', cell_data)
+            # determine the Driver as user
+            if matcher_split(guest, cell_data, [1]) == False:
+                # determine sign-in
+                if matcher_split(sign_out, cell_data, [1]) == False:
+                    # determine online
+                    if matcher_split(offline, cell_data, [1]) == False:
+                        self.appending('Driver_In_On', cell_data)
+                    # determine offline
+                    elif matcher_split(offline, cell_data, [1]):
+                        self.appending('Driver_In_Off', cell_data)
 
-            # for 'Driver/In/On'
-            elif matcher_split(driver, cell_data) and matcher_slice(sign_out, cell_data) != True and matcher_split(online, cell_data):
-                self.appending('Driver_In_On', cell_data)
+                # determine sign-out
+                elif matcher_split(sign_out, cell_data, [1]):
+                    # determine online
+                    if matcher_split(offline, cell_data, [1]) == False:
+                        self.appending('Driver_Out_On', cell_data)
+                    # determine offline
+                    elif matcher_split(offline, cell_data, [1]):
+                        self.appending('Driver_Out_Off', cell_data)
 
-            # for 'Driver/Out/Off'
-            elif matcher_split(driver, cell_data) and matcher_slice(sign_out, cell_data) and matcher_split(online, cell_data) != True:
-                self.appending('Driver_In_Off', cell_data)
+            # determine the Guest as user
+            elif matcher_split(guest, cell_data, [1]):
+                # determine sign-in
+                if matcher_split(sign_out, cell_data, [1]) == False:
+                    # determine online
+                    if matcher_split(offline, cell_data, [1]) == False:
+                        self.appending('Guest_In_On', cell_data)
+                    # determine offline
+                    elif matcher_split(offline, cell_data, [1]):
+                        self.appending('Guest_In_Off', cell_data)
 
-            # for 'Driver/Out/On'
-            elif matcher_split(driver, cell_data) and matcher_slice(sign_out, cell_data) and matcher_split(online, cell_data):
-                self.appending('Driver_In_Off', cell_data)
+                # determine sign-out
+                elif matcher_split(sign_out, cell_data, [1]):
+                    # determine online
+                    if matcher_split(offline, cell_data, [1]) == False:
+                        self.appending('Guest_Out_On', cell_data)
+                    # determine offline
+                    elif matcher_split(offline, cell_data, [1]):
+                        self.appending('Guest_Out_Off', cell_data)
 
-            # Guest
-            # for 'Guest/In/Off'
-            elif matcher_split(driver, cell_data) != True and matcher_slice(sign_out, cell_data) != True and matcher_split(online, cell_data) != True:
-                self.appending('Driver_In_Off', cell_data)
+        # for row in (self.sheet).rows:
+        #     cell_data = [cell.value for cell in row]
+        #     # sort the exception cases first
+        #     self.sorting_exceptions(cell_data, exp_dict)
+        #     # differentiate Driver/Guest, sign-in/sign-out and online/offline
 
-            # for 'Guest/In/On'
-            elif matcher_split(driver, cell_data) != True and matcher_slice(sign_out, cell_data) != True and matcher_split(online, cell_data):
-                self.appending('Driver_In_On', cell_data)
+        #     # Driver
+        #     # for 'Driver/In/Off'
+        #     if matcher_split(driver, cell_data) and matcher_slice(sign_out, cell_data) != True and matcher_split(online, cell_data) != True:
+        #         self.appending('Driver_In_Off', cell_data)
 
-            # for 'Guest/Out/Off'
-            elif matcher_split(driver, cell_data) != True and matcher_slice(sign_out, cell_data) and matcher_split(online, cell_data) != True:
-                self.appending('Driver_In_Off', cell_data)
+        #     # for 'Driver/In/On'
+        #     elif matcher_split(driver, cell_data) and matcher_slice(sign_out, cell_data) != True and matcher_split(online, cell_data):
+        #         self.appending('Driver_In_On', cell_data)
 
-            # for 'Guest/Out/On'
-            elif matcher_split(driver, cell_data) != True and matcher_slice(sign_out, cell_data) and matcher_split(online, cell_data):
-                self.appending('Driver_In_Off', cell_data)
+        #     # for 'Driver/Out/Off'
+        #     elif matcher_split(driver, cell_data) and matcher_slice(sign_out, cell_data) and matcher_split(online, cell_data) != True:
+        #         self.appending('Driver_In_Off', cell_data)
 
-        self.wb.save(self.output_name)
+        #     # for 'Driver/Out/On'
+        #     elif matcher_split(driver, cell_data) and matcher_slice(sign_out, cell_data) and matcher_split(online, cell_data):
+        #         self.appending('Driver_In_Off', cell_data)
+
+        #     # Guest
+        #     # for 'Guest/In/Off'
+        #     elif matcher_split(driver, cell_data) != True and matcher_slice(sign_out, cell_data) != True and matcher_split(online, cell_data) != True:
+        #         self.appending('Driver_In_Off', cell_data)
+
+        #     # for 'Guest/In/On'
+        #     elif matcher_split(driver, cell_data) != True and matcher_slice(sign_out, cell_data) != True and matcher_split(online, cell_data):
+        #         self.appending('Driver_In_On', cell_data)
+
+        #     # for 'Guest/Out/Off'
+        #     elif matcher_split(driver, cell_data) != True and matcher_slice(sign_out, cell_data) and matcher_split(online, cell_data) != True:
+        #         self.appending('Driver_In_Off', cell_data)
+
+        #     # for 'Guest/Out/On'
+        #     elif matcher_split(driver, cell_data) != True and matcher_slice(sign_out, cell_data) and matcher_split(online, cell_data):
+        #         self.appending('Driver_In_Off', cell_data)
+
+        # self.wb.save(self.output_name)
 
 
 testing = Tc_sorter('Taipei_CaseList.xlsx',
