@@ -2,7 +2,7 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import re
 
-categories = ['Flash User', 'Multi User', 'Button', 'Invalid Cases',
+categories = ['flash user', 'multi user', 'press_button', 'invalid',
               'Driver_In_Off', 'Driver_In_On', 'Driver_Out_Off', 'Driver_Out_On',
               'Guest_In_Off', 'Guest_In_On', 'Guest_Out_Off', 'Guest_Out_On']
 
@@ -21,7 +21,7 @@ exp_dict = {name: item for name,
 guest = ['guest']
 
 # Layer 2
-sign_out = ['sign out', 'sign-out', 'signout']
+sign_out = ['sign out', 'sign-out', 'signout', 'signed out']
 offline = ['offline']
 
 # keyword for determining the function-related categories
@@ -183,6 +183,7 @@ class Tc_sorter:
                     # determine offline
                     elif matcher_split(offline, cell_data, [1]):
                         self.appending('Guest_Out_Off', cell_data)
+        self.wb.save(self.output_name)
 
         # for row in (self.sheet).rows:
         #     cell_data = [cell.value for cell in row]
