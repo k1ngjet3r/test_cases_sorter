@@ -228,7 +228,7 @@ class Tc_sorter:
         # self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('Taipei_CaseList.xlsx',
+testing = Tc_sorter('W46_added.xlsx',
                     'Sorted_cases_W46.xlsx', categories)
 
 testing.sorting()
