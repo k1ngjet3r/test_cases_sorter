@@ -2,18 +2,18 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import re
 
-categories = ['flash user', 'multi user', 'press_button', 'invalid',
+categories = ['flash user', 'multi_user', 'press_button', 'invalid',
               'Driver_In_Off', 'Driver_In_On', 'Driver_Out_Off', 'Driver_Out_On',
               'Guest_In_Off', 'Guest_In_On', 'Guest_Out_Off', 'Guest_Out_On']
 
 # keyword for layer 1
 flash_user = ['flash']
-mulit_user = ['multi', 'primary' 'secondary']
+multi_user = ['multi', 'primary' 'secondary']
 press_button = ['long press', 'short press', 'press "end" key', 'press ptt']
 invalid = ['audiobook', 'sxm']
 
-exceptions_names = ['flash_user', 'mulit_user', 'press_button', 'invalid']
-exceptions_items = [flash_user, mulit_user, press_button, invalid]
+exceptions_names = ['flash_user', 'multi_user', 'press_button', 'invalid']
+exceptions_items = [flash_user, multi_user, press_button, invalid]
 
 exp_dict = {name: item for name,
             item in zip(exceptions_names, exceptions_items)}
@@ -90,7 +90,7 @@ class Tc_sorter:
     #     return sorted_cases
 
     def cell_data(self, row):
-        return [cell.value.lower() for cell in row]
+        return [str(cell.value).lower() for cell in row]
 
     def sorting_exceptions(self, cell_data, exceptions):
         wb = self.wb
@@ -228,7 +228,7 @@ class Tc_sorter:
         # self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W46_added.xlsx',
+testing = Tc_sorter('UnsortedCaseList_W46.xlsx',
                     'Sorted_cases_W46.xlsx', categories)
 
 testing.sorting()
