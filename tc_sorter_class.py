@@ -21,7 +21,7 @@ exp_dict = {name: item for name,
 guest = ['guest']
 
 # Layer 2
-sign_out = ['sign out', 'sign-out', 'signout', 'signed out']
+sign_out = ['sign out', 'sign-out', 'signout', 'signed out', 'user is signed out', 'not sign in']
 offline = ['offline']
 
 # keyword for determining the function-related categories
