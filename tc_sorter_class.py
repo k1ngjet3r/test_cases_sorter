@@ -9,7 +9,7 @@ categories = ['flash user', 'multi_user', 'press_button', 'invalid',
 # keyword for layer 1
 flash_user = ['flash']
 multi_user = ['multi', 'primary' 'secondary']
-press_button = ['long press', 'short press', 'press "end" key']
+press_button = ['long press', 'short press', 'press "end" key', 'ignition']
 invalid = ['audiobook', 'sxm']
 
 exceptions_names = ['flash_user', 'multi_user', 'press_button', 'invalid']
@@ -93,8 +93,10 @@ class Tc_sorter:
     def phone_type(self, cell_data):
         if matcher_split(['iphone'], cell_data, [1]):
             return "iPhone"
-        elif matcher_slice(['android phone'], cell_data, [1]):
+        elif matcher_slice(['android'], cell_data, [1]):
             return 'Android'
+        elif matcher_split(['iphone'], cell_data, [1]) and matcher_slice(['android'], cell_data, [1]):
+            return 'Both'
         else:
             return ' '
 
