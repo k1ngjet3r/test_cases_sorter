@@ -46,7 +46,7 @@ functions = {name: item for name, item in zip(function_names, function_items)}
 
 def matcher_slice(keywords, cell_data, index_range):
     for i in index_range:
-        sen = cell_data[i]
+        sen = cell_data[i].lower()
         for key in keywords:
             if re.search(key, sen):
                 return True
@@ -55,7 +55,7 @@ def matcher_slice(keywords, cell_data, index_range):
 
 def matcher_split(keywords, cell_data, index_range):
     for i in index_range:
-        clean_sentance = re.sub(r'[^\w]', ' ', cell_data[i])
+        clean_sentance = re.sub(r'[^\w]', ' ', cell_data[i].lower())
         word_list = clean_sentance.split()
         for key in keywords:
             if key in word_list:
