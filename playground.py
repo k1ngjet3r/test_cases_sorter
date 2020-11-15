@@ -1,9 +1,7 @@
 from openpyxl import load_workbook
 from openpyxl import Workbook
+import re
 
-original_file = load_workbook('test_example.xlsx')
-sheet = original_file.active
+sen = 'Hi, my name is Jeter.'
 
-for row in sheet.iter_rows(max_col=4, values_only=True):
-    cell_data = [data for data in row]
-    print(cell_data)
+print(re.search('jeter', sen) == None)
