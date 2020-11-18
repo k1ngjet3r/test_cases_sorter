@@ -145,4 +145,4 @@ class Tc_sorter:
 
 sorted_file = Tc_sorter('TestCaseDetails_W46.xlsx',
                         'sorted_w46.xlsx', sheet_names)
-sorted_file = Tc_sorter.sorting
+sorted_file.sorting()
