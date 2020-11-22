@@ -19,8 +19,8 @@ flash_user = ['flash']
 press_button = ['long press', 'short press', 'press "end" key']
 invalid = ['audiobook', 'sxm']
 
-exceptions_names = ['flash_user', 'multi_user', 'press_button', 'invalid']
-exceptions_items = [flash_user, multi_user, press_button, invalid]
+exceptions_names = ['flash_user', 'press_button', 'invalid']
+exceptions_items = [flash_user, press_button, invalid]
 
 exp_dict = {name: item for name,
             item in zip(exceptions_names, exceptions_items)}
@@ -58,6 +58,8 @@ class Tc_sorter:
     def __init__(self, cell_data):
         self.cell_data = cell_data
 
+    def
+
     def phone_type(self, cell_data):
         iphone = ['iphone', 'cp', 'wcp']
         android = ['android', 'aa', 'waa']
@@ -84,57 +86,18 @@ class Tc_sorter:
         else:
             cell_data.append('online')
 
-    def sorting(self):
-        # Filter out the exception cases
-        if matcher_split(flash_user, cell_data, [1, 2]):
-            flash_user.append(cell_data)
-
-        elif matcher_split(invalid, cell_data, [1, 2]):
-            invalid.append(cell_data)
-
-        elif matcher_slice('press_button', cell_data, [1, 2]):
-            press_button.append(cell_data)
-
+    def user(self, cell_data):
+        guest = ['guest']
+        others = ['secondary', 'user 1', 'user 2', 'user1', 'user2']
+        if matcher_split(guest, cell_data, [1]):
+            cell_data.append('guest')
+        elif matcher_slice(others, cell_data, [1]):
+            cell_data.append('others')
         else:
-            # determine the Driver as user
-            if matcher_split(guest, cell_data, [1]) == False:
-                # determine sign-in
-                if matcher_split(sign_out, cell_data, [1]) == False:
-                    # determine online
-                    if matcher_split(offline, cell_data, [1]) == False:
-                        Driver_In_On.append(cell_data)
-                    # determine offline
-                    elif matcher_split(offline, cell_data, [1]):
-                        Driver_In_Off.append(cell_data)
+            cell_data.append('Driver')
 
-                # determine sign-out
-                elif matcher_split(sign_out, cell_data, [1]):
-                    # determine online
-                    if matcher_split(offline, cell_data, [1]) == False:
-                        Driver_Out_On.append(cell_data)
-                    # determine offline
-                    elif matcher_split(offline, cell_data, [1]):
-                        Driver_Out_Off.append(cell_data)
-
-                # determine the Guest as user
-            elif matcher_split(guest, cell_data, [1]):
-                # determine sign-in
-                if matcher_split(sign_out, cell_data, [1]) == False:
-                    # determine online
-                    if matcher_split(offline, cell_data, [1]) == False:
-                        Guest_In_On.append(cell_data)
-                    # determine offline
-                    elif matcher_split(offline, cell_data, [1]):
-                        Guest_In_Off.append(cell_data)
-
-                # determine sign-out
-                elif matcher_split(sign_out, cell_data, [1]):
-                    # determine online
-                    if matcher_split(offline, cell_data, [1]) == False:
-                        Guest_Out_On.append(cell_data)
-                    # determine offline
-                    elif matcher_split(offline, cell_data, [1]):
-                        Guest_Out_Off.append(cell_data)
+    def sorting(self, cell_data):
+        pass
 
 
 row_1 = ['TC_Android_Auto_0001_Wireless',
