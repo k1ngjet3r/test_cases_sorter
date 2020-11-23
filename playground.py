@@ -3,8 +3,8 @@ from openpyxl import Workbook
 import re
 
 flash_user = []
-press_button = []
-invalid = []
+bench_only = []
+
 Driver_In_Off = []
 Driver_In_On = []
 Driver_Out_Off = []
@@ -14,18 +14,8 @@ Guest_In_On = []
 Guest_Out_Off = []
 Guest_Out_On = []
 
-# keyword for layer 1
 flash_user = ['flash']
-press_button = ['long press', 'short press', 'press "end" key']
-invalid = ['audiobook', 'sxm']
 
-exceptions_names = ['flash_user', 'press_button', 'invalid']
-exceptions_items = [flash_user, press_button, invalid]
-
-exp_dict = {name: item for name,
-            item in zip(exceptions_names, exceptions_items)}
-
-# Layer 2
 sign_out = ['sign out', 'sign-out', 'signout', 'signed out']
 
 offline = ['offline']
@@ -33,6 +23,8 @@ offline = ['offline']
 guest = ['guest']
 
 ac = ['a/c', 'temperature', 'climate', 'defroster', 'air', 'fan']
+
+press_button = ['long press', 'short press', 'press "end" key']
 
 
 def matcher_slice(keywords, cell_data, index_range):
@@ -57,8 +49,6 @@ def matcher_split(keywords, cell_data, index_range):
 class Tc_sorter:
     def __init__(self, cell_data):
         self.cell_data = cell_data
-
-    def
 
     def phone_type(self, cell_data):
         iphone = ['iphone', 'cp', 'wcp']
@@ -97,7 +87,15 @@ class Tc_sorter:
             cell_data.append('Driver')
 
     def sorting(self, cell_data):
-        pass
+        self.phone_type(cell_data)
+        self.sign_status(cell_data)
+        self.connection(cell_data)
+        self.user(cell_data)
+
+        if matcher_split(flash, cell_data, [1]):
+            flash.append(cell_data)
+        elif matcher_slice(ac, cell_data, [1, 2, 3]) or matcher_slice():
+            bench_only.append(cell_data)
 
 
 row_1 = ['TC_Android_Auto_0001_Wireless',
