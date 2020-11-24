@@ -27,22 +27,20 @@ ac = ['a/c', 'temperature', 'climate', 'defroster', 'air', 'fan']
 press_button = ['long press', 'short press', 'press "end" key']
 
 
-def matcher_slice(keywords, cell_data, index_range):
-    for i in index_range:
-        sen = cell_data[i].lower()
-        for key in keywords:
-            if re.search(key, sen):
-                return True
+def matcher_slice(keywords, cell_data):
+    sen = cell_data.lower()
+    for key in keywords:
+        if re.search(key, sen):
+            return True
     return False
 
 
-def matcher_split(keywords, cell_data, index_range):
-    for i in index_range:
-        clean_sentance = re.sub(r'[^\w]', ' ', cell_data[i].lower())
-        word_list = clean_sentance.split()
-        for key in keywords:
-            if key in word_list:
-                return True
+def matcher_split(keywords, cell_data):
+    clean_sentance = re.sub(r'[^\w]', ' ', cell_data.lower())
+    word_list = clean_sentance.split()
+    for key in keywords:
+        if key in word_list:
+            return True
     return False
 
 
@@ -52,26 +50,33 @@ class Tc_sorter:
 
     def phone_type(self, cell_data):
         iphone = ['iphone', 'cp', 'wcp']
-        android = ['android', 'aa', 'waa']
-        if matcher_split(iphone, cell_data, [1, 2, 3]):
-            cell_data.append("iPhone")
-        elif matcher_split(android, cell_data, [1, 2, 3]):
+        android = ['android', 'waa', 'aa']
+        phone_requirement = [0, 0]
+        for cell in self.cell_data[1:3]:
+            if matcher_split(iphone, cell):
+                phone_requirement[0] = 1
+            if matcher_slice(android, cell):
+                phone_requirement[1] = 1
+
+        if phone_requirement == [1, 0]:
+            cell_data.append('iPhone')
+        elif phone_requirement == [0, 1]:
             cell_data.append('Android')
-        elif matcher_split(iphone, cell_data, [1, 2, 3]) and matcher_split(android, cell_data, [1, 2, 3]):
+        elif phone_requirement == [1, 1]:
             cell_data.append('Both')
         else:
             cell_data.append(' ')
 
     def sign_status(self, cell_data):
         sign_out = ['sign out', 'sign-out', 'signout', 'signed out']
-        if matcher_slice(sign_out, cell_data, [1]):
+        if matcher_slice(sign_out, cell_data[1]):
             cell_data.append('sign out')
         else:
             cell_data.append('sign in')
 
     def connection(self, cell_data):
         offline = ['offline']
-        if matcher_split(offline, cell_data, [1]):
+        if matcher_split(offline, cell_data[1]):
             cell_data.append('offline')
         else:
             cell_data.append('online')
@@ -79,9 +84,9 @@ class Tc_sorter:
     def user(self, cell_data):
         guest = ['guest']
         others = ['secondary', 'user 1', 'user 2', 'user1', 'user2']
-        if matcher_split(guest, cell_data, [1]):
+        if matcher_split(guest, cell_data[1]):
             cell_data.append('guest')
-        elif matcher_slice(others, cell_data, [1]):
+        elif matcher_slice(others, cell_data[1]):
             cell_data.append('others')
         else:
             cell_data.append('Driver')
@@ -117,5 +122,3 @@ row_3 = ['TC_MFL_000000_GAS_Maps_0057',
          ]
 
 rows = [row_1, row_2, row_3]
-
-print(matcher_split(['guest'], row_1, [1]))
