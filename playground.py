@@ -97,7 +97,7 @@ class Tc_sorter:
         self.connection(cell_data)
         self.user(cell_data)
 
-        if matcher_split(flash, cell_data, [1]):
+        if matcher_split(flash, cell_data):
             flash.append(cell_data)
         elif matcher_slice(ac, cell_data, [1, 2, 3]) or matcher_slice():
             bench_only.append(cell_data)
