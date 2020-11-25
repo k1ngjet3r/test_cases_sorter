@@ -2,29 +2,13 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import re
 
-flash_user = []
 bench_only = []
 
-Driver_In_Off = []
-Driver_In_On = []
-Driver_Out_Off = []
-Driver_Out_On = []
-Guest_In_Off = []
-Guest_In_On = []
-Guest_Out_Off = []
-Guest_Out_On = []
+After_flash = []
+
+other_cases = []
 
 flash_user = ['flash']
-
-sign_out = ['sign out', 'sign-out', 'signout', 'signed out']
-
-offline = ['offline']
-
-guest = ['guest']
-
-ac = ['a/c', 'temperature', 'climate', 'defroster', 'air', 'fan']
-
-press_button = ['long press', 'short press', 'press "end" key']
 
 
 def matcher_slice(keywords, cell_data):
@@ -91,16 +75,27 @@ class Tc_sorter:
         else:
             cell_data.append('Driver')
 
+    def bench_only(self, cell_data):
+        ac = ['a/c', 'temperature', 'climate',
+              'defroster', 'air', 'fan', 'hvac']
+        press_button = ['long press', 'short press', 'press "end" key']
+        cluster = ['cluster']
+        bench_only_case = False
+        for cell in cell_data[1:4]:
+            if matcher_slice(ac, cell) or matcher_slice(press_button, cell) or matcher_slice(cluster, cell):
+                bench_only_case = True
+        return bench_only_case
+
     def sorting(self, cell_data):
         self.phone_type(cell_data)
         self.sign_status(cell_data)
         self.connection(cell_data)
         self.user(cell_data)
 
-        if matcher_split(flash, cell_data):
-            flash.append(cell_data)
-        elif matcher_slice(ac, cell_data, [1, 2, 3]) or matcher_slice():
-            bench_only.append(cell_data)
+        if self.bench_only(cell_data):
+            bench_only.append(cell_data[0])
+        else:
+            other_cases.append(cell_data[0])
 
 
 row_1 = ['TC_Android_Auto_0001_Wireless',
@@ -122,3 +117,11 @@ row_3 = ['TC_MFL_000000_GAS_Maps_0057',
          ]
 
 rows = [row_1, row_2, row_3]
+
+for row in rows:
+    Tc_sorter(row).sorting(row)
+
+print(bench_only)
+print(other_cases)
+
+print(row_1)
