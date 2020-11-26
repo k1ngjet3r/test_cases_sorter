@@ -3,6 +3,9 @@ from openpyxl import Workbook
 import re
 
 flash_user = ['flash']
+sheet_names = ['bench_only',
+               'Driver/Online/In', 'Driver/Online/Out', 'Driver/Offline/In', 'Driver/Offline/Out'
+               'Guest/Online/In', 'Guest/Online/Out', 'Guest/Offline/In', 'Guest/Offline/Out']
 
 
 def matcher_slice(keywords, cell_data):
@@ -29,6 +32,8 @@ class Tc_sorter:
         self.sheet = (load_workbook(self.input_name)).active
         self.wb = Workbook()
         self.wb.active
+        for name in sheet_names:
+            self.wb.create_sheet(name, int((sheet_names).index(name)))
 
     def cell_data(self, row):
         return [cell.value for cell in row]
@@ -54,24 +59,24 @@ class Tc_sorter:
     def sign_status(self, cell_data):
         sign_out = ['sign out', 'sign-out', 'signout', 'signed out']
         if matcher_slice(sign_out, cell_data[1]):
-            cell_data.append('sign out')
+            cell_data.append('sign_out')
         else:
-            cell_data.append('sign in')
+            cell_data.append('sign_in')
 
     def connection(self, cell_data):
         offline = ['offline']
         if matcher_split(offline, cell_data[1]):
-            cell_data.append('offline')
+            cell_data.append('Offline')
         else:
-            cell_data.append('online')
+            cell_data.append('Online')
 
     def user(self, cell_data):
         guest = ['guest']
         others = ['secondary', 'user 1', 'user 2', 'user1', 'user2']
         if matcher_split(guest, cell_data[1]):
-            cell_data.append('guest')
+            cell_data.append('Guest')
         elif matcher_slice(others, cell_data[1]):
-            cell_data.append('others')
+            cell_data.append('Others')
         else:
             cell_data.append('Driver')
 
@@ -90,10 +95,18 @@ class Tc_sorter:
         sheet = self.sheet
         for row in sheet.iter_rows(max_col=4, values_only=True):
             cell_data = self.cell_data(row)
-            self.phone_type(cell_data)
-            self.sign_status(cell_data)
-            self.connection(cell_data)
             self.user(cell_data)
+            self.connection(cell_data)
+            self.sign_status(cell_data)
+            self.phone_type(cell_data)
+
+            # the final format will be like this:
+            # ['ID', 'precondition', 'test_steps', 'expected_result', 'user', 'connection', 'sign_status', 'phone_type']
+            if self.bench_only(cell_data):
+                self.wb['bench_only'].append(cell_data)
+            else:
+                if cell_data[4] == 'Driver' and cell_data[5] == 'Online' and cell_data[6] == 'sign_in':
+                    self.wb['Driver/Online/In']
 
         self.wb.save(self.output_name)
 
