@@ -4,8 +4,9 @@ import re
 
 flash_user = ['flash']
 sheet_names = ['bench_only',
-               'Driver/Online/In', 'Driver/Online/Out', 'Driver/Offline/In', 'Driver/Offline/Out'
-               'Guest/Online/In', 'Guest/Online/Out', 'Guest/Offline/In', 'Guest/Offline/Out']
+               'Driver_Online_In', 'Driver_Online_Out', 'Driver_Offline_In', 'Driver_Offline_Out'
+               'Guest_Online_In', 'Guest_Online_Out', 'Guest_Offline_In', 'Guest_Offline_Out',
+               'Other']
 
 
 def matcher_slice(keywords, cell_data):
@@ -36,7 +37,7 @@ class Tc_sorter:
             self.wb.create_sheet(name, int((sheet_names).index(name)))
 
     def cell_data(self, row):
-        return [cell.value for cell in row]
+        return [cell for cell in row]
 
     def phone_type(self, cell_data):
         iphone = ['iphone', 'cp', 'wcp']
@@ -95,23 +96,41 @@ class Tc_sorter:
         sheet = self.sheet
         for row in sheet.iter_rows(max_col=4, values_only=True):
             cell_data = self.cell_data(row)
+            self.phone_type(cell_data)
             self.user(cell_data)
             self.connection(cell_data)
             self.sign_status(cell_data)
-            self.phone_type(cell_data)
 
             # the final format will be like this:
-            # ['ID', 'precondition', 'test_steps', 'expected_result', 'user', 'connection', 'sign_status', 'phone_type']
+            # ['ID', 'precondition', 'test_steps', 'expected_result', 'phone_type', 'user', 'connection', 'sign_status']
             if self.bench_only(cell_data):
                 self.wb['bench_only'].append(cell_data)
             else:
-                if cell_data[4] == 'Driver' and cell_data[5] == 'Online' and cell_data[6] == 'sign_in':
-                    self.wb['Driver/Online/In']
+                if cell_data[5] == 'Driver' and cell_data[6] == 'Online' and cell_data[7] == 'sign_in':
+                    self.wb['Driver_Online_In'].append(cell_data)
+                elif cell_data[5] == 'Driver' and cell_data[6] == 'Online' and cell_data[7] == 'sign_out':
+                    self.wb['Driver_Online_Out'].append(cell_data)
+                elif cell_data[5] == 'Driver' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_in':
+                    self.wb['Driver_Offline_In'].append(cell_data)
+                elif cell_data[5] == 'Driver' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_out':
+                    self.wb['Driver_Offline_Out'].append(cell_data)
+
+                elif cell_data[5] == 'Guest' and cell_data[6] == 'Online' and cell_data[7] == 'sign_in':
+                    self.wb['Guest_Online_In'].append(cell_data)
+                elif cell_data[5] == 'Guest' and cell_data[6] == 'Online' and cell_data[7] == 'sign_out':
+                    self.wb['Guest_Online_Out'].append(cell_data)
+                elif cell_data[5] == 'Guest' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_in':
+                    self.wb['Guest_Offline_In'].append(cell_data)
+                elif cell_data[5] == 'Guest' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_out':
+                    self.wb['Guest_Offline_Out'].append(cell_data)
+
+                else:
+                    self.wb['Other'].append(cell_data)
 
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W46.xlsx',
-                    'Sorted_cases_W46.xlsx')
+testing = Tc_sorter('MY22_1499s.xlsx',
+                    'MY22.xlsx')
 
 testing.sorting()
