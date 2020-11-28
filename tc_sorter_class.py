@@ -4,7 +4,7 @@ import re
 
 flash_user = ['flash']
 sheet_names = ['bench_only',
-               'Driver_Online_In', 'Driver_Online_Out', 'Driver_Offline_In', 'Driver_Offline_Out'
+               'Driver_Online_In', 'Driver_Online_Out', 'Driver_Offline_In', 'Driver_Offline_Out',
                'Guest_Online_In', 'Guest_Online_Out', 'Guest_Offline_In', 'Guest_Offline_Out',
                'Other']
 
@@ -37,7 +37,13 @@ class Tc_sorter:
             self.wb.create_sheet(name, int((sheet_names).index(name)))
 
     def cell_data(self, row):
-        return [cell for cell in row]
+        cells = []
+        for cell in row:
+            if cell is None:
+                cells.append('none')
+            else:
+                cells.append(cell)
+        return cells
 
     def phone_type(self, cell_data):
         iphone = ['iphone', 'cp', 'wcp']
