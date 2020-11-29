@@ -89,12 +89,13 @@ class Tc_sorter:
 
     def bench_only(self, cell_data):
         ac = ['a/c', 'temperature', 'climate',
-              'defroster', 'air', 'fan', 'hvac']
+              'defroster', 'hvac']
+        ac_split = ['air', 'fan']
         press_button = ['long press', 'short press', 'press "end" key']
-        cluster = ['cluster']
+        cluster = ['cluster', 'swc']
         bench_only_case = False
         for cell in cell_data[1:4]:
-            if matcher_slice(ac, cell) or matcher_slice(press_button, cell) or matcher_slice(cluster, cell):
+            if matcher_slice(ac, cell) or matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_split(ac_split, cell):
                 bench_only_case = True
         return bench_only_case
 
