@@ -1,3 +1,6 @@
+import re
+
+
 def matcher(keywords, sentance):
     for key in keywords:
         num_slices = int(len(sentance)) + 1 - int(len(key))
@@ -7,7 +10,16 @@ def matcher(keywords, sentance):
     return False
 
 
-sen = 'hello, my name is jeter'
-keywords = ['I', 'you']
+def matcher_split(keywords, sentance):
+    clean_sentance = re.sub(r'[^\w]', ' ', sentance.lower())
+    word_list = clean_sentance.split()
+    for key in keywords:
+        if key in word_list:
+            return True
+    return False
 
-print(matcher(keywords, sen))
+
+sen = '1.hello! My name is Pair.'
+keywords = ['my', 'air']
+
+print(matcher_split(keywords, sen))
