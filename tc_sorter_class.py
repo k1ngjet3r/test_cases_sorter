@@ -3,7 +3,7 @@ from openpyxl import Workbook
 import re
 
 flash_user = ['flash']
-sheet_names = ['bench_only',
+sheet_names = ['ac', 'bench_only',
                'Driver_Online_In', 'Driver_Online_Out', 'Driver_Offline_In', 'Driver_Offline_Out',
                'Guest_Online_In', 'Guest_Online_Out', 'Guest_Offline_In', 'Guest_Offline_Out',
                'Other']
@@ -88,16 +88,23 @@ class Tc_sorter:
             cell_data.append('Driver')
 
     def bench_only(self, cell_data):
-        ac = ['a/c', 'temperature', 'climate',
-              'defroster', 'hvac']
-        ac_split = ['air', 'fan']
         press_button = ['long press', 'short press', 'press "end" key']
         cluster = ['cluster', 'swc']
         bench_only_case = False
         for cell in cell_data[1:4]:
-            if matcher_slice(ac, cell) or matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_split(ac_split, cell):
+            if matcher_slice(press_button, cell) or matcher_slice(cluster, cell):
                 bench_only_case = True
         return bench_only_case
+
+    def ac_cases(self, cell_data):
+        ac = ['a/c', 'temperature', 'climate',
+              'defroster', 'hvac']
+        ac_split = ['air', 'fan']
+        ac_case = False
+        for cell in cell_data[1:4]:
+            if matcher_slice(ac, cell) or matcher_split(ac_split, cell):
+                ac_case = True
+        return ac_case
 
     def sorting(self):
         sheet = self.sheet
@@ -112,6 +119,8 @@ class Tc_sorter:
             # ['ID', 'precondition', 'test_steps', 'expected_result', 'phone_type', 'user', 'connection', 'sign_status']
             if self.bench_only(cell_data):
                 self.wb['bench_only'].append(cell_data)
+            elif self.ac_cases(cell_data):
+                self.wb['ac'].append(cell_data)
             else:
                 if cell_data[5] == 'Driver' and cell_data[6] == 'Online' and cell_data[7] == 'sign_in':
                     self.wb['Driver_Online_In'].append(cell_data)
@@ -137,7 +146,7 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('MY22_1499s.xlsx',
-                    'MY22.xlsx')
+testing = Tc_sorter('MY22_Taipei_W48.xlsx',
+                    'MY22_W49.xlsx')
 
 testing.sorting()
