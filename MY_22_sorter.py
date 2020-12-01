@@ -2,7 +2,6 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import re
 
-flash_user = ['flash']
 sheet_names = ['ac', 'bench_only',
                'Driver_Online_In', 'Driver_Online_Out', 'Driver_Offline_In', 'Driver_Offline_Out',
                'Guest_Online_In', 'Guest_Online_Out', 'Guest_Offline_In', 'Guest_Offline_Out',
@@ -64,7 +63,8 @@ class Tc_sorter:
             cell_data.append(' ')
 
     def sign_status(self, cell_data):
-        sign_out = ['sign out', 'sign-out', 'signout', 'signed out', 'no google user is logged  in']
+        sign_out = ['sign out', 'sign-out', 'signout',
+                    'signed out', 'no google user is logged  in']
         if matcher_slice(sign_out, cell_data[1]):
             cell_data.append('sign_out')
         else:
