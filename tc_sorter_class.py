@@ -64,7 +64,7 @@ class Tc_sorter:
             cell_data.append(' ')
 
     def sign_status(self, cell_data):
-        sign_out = ['sign out', 'sign-out', 'signout', 'signed out']
+        sign_out = ['sign out', 'sign-out', 'signout', 'signed out', 'no google user is logged  in']
         if matcher_slice(sign_out, cell_data[1]):
             cell_data.append('sign_out')
         else:
@@ -96,7 +96,7 @@ class Tc_sorter:
                 bench_only_case = True
         return bench_only_case
 
-    def ac_cases(self, cell_data):
+    def ac_only(self, cell_data):
         ac = ['a/c', 'temperature', 'climate',
               'defroster', 'hvac']
         ac_split = ['air', 'fan']
@@ -119,7 +119,7 @@ class Tc_sorter:
             # ['ID', 'precondition', 'test_steps', 'expected_result', 'phone_type', 'user', 'connection', 'sign_status']
             if self.bench_only(cell_data):
                 self.wb['bench_only'].append(cell_data)
-            elif self.ac_cases(cell_data):
+            elif self.ac_only(cell_data):
                 self.wb['ac'].append(cell_data)
             else:
                 if cell_data[5] == 'Driver' and cell_data[6] == 'Online' and cell_data[7] == 'sign_in':
@@ -146,7 +146,7 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('MY22_Taipei_W48.xlsx',
+testing = Tc_sorter('MY22_Taipei_W49.xlsx',
                     'MY22_W49.xlsx')
 
 testing.sorting()
