@@ -99,27 +99,26 @@ class Tc_sorter:
 
             # the final format will be like this:
             # ['ID', 'precondition', 'test_steps', 'expected_result', 'phone_type', 'user', 'connection', 'sign_status']
-            if:
-                if cell_data[5] == 'Driver' and cell_data[6] == 'Online' and cell_data[7] == 'sign_in':
-                    self.wb['Driver_Online_In'].append(cell_data)
-                elif cell_data[5] == 'Driver' and cell_data[6] == 'Online' and cell_data[7] == 'sign_out':
-                    self.wb['Driver_Online_Out'].append(cell_data)
-                elif cell_data[5] == 'Driver' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_in':
-                    self.wb['Driver_Offline_In'].append(cell_data)
-                elif cell_data[5] == 'Driver' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_out':
-                    self.wb['Driver_Offline_Out'].append(cell_data)
+            if cell_data[5] == 'Driver' and cell_data[6] == 'Online' and cell_data[7] == 'sign_in':
+                self.wb['Driver_Online_In'].append(cell_data)
+            elif cell_data[5] == 'Driver' and cell_data[6] == 'Online' and cell_data[7] == 'sign_out':
+                self.wb['Driver_Online_Out'].append(cell_data)
+            elif cell_data[5] == 'Driver' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_in':
+                self.wb['Driver_Offline_In'].append(cell_data)
+            elif cell_data[5] == 'Driver' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_out':
+                self.wb['Driver_Offline_Out'].append(cell_data)
 
-                elif cell_data[5] == 'Guest' and cell_data[6] == 'Online' and cell_data[7] == 'sign_in':
-                    self.wb['Guest_Online_In'].append(cell_data)
-                elif cell_data[5] == 'Guest' and cell_data[6] == 'Online' and cell_data[7] == 'sign_out':
-                    self.wb['Guest_Online_Out'].append(cell_data)
-                elif cell_data[5] == 'Guest' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_in':
-                    self.wb['Guest_Offline_In'].append(cell_data)
-                elif cell_data[5] == 'Guest' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_out':
-                    self.wb['Guest_Offline_Out'].append(cell_data)
+            elif cell_data[5] == 'Guest' and cell_data[6] == 'Online' and cell_data[7] == 'sign_in':
+                self.wb['Guest_Online_In'].append(cell_data)
+            elif cell_data[5] == 'Guest' and cell_data[6] == 'Online' and cell_data[7] == 'sign_out':
+                self.wb['Guest_Online_Out'].append(cell_data)
+            elif cell_data[5] == 'Guest' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_in':
+                self.wb['Guest_Offline_In'].append(cell_data)
+            elif cell_data[5] == 'Guest' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_out':
+                self.wb['Guest_Offline_Out'].append(cell_data)
 
-                else:
-                    self.wb['Other'].append(cell_data)
+            else:
+                self.wb['Other'].append(cell_data)
 
         self.wb.save(self.output_name)
 
