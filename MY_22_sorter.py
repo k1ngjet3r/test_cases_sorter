@@ -2,10 +2,16 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import re
 
-sheet_names = ['ac', 'bench_only',
-               'Driver_Online_In', 'Driver_Online_Out', 'Driver_Offline_In', 'Driver_Offline_Out',
-               'Guest_Online_In', 'Guest_Online_Out', 'Guest_Offline_In', 'Guest_Offline_Out',
-               'Other']
+sheet_names = [
+    'Difficult_cases', 'Bench_only',
+    'Driver_Online_In', 'Driver_Online_Out', 'Driver_Offline_In', 'Driver_Offline_Out',
+    'Guest_Online_In', 'Guest_Online_Out', 'Guest_Offline_In', 'Guest_Offline_Out',
+    'Other']
+
+difficult_cases = []
+
+titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Precondition',
+          'Test steps', 'Expected', 'Phone', 'User', 'Online/Offline', 'Sign Status']
 
 
 def matcher_slice(keywords, cell_data):
@@ -26,10 +32,13 @@ def matcher_split(keywords, cell_data):
 
 
 class Tc_sorter:
-    def __init__(self, input_name, output_name):
-        self.input_name = str(input_name)
+    def __init__(self, test_case_list, output_name, last_week_result):
+        self.test_case_list = str(test_case_list)
         self.output_name = str(output_name)
-        self.sheet = (load_workbook(self.input_name)).active
+        self.last_week_result = str(last_week_result)
+        self.sheet = (load_workbook(self.test_case_list)).active
+        self.last_week_result.sheet = (
+            load_workbook(self.last_week_result)).active
         self.wb = Workbook()
         self.wb.active
         for name in sheet_names:
@@ -77,6 +86,10 @@ class Tc_sorter:
         else:
             cell_data.append('Online')
 
+    def formatter(self, cell_data):
+        for _ in range(3):
+            cell_data.insert(1, '')
+
     def user(self, cell_data):
         guest = ['guest']
         others = ['secondary', 'user 1', 'user 2', 'user1', 'user2']
@@ -90,21 +103,12 @@ class Tc_sorter:
     def bench_only(self, cell_data):
         press_button = ['long press', 'short press', 'press "end" key']
         cluster = ['cluster', 'swc']
+        speed_limit = ['speed limit']
         bench_only_case = False
         for cell in cell_data[1:4]:
-            if matcher_slice(press_button, cell) or matcher_slice(cluster, cell):
+            if matcher_slice(press_button, cell) or matcher_split(cluster, cell) or matcher_slice(speed_limit, cell):
                 bench_only_case = True
         return bench_only_case
-
-    def ac_only(self, cell_data):
-        ac = ['a/c', 'temperature', 'climate',
-              'defroster', 'hvac']
-        ac_split = ['air', 'fan']
-        ac_case = False
-        for cell in cell_data[1:4]:
-            if matcher_slice(ac, cell) or matcher_split(ac_split, cell):
-                ac_case = True
-        return ac_case
 
     def sorting(self):
         sheet = self.sheet
@@ -114,39 +118,41 @@ class Tc_sorter:
             self.user(cell_data)
             self.connection(cell_data)
             self.sign_status(cell_data)
-
+            self.formatter(cell_data)
             # the final format will be like this:
-            # ['ID', 'precondition', 'test_steps', 'expected_result', 'phone_type', 'user', 'connection', 'sign_status']
-            if self.bench_only(cell_data):
-                self.wb['bench_only'].append(cell_data)
-            elif self.ac_only(cell_data):
-                self.wb['ac'].append(cell_data)
+            # ['ID', 'Pass/Fail', 'tester', 'comment', 'precondition', 'test_steps', 'expected_result', 'phone_type', 'user', 'connection', 'sign_status', 'name of tester']
+
+            if cell_data[0] in difficult_cases:
+                self.wb['Difficult_cases'].append(cell_data)
+
+            elif self.bench_only(cell_data):
+                self.wb['Bench_only'].append(cell_data)
+
             else:
-                if cell_data[5] == 'Driver' and cell_data[6] == 'Online' and cell_data[7] == 'sign_in':
+                if cell_data[8] == 'Driver' and cell_data[9] == 'Online' and cell_data[10] == 'sign_in':
                     self.wb['Driver_Online_In'].append(cell_data)
-                elif cell_data[5] == 'Driver' and cell_data[6] == 'Online' and cell_data[7] == 'sign_out':
+                elif cell_data[8] == 'Driver' and cell_data[9] == 'Online' and cell_data[10] == 'sign_out':
                     self.wb['Driver_Online_Out'].append(cell_data)
-                elif cell_data[5] == 'Driver' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_in':
+                elif cell_data[8] == 'Driver' and cell_data[9] == 'Offline' and cell_data[10] == 'sign_in':
                     self.wb['Driver_Offline_In'].append(cell_data)
-                elif cell_data[5] == 'Driver' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_out':
+                elif cell_data[8] == 'Driver' and cell_data[9] == 'Offline' and cell_data[10] == 'sign_out':
                     self.wb['Driver_Offline_Out'].append(cell_data)
 
-                elif cell_data[5] == 'Guest' and cell_data[6] == 'Online' and cell_data[7] == 'sign_in':
+                elif cell_data[8] == 'Guest' and cell_data[9] == 'Online' and cell_data[10] == 'sign_in':
                     self.wb['Guest_Online_In'].append(cell_data)
-                elif cell_data[5] == 'Guest' and cell_data[6] == 'Online' and cell_data[7] == 'sign_out':
+                elif cell_data[8] == 'Guest' and cell_data[9] == 'Online' and cell_data[10] == 'sign_out':
                     self.wb['Guest_Online_Out'].append(cell_data)
-                elif cell_data[5] == 'Guest' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_in':
+                elif cell_data[8] == 'Guest' and cell_data[9] == 'Offline' and cell_data[10] == 'sign_in':
                     self.wb['Guest_Offline_In'].append(cell_data)
-                elif cell_data[5] == 'Guest' and cell_data[6] == 'Offline' and cell_data[7] == 'sign_out':
+                elif cell_data[8] == 'Guest' and cell_data[9] == 'Offline' and cell_data[10] == 'sign_out':
                     self.wb['Guest_Offline_Out'].append(cell_data)
-
                 else:
                     self.wb['Other'].append(cell_data)
 
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('MY22_Taipei_W49.xlsx',
-                    'MY22_W49.xlsx')
+testing = Tc_sorter('MY23_Taipei_W49.xlsx',
+                    'MY23_W49.xlsx')
 
 testing.sorting()
