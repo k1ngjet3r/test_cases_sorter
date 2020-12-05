@@ -9,7 +9,7 @@ To make our life easier by avoiding sort the 1000+ test cases manually
     * Introducing the MY_23_sortor.py for sorting the MY-23-related cases
     * Adding formater method to the class for the output format
     * Create a new sheet names difficult_case that contain the list of failed cases from last week
-    * Appending the name of the tester who executed the cases previous week
+    * Appending the name of the tester who executed the cases, also the result from previous week
 
 
 * V1.1
