@@ -3,7 +3,7 @@ from openpyxl import Workbook
 import re
 
 sheet_names = [
-    'Difficult_cases', 'Bench_only',
+    'Difficult_cases', 'Bench_only', 'ac_only',
     'Driver_Online_In', 'Driver_Online_Out', 'Driver_Offline_In', 'Driver_Offline_Out',
     'Guest_Online_In', 'Guest_Online_Out', 'Guest_Offline_In', 'Guest_Offline_Out',
     'Other']
@@ -32,17 +32,18 @@ def matcher_split(keywords, cell_data):
 
 
 class Tc_sorter:
-    def __init__(self, test_case_list, output_name, last_week_result):
+    def __init__(self, test_case_list, output_name):
         self.test_case_list = str(test_case_list)
         self.output_name = str(output_name)
-        self.last_week_result = str(last_week_result)
+        # self.last_week_result = str(last_week_result)
         self.sheet = (load_workbook(self.test_case_list)).active
-        self.last_week_result.sheet = (
-            load_workbook(self.last_week_result)).active
+        # self.last_week_result.sheet = (
+        #     load_workbook(self.last_week_result)).active
         self.wb = Workbook()
         self.wb.active
         for name in sheet_names:
             self.wb.create_sheet(name, int((sheet_names).index(name)))
+            self.wb[name].append(titles)
 
     def cell_data(self, row):
         cells = []
@@ -57,7 +58,7 @@ class Tc_sorter:
         iphone = ['iphone', 'cp', 'wcp']
         android = ['android', 'waa', 'aa']
         phone_requirement = [0, 0]
-        for cell in cell_data[1:3]:
+        for cell in cell_data[4:6]:
             if matcher_split(iphone, cell):
                 phone_requirement[0] = 1
             if matcher_slice(android, cell):
@@ -74,14 +75,14 @@ class Tc_sorter:
     def sign_status(self, cell_data):
         sign_out = ['sign out', 'sign-out', 'signout',
                     'signed out', 'no google user is logged  in']
-        if matcher_slice(sign_out, cell_data[1]):
+        if matcher_slice(sign_out, cell_data[4]):
             cell_data.append('sign_out')
         else:
             cell_data.append('sign_in')
 
     def connection(self, cell_data):
         offline = ['offline']
-        if matcher_split(offline, cell_data[1]):
+        if matcher_split(offline, cell_data[4]):
             cell_data.append('Offline')
         else:
             cell_data.append('Online')
@@ -93,10 +94,13 @@ class Tc_sorter:
     def user(self, cell_data):
         guest = ['guest']
         others = ['secondary', 'user 1', 'user 2', 'user1', 'user2']
-        if matcher_split(guest, cell_data[1]):
+        primary = ['primary']
+        if matcher_split(guest, cell_data[4]):
             cell_data.append('Guest')
-        elif matcher_slice(others, cell_data[1]):
+        elif matcher_slice(others, cell_data[4]):
             cell_data.append('Others')
+        elif matcher_split(guest, cell_data[5]) and (matcher_slice(others, cell_data[5]) or matcher_split(primary, cell_data[5])):
+            cell_data.append('multiple')
         else:
             cell_data.append('Driver')
 
@@ -105,10 +109,20 @@ class Tc_sorter:
         cluster = ['cluster', 'swc']
         speed_limit = ['speed limit']
         bench_only_case = False
-        for cell in cell_data[1:4]:
-            if matcher_slice(press_button, cell) or matcher_split(cluster, cell) or matcher_slice(speed_limit, cell):
+        for cell in cell_data[4:7]:
+            if matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell):
                 bench_only_case = True
         return bench_only_case
+
+    def ac_only(self, cell_data):
+        ac = ['a/c', 'temperature', 'climate',
+              'defroster', 'hvac']
+        ac_split = ['air', 'fan']
+        ac_case = False
+        for cell in cell_data[4:7]:
+            if matcher_slice(ac, cell) or matcher_split(ac_split, cell):
+                ac_case = True
+        return ac_case
 
     def sorting(self):
         sheet = self.sheet
@@ -127,6 +141,9 @@ class Tc_sorter:
 
             elif self.bench_only(cell_data):
                 self.wb['Bench_only'].append(cell_data)
+
+            elif self.ac_only(cell_data):
+                self.wb['ac_only'].append(cell_data)
 
             else:
                 if cell_data[8] == 'Driver' and cell_data[9] == 'Online' and cell_data[10] == 'sign_in':
@@ -152,7 +169,7 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('MY23_Taipei_W49.xlsx',
-                    'MY23_W49.xlsx')
+testing = Tc_sorter('MY22_1499s.xlsx',
+                    'MY22.xlsx')
 
 testing.sorting()
