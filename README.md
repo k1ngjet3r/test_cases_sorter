@@ -1,6 +1,17 @@
 # test_cases_sorter
 
-To make our life easier by avoiding sort the 1000+ test cases manually 
+To make our life easier by avoiding sort the 1000+ test cases manually
+
+## Setup
+* Python with version 3.7+
+* Visual Studio Code (optional)
+* Openpyxl installed
+
+## How to use
+1. Open the MY_22_sorter.py using VS Code
+2. Drug the test case and last week result file in the form of .xlsx to the VS Code
+3. Set the input file name, output file name, and last week result file name in the testing = Tc_sorter('input_name', 'output_name', 'last week result')
+4. Execute the script and wait for the output file generated
 
 ## Version History
 
