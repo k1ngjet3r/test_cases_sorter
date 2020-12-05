@@ -11,7 +11,8 @@ sheet_names = [
 difficult_cases = []
 
 titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Precondition',
-          'Test steps', 'Expected', 'Phone', 'User', 'Online/Offline', 'Sign Status']
+          'Test steps', 'Expected', 'Phone', 'User', 'Online/Offline', 'Sign Status',
+          'Last_week_tester', 'Last_week_result', 'Comment', 'Bug_ID']
 
 
 def matcher_slice(keywords, cell_data):
@@ -136,11 +137,12 @@ class Tc_sorter:
             self.sign_status(cell_data)
 
             for last_week_row in last_week.iter_rows(max_col=5, values_only=True):
-                last_weeK_cell = self.cell_data(last_week_row)
-                if last_weeK_cell[0] == cell_data[0]:
-                    cell_data += last_weeK_cell[1:]
-                else:
-                    cell_data += 'No data'
+                last_week_cell = self.cell_data(last_week_row)
+                if last_week_cell[0] == cell_data[0]:
+                    cell_data.append(last_week_cell[2])
+                    cell_data.append(last_week_cell[3])
+                    cell_data.append(last_week_cell[1])
+                    cell_data.append(last_week_cell[4])
 
             # the final format will be like this:
             # ['ID', 'Pass/Fail', 'tester', 'comment',
