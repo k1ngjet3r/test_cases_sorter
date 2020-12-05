@@ -32,13 +32,13 @@ def matcher_split(keywords, cell_data):
 
 
 class Tc_sorter:
-    def __init__(self, test_case_list, output_name):
+    def __init__(self, test_case_list, output_name, last_week):
         self.test_case_list = str(test_case_list)
         self.output_name = str(output_name)
-        # self.last_week_result = str(last_week_result)
+        self.last_week = str(last_week)
         self.sheet = (load_workbook(self.test_case_list)).active
-        # self.last_week_result.sheet = (
-        #     load_workbook(self.last_week_result)).active
+        self.last_week_result = (
+            load_workbook(self.last_week)).active
         self.wb = Workbook()
         self.wb.active
         for name in sheet_names:
@@ -126,15 +126,27 @@ class Tc_sorter:
 
     def sorting(self):
         sheet = self.sheet
+        last_week = self.last_week_result
         for row in sheet.iter_rows(max_col=4, values_only=True):
             cell_data = self.cell_data(row)
+            self.formatter(cell_data)
             self.phone_type(cell_data)
             self.user(cell_data)
             self.connection(cell_data)
             self.sign_status(cell_data)
-            self.formatter(cell_data)
+
+            for last_week_row in last_week.iter_rows(max_col=5, values_only=True):
+                last_weeK_cell = self.cell_data(last_week_row)
+                if last_weeK_cell[0] == cell_data[0]:
+                    cell_data += last_weeK_cell[1:]
+                else:
+                    cell_data += 'No data'
+
             # the final format will be like this:
-            # ['ID', 'Pass/Fail', 'tester', 'comment', 'precondition', 'test_steps', 'expected_result', 'phone_type', 'user', 'connection', 'sign_status', 'name of tester']
+            # ['ID', 'Pass/Fail', 'tester', 'comment',
+            #  'precondition', 'test_steps', 'expected_result',
+            #  'phone_type', 'user', 'connection', 'sign_status',
+            #  'name of tester', 'last_week_result']
 
             if cell_data[0] in difficult_cases:
                 self.wb['Difficult_cases'].append(cell_data)
@@ -170,6 +182,6 @@ class Tc_sorter:
 
 
 testing = Tc_sorter('MY22_1499s.xlsx',
-                    'MY22.xlsx')
+                    'MY22.xlsx', 'MY22_W49_result.xlsx')
 
 testing.sorting()
