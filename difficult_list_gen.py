@@ -18,4 +18,4 @@ for row in sheet.iter_rows(max_col=4, values_only=True):
     elif cells[-1] == '-':
         break
 
-print(len(difficult_list[1:]))
+print((difficult_list[1:]))
