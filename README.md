@@ -21,6 +21,7 @@ To make our life easier by avoiding sort the 1000+ test cases manually
     * Adding formater method to the class for the output format
     * Create a new sheet names difficult_case that contain the list of failed cases from last week
     * Appending the name of the tester who executed the cases, also the result from previous week
+    * Isolate the difficult cases to a separate sheet
 
 
 * V1.1
