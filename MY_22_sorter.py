@@ -185,6 +185,6 @@ class Tc_sorter:
 
 
 testing = Tc_sorter('MY22_1499s.xlsx',
-                    'MY22.xlsx', 'MY22_W49_result.xlsx')
+                    'MY22_W50.xlsx', 'MY22_W49_result.xlsx')
 
 testing.sorting()
