@@ -184,7 +184,7 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('MY22_1499s.xlsx',
+testing = Tc_sorter('MY22_Taipei_W50_fromJIRA.xlsx',
                     'MY22_W50.xlsx', 'MY22_W49_result.xlsx')
 
 testing.sorting()
