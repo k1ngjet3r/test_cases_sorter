@@ -14,6 +14,8 @@ To make our life easier by avoiding sort the 1000+ test cases manually
 4. Execute the script and wait for the output file generated
 
 ## Version History
+* V1.3
+    * Adding past result 
 
 * V1.2
     * Rename the TC_sorter_class.py to MY_22_sorter.py
@@ -22,7 +24,6 @@ To make our life easier by avoiding sort the 1000+ test cases manually
     * Create a new sheet names difficult_case that contain the list of failed cases from last week
     * Appending the name of the tester who executed the cases, also the result from previous week
     * Isolate the difficult cases to a separate sheet
-
 
 * V1.1
     * Using python class for the main structure
