@@ -75,7 +75,7 @@ class Tc_sorter:
 
     def sign_status(self, cell_data):
         sign_out = ['sign out', 'sign-out', 'signout',
-                    'signed out', 'no google user is logged  in']
+                    'signed out', 'no google user is logged  in', 'No user is signed in']
         if matcher_slice(sign_out, cell_data[4]):
             cell_data.append('sign_out')
         else:
@@ -129,7 +129,7 @@ class Tc_sorter:
     def sorting(self):
         sheet = self.sheet
         last_week = self.last_week_result
-        for row in sheet.iter_rows(max_col=4, values_only=True):
+        for row in sheet.iter_rows(max_col=5, values_only=True):
             cell_data = self.cell_data(row)
             self.formatter(cell_data)
             self.phone_type(cell_data)
