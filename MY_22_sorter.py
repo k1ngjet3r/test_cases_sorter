@@ -161,22 +161,23 @@ class Tc_sorter:
                 self.wb['ac_only'].append(cell_data)
 
             else:
-                if cell_data[8] == 'Driver' and cell_data[9] == 'Online' and cell_data[10] == 'sign_in':
+
+                if cell_data[9] == 'Driver' and cell_data[10] == 'Online' and cell_data[11] == 'sign_in':
                     self.wb['Driver_Online_In'].append(cell_data)
-                elif cell_data[8] == 'Driver' and cell_data[9] == 'Online' and cell_data[10] == 'sign_out':
+                elif cell_data[9] == 'Driver' and cell_data[10] == 'Online' and cell_data[11] == 'sign_out':
                     self.wb['Driver_Online_Out'].append(cell_data)
-                elif cell_data[8] == 'Driver' and cell_data[9] == 'Offline' and cell_data[10] == 'sign_in':
+                elif cell_data[9] == 'Driver' and cell_data[10] == 'Offline' and cell_data[11] == 'sign_in':
                     self.wb['Driver_Offline_In'].append(cell_data)
-                elif cell_data[8] == 'Driver' and cell_data[9] == 'Offline' and cell_data[10] == 'sign_out':
+                elif cell_data[9] == 'Driver' and cell_data[10] == 'Offline' and cell_data[11] == 'sign_out':
                     self.wb['Driver_Offline_Out'].append(cell_data)
 
-                elif cell_data[8] == 'Guest' and cell_data[9] == 'Online' and cell_data[10] == 'sign_in':
+                elif cell_data[9] == 'Guest' and cell_data[10] == 'Online' and cell_data[11] == 'sign_in':
                     self.wb['Guest_Online_In'].append(cell_data)
-                elif cell_data[8] == 'Guest' and cell_data[9] == 'Online' and cell_data[10] == 'sign_out':
+                elif cell_data[9] == 'Guest' and cell_data[10] == 'Online' and cell_data[11] == 'sign_out':
                     self.wb['Guest_Online_Out'].append(cell_data)
-                elif cell_data[8] == 'Guest' and cell_data[9] == 'Offline' and cell_data[10] == 'sign_in':
+                elif cell_data[9] == 'Guest' and cell_data[10] == 'Offline' and cell_data[11] == 'sign_in':
                     self.wb['Guest_Offline_In'].append(cell_data)
-                elif cell_data[8] == 'Guest' and cell_data[9] == 'Offline' and cell_data[10] == 'sign_out':
+                elif cell_data[9] == 'Guest' and cell_data[10] == 'Offline' and cell_data[11] == 'sign_out':
                     self.wb['Guest_Offline_Out'].append(cell_data)
                 else:
                     self.wb['Other'].append(cell_data)
