@@ -8,12 +8,15 @@ sheet_names = [
     'Guest_Online_In', 'Guest_Online_Out', 'Guest_Offline_In', 'Guest_Offline_Out',
     'Other']
 
-difficult_cases = ['TC_MFL_45104_Wireless_AndroidAuto_0058', 'TC_MFL_GAS_Google_Assistant_0636', 'TC_MFL_GAS_Google_Assistant_0652', 'TC_MFL_GAS_Google_Assistant_0774', 'TC_MFL_GAS_Google_Assistant_0692', 'TC_MFL_GAS_Google_Assistant_0538', 'TC_MFL_GAS_Google_Assistant_0623', 'TC_MFL_GAS_Google_Assistant_0628', 'TC_MFL_GAS_Google_Assistant_0767', 'TC_MFL_000000_GAS_Google_Assistant_0002', 'TC_MFL_GAS_Google_Assistant_0172', 'TC_MFL_GAS_Google_Assistant_0173', 'TC_MFL_GAS_Google_Assistant_0174', 'TC_MFL_GAS_Google_Assistant_0175', 'TC_MFL_GAS_Google_Assistant_0352', 'TC_MFL_GAS_Google_Assistant_0356', 'TC_MFL_GAS_Google_Assistant_0357', 'TC_MFL_GAS_Google_Assistant_0358', 'TC_MFL_GAS_Google_Assistant_0384', 'TC_MFL_GAS_Google_Assistant_0388', 'TC_MFL_GAS_Google_Assistant_0389', 'TC_MFL_GAS_Google_Assistant_0435', 'TC_MFL_GAS_Google_Assistant_0446', 'TC_MFL_GAS_Google_Assistant_0447', 'TC_MFL_GAS_Google_Assistant_0467', 'TC_MFL_GAS_Google_Assistant_0468', 'TC_MFL_GAS_Google_Assistant_0553', 'TC_MFL_GAS_Google_Assistant_0578', 'TC_MFL_GAS_Google_Assistant_0585', 'TC_MFL_GAS_Google_Assistant_0590', 'TC_MFL_GAS_Google_Assistant_0599', 'TC_MFL_GAS_Google_Assistant_0603', 'TC_MFL_GAS_Google_Assistant_0611', 'TC_MFL_GAS_Google_Assistant_0612', 'TC_MFL_GAS_Google_Assistant_0615', 'TC_MFL_GAS_Google_Assistant_0625', 'TC_MFL_GAS_Google_Assistant_0626', 'TC_MFL_GAS_Google_Assistant_0627', 'TC_MFL_GAS_Google_Assistant_0632', 'TC_MFL_GAS_Google_Assistant_0633', 'TC_MFL_GAS_Google_Assistant_0634', 'TC_MFL_GAS_Google_Assistant_0635', 'TC_MFL_GAS_Google_Assistant_0637', 'TC_MFL_GAS_Google_Assistant_0639', 'TC_MFL_GAS_Google_Assistant_0640', 'TC_MFL_GAS_Google_Assistant_0641', 'TC_MFL_GAS_Google_Assistant_0643', 'TC_MFL_GAS_Google_Assistant_0646', 'TC_MFL_GAS_Google_Assistant_0647', 'TC_MFL_GAS_Google_Assistant_0650', 'TC_MFL_GAS_Google_Assistant_0653', 'TC_MFL_GAS_Google_Assistant_0654', 'TC_MFL_GAS_Google_Assistant_0655',
-                   'TC_MFL_GAS_Google_Assistant_0667', 'TC_MFL_GAS_Google_Assistant_0679', 'TC_MFL_GAS_Google_Assistant_0681', 'TC_MFL_GAS_Google_Assistant_0688', 'TC_MFL_GAS_Google_Assistant_0691', 'TC_MFL_GAS_Google_Assistant_0794', 'TC_Wireless_Android_Auto_193939_0011', 'TC_Android_Auto_0104_Wireless', 'TC_Android_Auto_0146_Wireless', 'TC_Android_Auto_0213_Wireless', 'TC_Android_Auto_0402_Wireless', 'TC_Android_Auto_Power_Off_0006', 'TC_Android_Auto_Wireless_210569_0003', 'TC_Android_Auto_connection_wireless_0001', 'TC_MEDIA_ANDROID_AUTO_0123_Wireless', 'TC_MFL_000000_GAS_Maps_0087', 'TC_MFL_000000_GAS_Maps_0101', 'TC_MFL_000000_GAS_Maps_0102', 'TC_MFL_000000_GAS_Maps_0106', 'TC_MFL_107206_Android_Auto_0070', 'TC_MFL_107206_Android_Auto_0071', 'TC_MFL_45104_Wireless_AndroidAuto_0038', 'TC_MFL_51771_BT_SR_Unavailable_0007', 'TC_MFL_51771_BT_SR_Unavailable_0008', 'TC_MFL_51771_BT_SR_Unavailable_0009', 'TC_MFL_51771_BT_SR_Unavailable_0016', 'TC_MFL_GAS_Google_Assistant_0201', 'TC_MFL_GAS_Google_Assistant_0203', 'TC_MFL_GAS_Google_Assistant_0204', 'TC_MFL_GAS_Google_Assistant_0205', 'TC_MFL_GAS_Google_Assistant_0206', 'TC_MFL_GAS_Google_Assistant_0353', 'TC_MFL_GAS_Google_Assistant_0385', 'TC_MFL_GAS_Google_Assistant_0436', 'TC_MFL_GAS_Google_Assistant_0593', 'TC_MFL_GAS_Google_Assistant_0629', 'TC_MFL_GAS_Google_Assistant_0695', 'TC_MFL_GAS_Google_Assistant_0696', 'TC_MFL_GAS_Google_Assistant_0697', 'TC_MFL_GAS_Google_Assistant_0729', 'TC_MFL_GAS_Maps_0160', 'TC_MFL_GAS_Maps_0161', 'TC_Maps_Card_0003', 'TC_PINUIN_IgnitionCycle_014', 'TC_PINUIN_IgnitionCycle_023', 'TC_PINUI_SwitchUser_022', 'TC_PINUI_SwitchUser_023', 'TC_PINUI_SwitchUser_024', 'TC_PINUI_SwitchUser_025', 'TC_PINUI_SwitchUser_026', 'TC_Projection_PTT_0008', 'TC_Wireless_AA_TermsofUse_13', 'TC_Wireless_Android_Auto_Interaction_003', 'TC_dialogue_0016', 'TC_dialogue_0020', 'TC_CLU_ANDROID_AUTO_0004_Wireless', 'TC_CLU_ANDROID_AUTO_0005_Wireless', 'TC_CLU_ANDROID_AUTO_0006_Wireless']
+fail_case_sheet = ['Fail Cases Warren',
+                   'Fail Cases China', 'Cases for Lui Fei']
 
-titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Precondition',
-          'Test steps', 'Expected', 'Testing Objective', 'Phone', 'User', 'Online/Offline', 'Sign Status',
-          'W50_tester', 'W50_Comment', 'W50_result', 'W50_comment']
+# difficult_cases = ['TC_MFL_45104_Wireless_AndroidAuto_0058', 'TC_MFL_GAS_Google_Assistant_0636', 'TC_MFL_GAS_Google_Assistant_0652', 'TC_MFL_GAS_Google_Assistant_0774', 'TC_MFL_GAS_Google_Assistant_0692', 'TC_MFL_GAS_Google_Assistant_0538', 'TC_MFL_GAS_Google_Assistant_0623', 'TC_MFL_GAS_Google_Assistant_0628', 'TC_MFL_GAS_Google_Assistant_0767', 'TC_MFL_000000_GAS_Google_Assistant_0002', 'TC_MFL_GAS_Google_Assistant_0172', 'TC_MFL_GAS_Google_Assistant_0173', 'TC_MFL_GAS_Google_Assistant_0174', 'TC_MFL_GAS_Google_Assistant_0175', 'TC_MFL_GAS_Google_Assistant_0352', 'TC_MFL_GAS_Google_Assistant_0356', 'TC_MFL_GAS_Google_Assistant_0357', 'TC_MFL_GAS_Google_Assistant_0358', 'TC_MFL_GAS_Google_Assistant_0384', 'TC_MFL_GAS_Google_Assistant_0388', 'TC_MFL_GAS_Google_Assistant_0389', 'TC_MFL_GAS_Google_Assistant_0435', 'TC_MFL_GAS_Google_Assistant_0446', 'TC_MFL_GAS_Google_Assistant_0447', 'TC_MFL_GAS_Google_Assistant_0467', 'TC_MFL_GAS_Google_Assistant_0468', 'TC_MFL_GAS_Google_Assistant_0553', 'TC_MFL_GAS_Google_Assistant_0578', 'TC_MFL_GAS_Google_Assistant_0585', 'TC_MFL_GAS_Google_Assistant_0590', 'TC_MFL_GAS_Google_Assistant_0599', 'TC_MFL_GAS_Google_Assistant_0603', 'TC_MFL_GAS_Google_Assistant_0611', 'TC_MFL_GAS_Google_Assistant_0612', 'TC_MFL_GAS_Google_Assistant_0615', 'TC_MFL_GAS_Google_Assistant_0625', 'TC_MFL_GAS_Google_Assistant_0626', 'TC_MFL_GAS_Google_Assistant_0627', 'TC_MFL_GAS_Google_Assistant_0632', 'TC_MFL_GAS_Google_Assistant_0633', 'TC_MFL_GAS_Google_Assistant_0634', 'TC_MFL_GAS_Google_Assistant_0635', 'TC_MFL_GAS_Google_Assistant_0637', 'TC_MFL_GAS_Google_Assistant_0639', 'TC_MFL_GAS_Google_Assistant_0640', 'TC_MFL_GAS_Google_Assistant_0641', 'TC_MFL_GAS_Google_Assistant_0643', 'TC_MFL_GAS_Google_Assistant_0646', 'TC_MFL_GAS_Google_Assistant_0647', 'TC_MFL_GAS_Google_Assistant_0650', 'TC_MFL_GAS_Google_Assistant_0653', 'TC_MFL_GAS_Google_Assistant_0654', 'TC_MFL_GAS_Google_Assistant_0655',
+#                    'TC_MFL_GAS_Google_Assistant_0667', 'TC_MFL_GAS_Google_Assistant_0679', 'TC_MFL_GAS_Google_Assistant_0681', 'TC_MFL_GAS_Google_Assistant_0688', 'TC_MFL_GAS_Google_Assistant_0691', 'TC_MFL_GAS_Google_Assistant_0794', 'TC_Wireless_Android_Auto_193939_0011', 'TC_Android_Auto_0104_Wireless', 'TC_Android_Auto_0146_Wireless', 'TC_Android_Auto_0213_Wireless', 'TC_Android_Auto_0402_Wireless', 'TC_Android_Auto_Power_Off_0006', 'TC_Android_Auto_Wireless_210569_0003', 'TC_Android_Auto_connection_wireless_0001', 'TC_MEDIA_ANDROID_AUTO_0123_Wireless', 'TC_MFL_000000_GAS_Maps_0087', 'TC_MFL_000000_GAS_Maps_0101', 'TC_MFL_000000_GAS_Maps_0102', 'TC_MFL_000000_GAS_Maps_0106', 'TC_MFL_107206_Android_Auto_0070', 'TC_MFL_107206_Android_Auto_0071', 'TC_MFL_45104_Wireless_AndroidAuto_0038', 'TC_MFL_51771_BT_SR_Unavailable_0007', 'TC_MFL_51771_BT_SR_Unavailable_0008', 'TC_MFL_51771_BT_SR_Unavailable_0009', 'TC_MFL_51771_BT_SR_Unavailable_0016', 'TC_MFL_GAS_Google_Assistant_0201', 'TC_MFL_GAS_Google_Assistant_0203', 'TC_MFL_GAS_Google_Assistant_0204', 'TC_MFL_GAS_Google_Assistant_0205', 'TC_MFL_GAS_Google_Assistant_0206', 'TC_MFL_GAS_Google_Assistant_0353', 'TC_MFL_GAS_Google_Assistant_0385', 'TC_MFL_GAS_Google_Assistant_0436', 'TC_MFL_GAS_Google_Assistant_0593', 'TC_MFL_GAS_Google_Assistant_0629', 'TC_MFL_GAS_Google_Assistant_0695', 'TC_MFL_GAS_Google_Assistant_0696', 'TC_MFL_GAS_Google_Assistant_0697', 'TC_MFL_GAS_Google_Assistant_0729', 'TC_MFL_GAS_Maps_0160', 'TC_MFL_GAS_Maps_0161', 'TC_Maps_Card_0003', 'TC_PINUIN_IgnitionCycle_014', 'TC_PINUIN_IgnitionCycle_023', 'TC_PINUI_SwitchUser_022', 'TC_PINUI_SwitchUser_023', 'TC_PINUI_SwitchUser_024', 'TC_PINUI_SwitchUser_025', 'TC_PINUI_SwitchUser_026', 'TC_Projection_PTT_0008', 'TC_Wireless_AA_TermsofUse_13', 'TC_Wireless_Android_Auto_Interaction_003', 'TC_dialogue_0016', 'TC_dialogue_0020', 'TC_CLU_ANDROID_AUTO_0004_Wireless', 'TC_CLU_ANDROID_AUTO_0005_Wireless', 'TC_CLU_ANDROID_AUTO_0006_Wireless']
+
+titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment',
+          'Precondition', 'Test steps', 'Expected', 'Testing Objective', 'Phone', 'User', 'Online/Offline', 'Sign Status', 'Location'
+          'W50_result', 'W50_tester', 'Bug ID', 'W50_Automation_Comment']
 
 
 def matcher_slice(keywords, cell_data):
@@ -35,19 +38,27 @@ def matcher_split(keywords, cell_data):
 
 class Tc_sorter:
     def __init__(self, test_case_list, output_name, last_week, difficult_list):
+        print('Initiallizing...')
         self.test_case_list = str(test_case_list)
         self.output_name = str(output_name)
         self.last_week = str(last_week)
         self.sheet = (load_workbook(self.test_case_list)).active
+        print('{} loaded successfully'.format(self.test_case_list))
+
         self.last_week_result = (
             load_workbook(self.last_week)).active
-        self.wb = Workbook()
-        self.wb.active
+        print('{} loaded successfully'.format(self.last_week))
+
         self.difficult_list = str(difficult_list)
         self.dc_sheet = load_workbook(self.difficult_list).active
+        print(print('{} loaded successfully'.format(self.difficult_list)))
+
+        self.wb = Workbook()
+        self.wb.active
         for name in sheet_names:
             self.wb.create_sheet(name, int((sheet_names).index(name)))
             self.wb[name].append(titles)
+        print('Output file initiallized')
 
     def difficult_cases(self):
         difficult_cases = []
@@ -57,7 +68,7 @@ class Tc_sorter:
                 if cell is None:
                     cells.append('-')
                 else:
-                    cells.append(cells)
+                    cells.append(cell)
             if cells[-1] != '-':
                 difficult_cases.append(cells[-1])
             elif cells[-1] == '-':
@@ -144,23 +155,45 @@ class Tc_sorter:
                 ac_case = True
         return ac_case
 
+    def tc_location_dict(self):
+        tc_location = load_workbook('TC_location.xlsx').active
+        return {TCID: location for (TCID, location) in tc_location.iter_rows(
+            max_col=2, values_only=True) if TCID is not None}
+
     def sorting(self):
+        print('Opening a new sheet...')
         sheet = self.sheet
         last_week = self.last_week_result
+        print('Last week result loaded successfully')
+        difficult_cases_list = self.difficult_cases()
+        print('Difficult case list generated')
+        location_dict = self.tc_location_dict()
+        print('Test case location dictionary generated')
+        print('Iterating through the test plan......')
+
+        k = 1
+
         for row in sheet.iter_rows(max_col=5, values_only=True):
+            print('Iterate case no. {}'.format(k))
             cell_data = self.cell_data(row)
             self.formatter(cell_data)
             self.phone_type(cell_data)
             self.user(cell_data)
             self.connection(cell_data)
             self.sign_status(cell_data)
+            k += 1
+
+            if cell_data[0] != 'none':
+                cell_data.append(location_dict[cell_data[0]])
+            else:
+                cell_data.append('none')
 
             for last_week_row in last_week.iter_rows(max_col=5, values_only=True):
                 last_week_cell = self.cell_data(last_week_row)
                 if last_week_cell[0] == cell_data[0]:
+                    cell_data.append(last_week_cell[1])
                     cell_data.append(last_week_cell[2])
                     cell_data.append(last_week_cell[3])
-                    cell_data.append(last_week_cell[1])
                     cell_data.append(last_week_cell[4])
 
             # the final format will be like this:
@@ -169,7 +202,7 @@ class Tc_sorter:
             #  'phone_type', 'user', 'connection', 'sign_status',
             #  'name of tester', 'last_week_result']
 
-            if cell_data[0] in difficult_cases:
+            if cell_data[0] in difficult_cases_list:
                 self.wb['Difficult_cases'].append(cell_data)
 
             elif self.bench_only(cell_data):
@@ -179,31 +212,32 @@ class Tc_sorter:
                 self.wb['ac_only'].append(cell_data)
 
             else:
-
-                if cell_data[9] == 'Driver' and cell_data[10] == 'Online' and cell_data[11] == 'sign_in':
+                i = 9
+                if cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Driver_Online_In'].append(cell_data)
-                elif cell_data[9] == 'Driver' and cell_data[10] == 'Online' and cell_data[11] == 'sign_out':
+                elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_out':
                     self.wb['Driver_Online_Out'].append(cell_data)
-                elif cell_data[9] == 'Driver' and cell_data[10] == 'Offline' and cell_data[11] == 'sign_in':
+                elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_in':
                     self.wb['Driver_Offline_In'].append(cell_data)
-                elif cell_data[9] == 'Driver' and cell_data[10] == 'Offline' and cell_data[11] == 'sign_out':
+                elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_out':
                     self.wb['Driver_Offline_Out'].append(cell_data)
 
-                elif cell_data[9] == 'Guest' and cell_data[10] == 'Online' and cell_data[11] == 'sign_in':
+                elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Guest_Online_In'].append(cell_data)
-                elif cell_data[9] == 'Guest' and cell_data[10] == 'Online' and cell_data[11] == 'sign_out':
+                elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_out':
                     self.wb['Guest_Online_Out'].append(cell_data)
-                elif cell_data[9] == 'Guest' and cell_data[10] == 'Offline' and cell_data[11] == 'sign_in':
+                elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_in':
                     self.wb['Guest_Offline_In'].append(cell_data)
-                elif cell_data[9] == 'Guest' and cell_data[10] == 'Offline' and cell_data[11] == 'sign_out':
+                elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_out':
                     self.wb['Guest_Offline_Out'].append(cell_data)
                 else:
                     self.wb['Other'].append(cell_data)
 
+        print('Saving the file named {}'.format(self.output_name))
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W51.xlsx',
-                    'MY22_W51.xlsx', 'Result_P&F_W50.xlsx')
+testing = Tc_sorter('W51_test_plan.xlsx',
+                    'output.xlsx', 'W51_result.xlsx', 'W51_difficult.xlsx')
 
 testing.sorting()
