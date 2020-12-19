@@ -34,7 +34,7 @@ def matcher_split(keywords, cell_data):
 
 
 class Tc_sorter:
-    def __init__(self, test_case_list, output_name, last_week):
+    def __init__(self, test_case_list, output_name, last_week, difficult_list):
         self.test_case_list = str(test_case_list)
         self.output_name = str(output_name)
         self.last_week = str(last_week)
@@ -43,9 +43,26 @@ class Tc_sorter:
             load_workbook(self.last_week)).active
         self.wb = Workbook()
         self.wb.active
+        self.difficult_list = str(difficult_list)
+        self.dc_sheet = load_workbook(self.difficult_list).active
         for name in sheet_names:
             self.wb.create_sheet(name, int((sheet_names).index(name)))
             self.wb[name].append(titles)
+
+    def difficult_cases(self):
+        difficult_cases = []
+        for row in self.dc_sheet.iter_rows(max_col=1, values_only=True):
+            cells = []
+            for cell in row:
+                if cell is None:
+                    cells.append('-')
+                else:
+                    cells.append(cells)
+            if cells[-1] != '-':
+                difficult_cases.append(cells[-1])
+            elif cells[-1] == '-':
+                break
+        return difficult_cases[1:]
 
     def cell_data(self, row):
         cells = []
