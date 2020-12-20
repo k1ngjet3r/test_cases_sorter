@@ -15,7 +15,11 @@ To make our life easier by avoiding sort the 1000+ test cases manually
 
 ## Version History
 * V1.3
-    * Adding past result 
+    * Adding past result
+    * Adding the cases' location
+    * Fail-cases-related sheet automation generator
+    * Format correction
+    * Output progress status
 
 * V1.2
     * Rename the TC_sorter_class.py to MY_22_sorter.py
