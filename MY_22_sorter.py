@@ -59,7 +59,7 @@ class Tc_sorter:
             self.wb[name].append(titles)
         for fail_name in fail_case_sheet:
             self.wb.create_sheet(fail_name, int(
-                (fail_case_sheet).index(fail_name)))
+                (fail_case_sheet    ).index(fail_name)))
             self.wb[fail_name].append(fail_case_title)
         print('Output file initiallized')
 
