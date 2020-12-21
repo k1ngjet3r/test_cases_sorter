@@ -13,9 +13,9 @@ fail_case_sheet = ['Fail Cases Warren',
 fail_case_title = ['Date of failure', 'Ticket Filed', 'Original GM TC ID', 'Product Line', 'Case Location', 'Result Taipei', 'BUG ID',
                    'Precondition', 'Test steps', 'Expected', 'Automation Comment', 'Result Beijing, Nanjing, Warren', 'Comment Beijing, Nanjing, Warren', 'Tester']
 
-titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment',
+titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Note',
           'Precondition', 'Test steps', 'Expected', 'Testing Objective', 'Phone', 'User', 'Online/Offline', 'Sign Status', 'Location',
-          'W50_result', 'W50_tester', 'W50_Automation_Comment', 'Note']
+          'W50_result', 'W50_tester', 'W50_Automation_Comment']
 
 
 def matcher_slice(keywords, cell_data):
@@ -58,8 +58,7 @@ class Tc_sorter:
             self.wb.create_sheet(name, int((sheet_names).index(name)))
             self.wb[name].append(titles)
         for fail_name in fail_case_sheet:
-            self.wb.create_sheet(fail_name, int(
-                (fail_case_sheet).index(fail_name)))
+            self.wb.create_sheet(fail_name, -1)
             self.wb[fail_name].append(fail_case_title)
         print('Output file initiallized')
 
@@ -198,6 +197,8 @@ class Tc_sorter:
                     cell_data.append(last_week_cell[2])
                     cell_data.append(last_week_cell[3])
                     cell_data.append(last_week_cell[4])
+
+                cell_data = cell_data[:4] + [cell_data[-1]] + cell_data[4:-1]
 
             # the final format will be like this:
             # ['ID', 'Pass/Fail', 'tester', 'comment',
