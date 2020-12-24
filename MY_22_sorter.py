@@ -13,7 +13,7 @@ fail_case_sheet = ['Fail Cases Warren',
 fail_case_title = ['Date of failure', 'Ticket Filed', 'Original GM TC ID', 'Product Line', 'Case Location', 'Result Taipei', 'BUG ID',
                    'Precondition', 'Test steps', 'Expected', 'Automation Comment', 'Result Beijing, Nanjing, Warren', 'Comment Beijing, Nanjing, Warren', 'Tester']
 
-titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Note',
+titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Bug ID', 'Note',
           'Precondition', 'Test steps', 'Expected', 'Testing Objective', 'Phone', 'User', 'Online/Offline', 'Sign Status', 'Location',
           'W50_result', 'W50_tester', 'W50_Automation_Comment']
 
@@ -198,7 +198,7 @@ class Tc_sorter:
                     cell_data.append(last_week_cell[3])
                     cell_data.append(last_week_cell[4])
 
-                cell_data = cell_data[:4] + [cell_data[-1]] + cell_data[4:-1]
+                cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1]
 
             # the final format will be like this:
             # ['ID', 'Pass/Fail', 'tester', 'comment',
@@ -216,7 +216,7 @@ class Tc_sorter:
                 self.wb['ac_only'].append(cell_data)
 
             else:
-                i = 10
+                i = 11
                 if cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Driver_Online_In'].append(cell_data)
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_out':
