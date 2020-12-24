@@ -15,11 +15,10 @@ To make our life easier by avoiding sort the 1000+ test cases manually
 
 ## Version History
 * V1.3
-    * Adding past result
-    * Adding the cases' location
+    * Adding past result, cases' location, and failed cases' bug ID columns
     * Fail-cases-related sheet automation generator
     * Format correction
-    * Output progress status
+    * Introducing output progress status when executing the program
 
 * V1.2
     * Rename the TC_sorter_class.py to MY_22_sorter.py
