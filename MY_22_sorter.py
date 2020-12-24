@@ -216,7 +216,7 @@ class Tc_sorter:
                 self.wb['ac_only'].append(cell_data)
 
             else:
-                i = 9
+                i = 10
                 if cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Driver_Online_In'].append(cell_data)
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_out':
