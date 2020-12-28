@@ -138,7 +138,7 @@ class Tc_sorter:
 
     def bench_only(self, cell_data):
         press_button = ['long press', 'short press', 'press "end" key']
-        cluster = ['cluster', 'swc', 'ipc']
+        cluster = ['cluster', 'swc', 'ipc', 'clustor']
         speed_limit = ['speed limit']
         expection = ['short press Power key', 'Long press Power button',
                      'DLM', 'short press selection buttion on the rotary wheel']
