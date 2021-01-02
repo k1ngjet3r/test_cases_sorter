@@ -120,7 +120,7 @@ class Tc_sorter:
             cell_data.append('Online')
 
     def formatter(self, cell_data):
-        for _ in range(3):
+        for _ in range(5):
             cell_data.insert(1, '')
 
     def user(self, cell_data):
@@ -160,8 +160,17 @@ class Tc_sorter:
 
     def tc_location_dict(self):
         tc_location = load_workbook('TC_location.xlsx').active
+        # stored the data in a dictionary {test_case: location}
         return {TCID: location for (TCID, location) in tc_location.iter_rows(
             max_col=2, values_only=True) if TCID is not None}
+
+    def last_week_result(self):
+        last_week_dict = {}
+        last_week = self.last_week_result
+        for row in last_week.iter_rows(max_col=5, values_only=True):
+            last_week_cell = self.cell_data(row)
+            last_week_dict[last_week_cell[0]] = last_week_cell[1:]
+        return last_week_dict
 
     def sorting(self):
         print('Opening a new sheet...')
@@ -176,13 +185,21 @@ class Tc_sorter:
 
         k = 1
 
+        # Iterate through the unprocessd test cases
+        # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
         for row in sheet.iter_rows(max_col=5, values_only=True):
             print('Iterate case no. {}'.format(k))
+            # turn the data into a list
             cell_data = self.cell_data(row)
+            # adding 'pass/fail', 'Tester', 'Automation_comment', 'bug ID', 'Note' to the list
             self.formatter(cell_data)
+            # determine the phone type
             self.phone_type(cell_data)
+            # determine the user type
             self.user(cell_data)
+            # determine online/offline
             self.connection(cell_data)
+            # determine sign-in/sign-out
             self.sign_status(cell_data)
             k += 1
 
