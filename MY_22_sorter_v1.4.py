@@ -164,18 +164,17 @@ class Tc_sorter:
         return {TCID: location for (TCID, location) in tc_location.iter_rows(
             max_col=2, values_only=True) if TCID is not None}
 
-    def last_week_result(self):
+    def last_week_result_dict(self):
         last_week_dict = {}
         last_week = self.last_week_result
-        for row in last_week.iter_rows(max_col=5, values_only=True):
-            last_week_cell = self.cell_data(row)
+        for last_week_row in last_week.iter_rows(max_col=5, values_only=True):
+            last_week_cell = self.cell_data(last_week_row)
             last_week_dict[last_week_cell[0]] = last_week_cell[1:]
         return last_week_dict
 
     def sorting(self):
         print('Opening a new sheet...')
         sheet = self.sheet
-        last_week = self.last_week_result
         print('Last week result loaded successfully')
         difficult_cases_list = self.difficult_cases()
         print('Difficult case list generated')
@@ -208,15 +207,19 @@ class Tc_sorter:
             else:
                 cell_data.append(' ')
 
-            for last_week_row in last_week.iter_rows(max_col=5, values_only=True):
-                last_week_cell = self.cell_data(last_week_row)
-                if last_week_cell[0] == cell_data[0]:
-                    cell_data.append(last_week_cell[1])
-                    cell_data.append(last_week_cell[2])
-                    cell_data.append(last_week_cell[3])
-                    cell_data.append(last_week_cell[4])
+            # for last_week_row in last_week.iter_rows(max_col=5, values_only=True):
+            #     last_week_cell = self.cell_data(last_week_row)
+            #     if last_week_cell[0] == cell_data[0]:
+            #         cell_data.append(last_week_cell[1])
+            #         cell_data.append(last_week_cell[2])
+            #         cell_data.append(last_week_cell[3])
+            #         cell_data.append(last_week_cell[4])
+            last_week_dict = self.last_week_result_dict()
 
-                cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1]
+            for i in range(4):
+                cell_data.append(last_week_dict[cell_data[0]][i])
+
+            cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1]
 
             # the final format will be like this:
             # ['ID', 'Pass/Fail', 'tester', 'comment',
@@ -224,6 +227,7 @@ class Tc_sorter:
             #  'phone_type', 'user', 'connection', 'sign_status',
             #  'name of tester', 'last_week_result']
 
+            # Distributing the test case to the desinated sheet
             if cell_data[0] in difficult_cases_list:
                 self.wb['Difficult_cases'].append(cell_data)
 
