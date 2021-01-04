@@ -17,6 +17,8 @@ titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Bug
           'Precondition', 'Test steps', 'Expected', 'Testing Objective', 'Phone', 'User', 'Online/Offline', 'Sign Status', 'Location',
           'W50_result', 'W50_tester', 'W50_Automation_Comment']
 
+# the index of the precondition
+pre_index = 5
 
 def matcher_slice(keywords, cell_data):
     sen = cell_data.lower()
@@ -90,7 +92,7 @@ class Tc_sorter:
         iphone = ['iphone', 'cp', 'wcp']
         android = ['android', 'waa', 'aa']
         phone_requirement = [0, 0]
-        for cell in cell_data[5:7]:
+        for cell in cell_data[pre_index:pre_index+2]:
             if matcher_split(iphone, cell):
                 phone_requirement[0] = 1
             if matcher_slice(android, cell):
@@ -107,14 +109,14 @@ class Tc_sorter:
     def sign_status(self, cell_data):
         sign_out = ['sign out', 'sign-out', 'signout',
                     'signed out', 'no google user is logged  in', 'No user is signed in']
-        if matcher_slice(sign_out, cell_data[5]):
+        if matcher_slice(sign_out, cell_data[pre_index]):
             cell_data.append('sign_out')
         else:
             cell_data.append('sign_in')
 
     def connection(self, cell_data):
         offline = ['offline']
-        if matcher_split(offline, cell_data[5]):
+        if matcher_split(offline, cell_data[pre_index]):
             cell_data.append('Offline')
         else:
             cell_data.append('Online')
@@ -127,11 +129,11 @@ class Tc_sorter:
         guest = ['guest']
         others = ['secondary', 'user 1', 'user 2', 'user1', 'user2']
         primary = ['primary']
-        if matcher_split(guest, cell_data[5]):
+        if matcher_split(guest, cell_data[pre_index]):
             cell_data.append('Guest')
-        elif matcher_slice(others, cell_data[5]):
+        elif matcher_slice(others, cell_data[pre_index]):
             cell_data.append('Others')
-        elif matcher_split(guest, cell_data[6]) and (matcher_slice(others, cell_data[6]) or matcher_split(primary, cell_data[6])):
+        elif matcher_split(guest, cell_data[pre_index+1]) and (matcher_slice(others, cell_data[pre_index+1]) or matcher_split(primary, cell_data[pre_index+1])):
             cell_data.append('multiple')
         else:
             cell_data.append('Driver')
@@ -143,7 +145,7 @@ class Tc_sorter:
         expection = ['short press Power key', 'Long press Power button',
                      'DLM', 'short press selection buttion on the rotary wheel']
         bench_only_case = False
-        for cell in cell_data[5:8]:
+        for cell in cell_data[pre_index:pre_index+3]:
             if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and matcher_slice(expection, cell) != True:
                 bench_only_case = True
         return bench_only_case
@@ -153,7 +155,7 @@ class Tc_sorter:
               'defroster', 'hvac']
         ac_split = ['air', 'fan']
         ac_case = False
-        for cell in cell_data[5:8]:
+        for cell in cell_data[pre_index:pre_index+3]:
             if matcher_slice(ac, cell) or matcher_split(ac_split, cell):
                 ac_case = True
         return ac_case
@@ -201,8 +203,6 @@ class Tc_sorter:
             # determine sign-in/sign-out
             self.sign_status(cell_data)
             k += 1
-
-            print(cell_data)
 
             if cell_data[0] != 'none':
                 cell_data.append(location_dict[cell_data[0]])
