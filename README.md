@@ -14,6 +14,12 @@ To make our life easier by avoiding sort the 1000+ test cases manually
 4. Execute the script and wait for the output file generated
 
 ## Version History
+* V1.4
+    * Performance improvement (for loop -> dictionary)
+    * Fixed 'none' key issue
+    * Isolated the precondiction index
+
+
 * V1.3
     * Adding past result, cases' location, and failed cases' bug ID columns
     * Fail-cases-related sheet automation generator

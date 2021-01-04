@@ -209,13 +209,6 @@ class Tc_sorter:
             elif cell_data[0] == 'none':
                 break
 
-            # for last_week_row in last_week.iter_rows(max_col=5, values_only=True):
-            #     last_week_cell = self.cell_data(last_week_row)
-            #     if last_week_cell[0] == cell_data[0]:
-            #         cell_data.append(last_week_cell[1])
-            #         cell_data.append(last_week_cell[2])
-            #         cell_data.append(last_week_cell[3])
-            #         cell_data.append(last_week_cell[4])
             last_week_dict = self.last_week_result_dict()
 
             for i in range(4):
