@@ -205,14 +205,20 @@ class Tc_sorter:
             k += 1
 
             if cell_data[0] != 'none':
-                cell_data.append(location_dict[cell_data[0]])
+                if cell_data[0] in location_dict:
+                    cell_data.append(location_dict[cell_data[0]])
+                else:
+                    continue
             elif cell_data[0] == 'none':
                 break
 
             last_week_dict = self.last_week_result_dict()
 
             for i in range(4):
-                cell_data.append(last_week_dict[cell_data[0]][i])
+                if cell_data[0] in last_week_dict:
+                    cell_data.append(last_week_dict[cell_data[0]][i])
+                else:
+                    continue
 
             cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1]
 
@@ -252,7 +258,7 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W51_test_plan.xlsx',
-                    'output.xlsx', 'W51_result.xlsx', 'W51_difficult.xlsx')
+testing = Tc_sorter('W03_official.xlsx',
+                    'W03_sorted.xlsx', 'W52_result.xlsx', 'Difficult_cases.xlsx')
 
 testing.sorting()
