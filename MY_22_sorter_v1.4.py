@@ -127,11 +127,12 @@ class Tc_sorter:
 
     def user(self, cell_data):
         guest = ['guest']
+        non_guest = ['non-guest']
         others = ['secondary', 'user 1', 'user 2', 'user1', 'user2']
         primary = ['primary']
-        if matcher_split(guest, cell_data[pre_index]):
+        if matcher_split(guest, cell_data[pre_index]) and matcher_slice(non_guest, cell_data[pre_index]) is not False:
             cell_data.append('Guest')
-        elif matcher_slice(others, cell_data[pre_index]):
+        elif matcher_slice(others, cell_data[pre_index]) or  matcher_slice(non_guest, cell_data[pre_index]):
             cell_data.append('Others')
         elif matcher_split(guest, cell_data[pre_index+1]) and (matcher_slice(others, cell_data[pre_index+1]) or matcher_split(primary, cell_data[pre_index+1])):
             cell_data.append('multiple')
