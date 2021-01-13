@@ -18,7 +18,8 @@ titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Bug
           'W50_result', 'W50_tester', 'W50_Automation_Comment']
 
 # the index of the precondition
-pre_index = 5
+pre_index = 6
+
 
 def matcher_slice(keywords, cell_data):
     sen = cell_data.lower()
@@ -132,7 +133,7 @@ class Tc_sorter:
         primary = ['primary']
         if matcher_split(guest, cell_data[pre_index]) and matcher_slice(non_guest, cell_data[pre_index]) is not False:
             cell_data.append('Guest')
-        elif matcher_slice(others, cell_data[pre_index]) or  matcher_slice(non_guest, cell_data[pre_index]):
+        elif matcher_slice(others, cell_data[pre_index]) or matcher_slice(non_guest, cell_data[pre_index]):
             cell_data.append('Others')
         elif matcher_split(guest, cell_data[pre_index+1]) and (matcher_slice(others, cell_data[pre_index+1]) or matcher_split(primary, cell_data[pre_index+1])):
             cell_data.append('multiple')
@@ -140,16 +141,18 @@ class Tc_sorter:
             cell_data.append('Driver')
 
     def bench_only(self, cell_data):
-        press_button = ['long press', 'short press', 'press "end" key']
+        press_button = ['long press', 'short press',
+                        'press "end" key', 'face plate']
         cluster = ['cluster', 'swc', 'ipc', 'clustor']
         speed_limit = ['speed limit']
-        expection = ['short press Power key', 'Long press Power button',
+        expection = ['short press Power key', 'Long press Power button', 'short press Power button', 'Long press Power key',
                      'DLM', 'short press selection buttion on the rotary wheel']
-        bench_only_case = False
+
+        # [pre_index:pre_index+3] = [prediction, test step, expected]
         for cell in cell_data[pre_index:pre_index+3]:
             if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and matcher_slice(expection, cell) != True:
-                bench_only_case = True
-        return bench_only_case
+                return True
+        return False
 
     def ac_only(self, cell_data):
         ac = ['a/c', 'temperature', 'climate',
@@ -189,41 +192,78 @@ class Tc_sorter:
 
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
-        for row in sheet.iter_rows(max_col=5, values_only=True):
+        for row in sheet.iter_rows(max_col=5, max_row=1651, values_only=True):
             print('Iterate case no. {}'.format(k))
             # turn the data into a list
             cell_data = self.cell_data(row)
-            # adding 'pass/fail', 'Tester', 'Automation_comment', 'bug ID', 'Note' to the list
+            ''' 
+                Original case format:
+                [TCID, Precondition, Test Step, Expected, Objective]
+            '''
+            # adding 'pass/fail', 'Tester', 'Automation_comment', 'bug ID' to the list
             self.formatter(cell_data)
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective]
+            '''
             # determine the phone type
             self.phone_type(cell_data)
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type]
+            '''
             # determine the user type
             self.user(cell_data)
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User]
+            '''
             # determine online/offline
             self.connection(cell_data)
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline]
+            '''
             # determine sign-in/sign-out
             self.sign_status(cell_data)
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline, sign-in/out]
+            '''
             k += 1
 
+            # determine the location of the test case
             if cell_data[0] != 'none':
                 if cell_data[0] in location_dict:
                     cell_data.append(location_dict[cell_data[0]])
                 else:
-                    continue
-            elif cell_data[0] == 'none':
-                break
+                    cell_data.append(' ')
+                    ''' 
+                        [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline, sign-in/out, location]
+                    '''
+            # Stop the iteration when all the test cases were passed in the loop
+            # elif cell_data[0] == 'none':
+            #     break
 
+            # Generate the last week's result into dictionary
             last_week_dict = self.last_week_result_dict()
 
+            # Determine the location of the test cases
             for i in range(4):
                 if cell_data[0] in last_week_dict:
                     cell_data.append(last_week_dict[cell_data[0]][i])
                 else:
-                    continue
+                    cell_data.append(' ')
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline, sign-in/out, location, W-1_result, W-1_tester, W-1_Automation_Comment, Note]
+            '''
 
+            # Reorginized the order
             cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1]
+            '''
+                cell_data[:5]   = [TCID, pass/fail, 'Tester, Automation_comment, bug ID]
+                cell_data[-1]   = [Note]
+                cell_data[5:-1] = [Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline, sign-in/out, location, W-1_result, W-1_tester, W-1_Automation_Comment]
+
+            '''
 
             # Distributing the test case to the desinated sheet
+            # if the TCID in difficult_cases_list, append it to "Difficult_cases" sheet
             if cell_data[0] in difficult_cases_list:
                 self.wb['Difficult_cases'].append(cell_data)
 
@@ -259,7 +299,7 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W03_official.xlsx',
+testing = Tc_sorter('origi.xlsx',
                     'W03_sorted.xlsx', 'W52_result.xlsx', 'Difficult_cases.xlsx')
 
 testing.sorting()
