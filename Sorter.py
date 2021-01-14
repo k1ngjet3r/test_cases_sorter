@@ -1,0 +1,262 @@
+from openpyxl import load_workbook
+from openpyxl import Workbook
+import re
+
+sheet_names = [
+    'Difficult_cases', 'Bench_only', 'ac_only',
+    'Driver_Online_In', 'Driver_Online_Out', 'Driver_Offline_In', 'Driver_Offline_Out',
+    'Guest_Online_In', 'Other']
+
+fail_case_sheet = ['Fail Cases Warren',
+                   'Fail Cases China', 'Cases for Lui Fei']
+
+fail_case_title = ['Date of failure', 'Ticket Filed', 'Original GM TC ID', 'Product Line', 'Case Location', 'Result Taipei', 'BUG ID',
+                   'Precondition', 'Test steps', 'Expected', 'Automation Comment', 'Result Beijing, Nanjing, Warren', 'Comment Beijing, Nanjing, Warren', 'Tester']
+
+titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Bug ID', 'Note',
+          'Precondition', 'Test steps', 'Expected', 'Testing Objective', 'Phone', 'User', 'Online/Offline', 'Sign Status', 'Location',
+          'W50_result', 'W50_tester', 'W50_Automation_Comment']
+
+# the index of the precondition
+pre_index = 6
+
+def matcher_slice(keywords, cell_data):
+    sen = cell_data.lower()
+    for key in keywords:
+        if re.search(key, sen):
+            return True
+    return False
+
+
+def matcher_split(keywords, cell_data):
+    clean_sentance = re.sub(r'[^\w]', ' ', cell_data.lower())
+    word_list = clean_sentance.split()
+    for key in keywords:
+        if key in word_list:
+            return True
+    return False
+
+class Tc_sorter:
+    def __init__(self, test_case_list, output_name, last_week, difficult_list):
+        print('Initiallizing...')
+        self.test_case_list = str(test_case_list)
+        self.output_name = str(output_name)
+        self.last_week = str(last_week)
+        self.sheet = (load_workbook(self.test_case_list)).active
+        print('{} loaded successfully'.format(self.test_case_list))
+
+        self.last_week_result = (
+            load_workbook(self.last_week)).active
+        print('{} loaded successfully'.format(self.last_week))
+
+        self.difficult_list = str(difficult_list)
+        self.dc_sheet = load_workbook(self.difficult_list).active
+        print(print('{} loaded successfully'.format(self.difficult_list)))
+
+        self.wb = Workbook()
+        self.wb.active
+        for name in sheet_names:
+            self.wb.create_sheet(name, int((sheet_names).index(name)))
+            self.wb[name].append(titles)
+        for fail_name in fail_case_sheet:
+            self.wb.create_sheet(fail_name, -1)
+            self.wb[fail_name].append(fail_case_title)
+        print('Output file initiallized')
+
+    def difficult_cases(self):
+        difficult_cases = []
+        for row in self.dc_sheet.iter_rows(max_col=1, values_only=True):
+            cells = []
+            for cell in row:
+                if cell is None:
+                    cells.append('-')
+                else:
+                    cells.append(cell)
+            if cells[-1] != '-':
+                difficult_cases.append(cells[-1])
+            elif cells[-1] == '-':
+                break
+        return difficult_cases[1:]
+
+    def cell_data(self, row):
+        cells = []
+        for cell in row:
+            if cell is None:
+                cells.append('none')
+            else:
+                cells.append(cell)
+        return cells
+
+    def phone_type(self, cell_data):
+        iphone = ['iphone', 'cp', 'wcp']
+        android = ['android', 'waa', 'aa']
+        phone_requirement = [0, 0]
+        for cell in cell_data[pre_index:pre_index+2]:
+            if matcher_split(iphone, cell):
+                phone_requirement[0] = 1
+            if matcher_slice(android, cell):
+                phone_requirement[1] = 1
+        if phone_requirement == [1, 0]:
+            cell_data.append('iPhone')
+        elif phone_requirement == [0, 1]:
+            cell_data.append('Android')
+        elif phone_requirement == [1, 1]:
+            cell_data.append('Both')
+        else:
+            cell_data.append(' ')
+
+    def sign_status(self, cell_data):
+        sign_out = ['sign out', 'sign-out', 'signout',
+                    'signed out', 'no google user is logged  in', 'No user is signed in']
+        if matcher_slice(sign_out, cell_data[pre_index]):
+            cell_data.append('sign_out')
+        else:
+            cell_data.append('sign_in')
+
+    def connection(self, cell_data):
+        offline = ['offline']
+        if matcher_split(offline, cell_data[pre_index]):
+            cell_data.append('Offline')
+        else:
+            cell_data.append('Online')
+
+    def formatter(self, cell_data):
+        for _ in range(4):
+            cell_data.insert(1, '')
+
+    def user(self, cell_data):
+        guest = ['guest']
+        non_guest = ['non-guest']
+        others = ['secondary', 'user 1', 'user 2', 'user1', 'user2']
+        primary = ['primary']
+        if matcher_split(guest, cell_data[pre_index]) and matcher_slice(non_guest, cell_data[pre_index]) is not False:
+            cell_data.append('Guest')
+        elif matcher_slice(others, cell_data[pre_index]) or matcher_slice(non_guest, cell_data[pre_index]):
+            cell_data.append('Others')
+        elif matcher_split(guest, cell_data[pre_index+1]) and (matcher_slice(others, cell_data[pre_index+1]) or matcher_split(primary, cell_data[pre_index+1])):
+            cell_data.append('multiple')
+        else:
+            cell_data.append('Driver')
+
+    def bench_only(self, cell_data):
+        press_button = ['long press', 'short press',
+                        'press "end" key', 'face plate']
+        cluster = ['cluster', 'swc', 'ipc', 'clustor']
+        speed_limit = ['speed limit']
+        expection = ['short press Power key', 'Long press Power button', 'short press Power button', 'Long press Power key',
+                     'DLM', 'short press selection buttion on the rotary wheel']
+
+        # [pre_index:pre_index+3] = [prediction, test step, expected]
+        for cell in cell_data[pre_index:pre_index+3]:
+            if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and matcher_slice(expection, cell) != True:
+                return True
+        return False
+
+    def ac_only(self, cell_data):
+        ac = ['a/c', 'temperature', 'climate',
+              'defroster', 'hvac']
+        ac_split = ['air', 'fan']
+        ac_case = False
+        for cell in cell_data[pre_index:pre_index+3]:
+            if matcher_slice(ac, cell) or matcher_split(ac_split, cell):
+                ac_case = True
+        return ac_case
+
+    def tc_location_dict(self):
+        tc_location = load_workbook('TC_location.xlsx').active
+        # stored the data in a dictionary {test_case: location}
+        return {TCID: location for (TCID, location) in tc_location.iter_rows(
+            max_col=2, values_only=True) if TCID is not None}
+
+    def last_week_result_dict(self):
+        last_week_dict = {}
+        last_week = self.last_week_result
+        for last_week_row in last_week.iter_rows(max_col=5, values_only=True):
+            last_week_cell = self.cell_data(last_week_row)
+            last_week_dict[last_week_cell[0]] = last_week_cell[1:]
+        return last_week_dict
+
+    def sorting(self):
+        print('Opening a new sheet...')
+        sheet = self.sheet
+        print('Last week result loaded successfully')
+        difficult_cases_list = self.difficult_cases()
+        print('Difficult case list generated')
+        location_dict = self.tc_location_dict()
+        print('Test case location dictionary generated')
+        print('Iterating through the test plan......')
+
+        k = 1
+
+           # Iterate through the unprocessd test cases
+        # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
+        for row in sheet.iter_rows(max_col=5, max_row=1651, values_only=True):
+            print('Iterate case no. {}'.format(k))
+            # turn the data into a list
+            cell_data = self.cell_data(row)
+            ''' 
+                Original case format:
+                [TCID, Precondition, Test Step, Expected, Objective]
+            '''
+            # adding 'pass/fail', 'Tester', 'Automation_comment', 'bug ID' to the list
+            self.formatter(cell_data)
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective]
+            '''
+            # determine the phone type
+            self.phone_type(cell_data)
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type]
+            '''
+            # determine the user type
+            self.user(cell_data)
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User]
+            '''
+            # determine online/offline
+            self.connection(cell_data)
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline]
+            '''
+            # determine sign-in/sign-out
+            self.sign_status(cell_data)
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline, sign-in/out]
+            '''
+            k += 1
+
+            # determine the location of the test case
+            if cell_data[0] != 'none':
+                if cell_data[0] in location_dict:
+                    cell_data.append(location_dict[cell_data[0]])
+                else:
+                    cell_data.append(' ')
+                    ''' 
+                        [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline, sign-in/out, location]
+                    '''
+            # Stop the iteration when all the test cases were passed in the loop
+            # elif cell_data[0] == 'none':
+            #     break
+
+            # Generate the last week's result into dictionary
+            last_week_dict = self.last_week_result_dict()
+
+            # Determine the location of the test cases
+            for i in range(4):
+                if cell_data[0] in last_week_dict:
+                    cell_data.append(last_week_dict[cell_data[0]][i])
+                else:
+                    cell_data.append(' ')
+            ''' 
+                [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline, sign-in/out, location, W-1_result, W-1_tester, W-1_Automation_Comment, Note]
+            '''
+
+            # Reorginized the order
+            cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1] 
+
+            print(cell_data)
+
+testing = Tc_sorter('original.xlsx',
+                    'W03_sorted.xlsx', 'W52_result.xlsx', 'Difficult_cases.xlsx')
+
+testing.sorting()
