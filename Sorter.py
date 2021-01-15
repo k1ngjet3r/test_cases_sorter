@@ -1,3 +1,4 @@
+from os import replace
 from openpyxl import load_workbook
 from openpyxl import Workbook
 import re
@@ -85,7 +86,8 @@ class Tc_sorter:
                 cells.append('none')
             else:
                 cells.append(cell)
-        return cells
+        # return cells 
+        print(cells)
 
     def phone_type(self, cell_data):
         iphone = ['iphone', 'cp', 'wcp']
@@ -190,35 +192,42 @@ class Tc_sorter:
 
            # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
-        for row in sheet.iter_rows(max_col=5, max_row=1651, values_only=True):
+        for row in sheet.iter_rows(max_col=5, max_row=1, values_only=True):
             print('Iterate case no. {}'.format(k))
             # turn the data into a list
+            print('turn the data into a list')
             cell_data = self.cell_data(row)
             ''' 
                 Original case format:
                 [TCID, Precondition, Test Step, Expected, Objective]
             '''
+            print(cell_data[0])
             # adding 'pass/fail', 'Tester', 'Automation_comment', 'bug ID' to the list
+            print(3)
             self.formatter(cell_data)
             ''' 
                 [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective]
             '''
             # determine the phone type
+            print(4)
             self.phone_type(cell_data)
             ''' 
                 [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type]
             '''
             # determine the user type
+            print(5)
             self.user(cell_data)
             ''' 
                 [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User]
             '''
             # determine online/offline
+            print(6)
             self.connection(cell_data)
             ''' 
                 [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline]
             '''
             # determine sign-in/sign-out
+            print(7)
             self.sign_status(cell_data)
             ''' 
                 [TCID, pass/fail, Tester, Automation_comment, bug ID, Precondition, Test Step, Expected, Objective, Phone_type, User, Online/offline, sign-in/out]
@@ -254,9 +263,11 @@ class Tc_sorter:
             # Reorginized the order
             cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1] 
 
+            
             print(cell_data)
+            
 
-testing = Tc_sorter('original.xlsx',
+testing = Tc_sorter('unicode_case (1).xlsx',
                     'W03_sorted.xlsx', 'W52_result.xlsx', 'Difficult_cases.xlsx')
 
 testing.sorting()

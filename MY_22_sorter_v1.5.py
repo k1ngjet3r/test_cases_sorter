@@ -18,11 +18,13 @@ titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Bug
           'W50_result', 'W50_tester', 'W50_Automation_Comment']
 
 # the index of the precondition
-pre_index = 6
+# This index is the postion of the precondition before "note" tap was moved to position 5
+pre_index = 5
 
 
 def matcher_slice(keywords, cell_data):
     sen = cell_data.lower()
+    # slice the string into pieces depend on the length of the string
     for key in keywords:
         if re.search(key, sen):
             return True
@@ -195,7 +197,12 @@ class Tc_sorter:
         for row in sheet.iter_rows(max_col=5, max_row=1651, values_only=True):
             print('Iterate case no. {}'.format(k))
             # turn the data into a list
-            cell_data = self.cell_data(row)
+            cell_data = []
+            for cell in row:
+                if cell is not None:
+                    cell_data.append(cell)
+                else:
+                    cell_data.append('none')
             ''' 
                 Original case format:
                 [TCID, Precondition, Test Step, Expected, Objective]
