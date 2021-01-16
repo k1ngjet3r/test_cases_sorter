@@ -130,9 +130,9 @@ class Tc_sorter:
         non_guest = ['non-guest']
         others = ['secondary', 'user 1', 'user 2', 'user1', 'user2']
         primary = ['primary']
-        if matcher_split(guest, cell_data[pre_index]) and matcher_slice(non_guest, cell_data[pre_index]) is not False:
+        if matcher_split(guest, cell_data[pre_index]) and matcher_slice(non_guest, cell_data[pre_index]) is False:
             cell_data.append('Guest')
-        elif matcher_slice(others, cell_data[pre_index]) or  matcher_slice(non_guest, cell_data[pre_index]):
+        elif matcher_slice(others, cell_data[pre_index]) or matcher_slice(non_guest, cell_data[pre_index]):
             cell_data.append('Others')
         elif matcher_split(guest, cell_data[pre_index+1]) and (matcher_slice(others, cell_data[pre_index+1]) or matcher_split(primary, cell_data[pre_index+1])):
             cell_data.append('multiple')
@@ -143,7 +143,7 @@ class Tc_sorter:
         press_button = ['long press', 'short press', 'press "end" key']
         cluster = ['cluster', 'swc', 'ipc', 'clustor']
         speed_limit = ['speed limit']
-        expection = ['short press Power key', 'Long press Power button',
+        expection = ['short press Power key', 'long press Power key', 'long press Power button', 'short press Power button', 
                      'DLM', 'short press selection buttion on the rotary wheel']
         bench_only_case = False
         for cell in cell_data[pre_index:pre_index+3]:
@@ -192,7 +192,12 @@ class Tc_sorter:
         for row in sheet.iter_rows(max_col=5, values_only=True):
             print('Iterate case no. {}'.format(k))
             # turn the data into a list
-            cell_data = self.cell_data(row)
+            cell_data = []
+            for cell in row:
+                if cell is not None:
+                    cell_data.append(cell)
+                else:
+                    cell_data.append('none')
             # adding 'pass/fail', 'Tester', 'Automation_comment', 'bug ID', 'Note' to the list
             self.formatter(cell_data)
             # determine the phone type
@@ -259,7 +264,7 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W03_official.xlsx',
+testing = Tc_sorter('Original.xlsx',
                     'W03_sorted.xlsx', 'W52_result.xlsx', 'Difficult_cases.xlsx')
 
 testing.sorting()

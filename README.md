@@ -3,7 +3,7 @@
 To make our life easier by avoiding sort the 1000+ test cases manually
 
 ## Setup
-* Python with version 3.7+
+* Python with version 3.6+
 * Visual Studio Code (optional)
 * Openpyxl installed
 
@@ -18,7 +18,6 @@ To make our life easier by avoiding sort the 1000+ test cases manually
     * Performance improvement (for loop -> dictionary)
     * Fixed 'none' key issue
     * Isolated the precondiction index
-
 
 * V1.3
     * Adding past result, cases' location, and failed cases' bug ID columns
