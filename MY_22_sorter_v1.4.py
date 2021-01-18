@@ -189,7 +189,7 @@ class Tc_sorter:
 
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
-        for row in sheet.iter_rows(max_col=5, values_only=True):
+        for row in sheet.iter_rows(max_col=5, max_row=1651, values_only=True):
             print('Iterate case no. {}'.format(k))
             # turn the data into a list
             cell_data = []
@@ -198,6 +198,7 @@ class Tc_sorter:
                     cell_data.append(cell)
                 else:
                     cell_data.append('none')
+
             # adding 'pass/fail', 'Tester', 'Automation_comment', 'bug ID', 'Note' to the list
             self.formatter(cell_data)
             # determine the phone type
@@ -210,13 +211,10 @@ class Tc_sorter:
             self.sign_status(cell_data)
             k += 1
 
-            if cell_data[0] != 'none':
-                if cell_data[0] in location_dict:
-                    cell_data.append(location_dict[cell_data[0]])
-                else:
-                    continue
-            elif cell_data[0] == 'none':
-                break
+            if cell_data[0] in location_dict:
+                cell_data.append(location_dict[cell_data[0]])
+            else:
+                cell_data.append('none')
 
             last_week_dict = self.last_week_result_dict()
 
@@ -265,6 +263,6 @@ class Tc_sorter:
 
 
 testing = Tc_sorter('Original.xlsx',
-                    'W04_sorted.xlsx', 'W03_result.xlsx', 'Difficult_cases.xlsx')
+                    'W04_sorted.xlsx', 'W03_result.xlsx', 'track test.xlsx')
 
 testing.sorting()
