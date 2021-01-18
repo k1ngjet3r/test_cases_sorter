@@ -265,6 +265,6 @@ class Tc_sorter:
 
 
 testing = Tc_sorter('Original.xlsx',
-                    'W03_sorted.xlsx', 'W52_result.xlsx', 'Difficult_cases.xlsx')
+                    'W04_sorted.xlsx', 'W03_result.xlsx', 'Difficult_cases.xlsx')
 
 testing.sorting()
