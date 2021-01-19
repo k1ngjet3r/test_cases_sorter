@@ -143,8 +143,8 @@ class Tc_sorter:
         press_button = ['long press', 'short press', 'press "end" key']
         cluster = ['cluster', 'swc', 'ipc', 'clustor']
         speed_limit = ['speed limit']
-        expection = ['short press Power key', 'long press Power key', 'long press Power button', 'short press Power button', 
-                     'DLM', 'short press selection buttion on the rotary wheel']
+        expection = ['short press power key', 'long press power key', 'long press power button', 'short press power button', 
+                     'dlm', 'short press selection buttion on the rotary wheel']
         bench_only_case = False
         for cell in cell_data[pre_index:pre_index+3]:
             if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and matcher_slice(expection, cell) != True:
