@@ -20,6 +20,7 @@ titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Bug
 # the index of the precondition
 pre_index = 5
 
+
 def matcher_slice(keywords, cell_data):
     sen = cell_data.lower()
     for key in keywords:
@@ -89,7 +90,7 @@ class Tc_sorter:
         return cells
 
     def phone_type(self, cell_data):
-        iphone = ['iphone', 'cp', 'wcp']
+        iphone = ['iphone', 'cp', 'wcp', 'carplay', 'apple']
         android = ['android', 'waa', 'aa']
         phone_requirement = [0, 0]
         for cell in cell_data[pre_index:pre_index+2]:
@@ -143,7 +144,7 @@ class Tc_sorter:
         press_button = ['long press', 'short press', 'press "end" key']
         cluster = ['cluster', 'swc', 'ipc', 'clustor']
         speed_limit = ['speed limit']
-        expection = ['short press power key', 'long press power key', 'long press power button', 'short press power button', 
+        expection = ['short press power key', 'long press power key', 'long press power button', 'short press power button',
                      'dlm', 'short press selection buttion on the rotary wheel']
         bench_only_case = False
         for cell in cell_data[pre_index:pre_index+3]:
