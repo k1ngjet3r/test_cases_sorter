@@ -10,10 +10,17 @@ To make our life easier by avoiding sort the 1000+ test cases manually
 ## How to use
 1. Open the MY_22_sorter.py using VS Code
 2. Drug the test case and last week result file in the form of .xlsx to the VS Code
-3. Set the input file name, output file name, and last week result file name in the testing = Tc_sorter('input_name', 'output_name', 'last week result')
+3. Set the input file name, output file name, and last week result file name in the testing = Tc_sorter('input_name', 'output_name', 'last week result', 'diffcult_cases')
 4. Execute the script and wait for the output file generated
 
 ## Version History
+* V1.5.1
+    * Introduce JSON files for storing sheet-related data and keywords
+    * Added new sheet for holding automation cases 
+
+* V1.4.1
+    * Fixed "carplay"-related cases did't have iphone label in the phone-type column
+
 * V1.4
     * Performance improvement (for loop -> dictionary)
     * Fixed 'none' key issue

@@ -1,2 +1,0 @@
-Original GM TC ID, Pass/Fail, Tester, Automation Comment, Bug ID, Note, Precondition, Test steps, Expected, Testing Objective, Phone, User, Online/Offline, Sign Status, Location, W50_result, W50_tester, W50_Automation_Comment
-Difficult_cases, Bench_only, ac_only, Driver_Online_In, Driver_Online_Out, Driver_Offline_In, Driver_Offline_Out, Guest_Online_In, Other

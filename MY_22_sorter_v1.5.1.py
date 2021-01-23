@@ -1,28 +1,25 @@
 from openpyxl import load_workbook
 from openpyxl import Workbook
 import re
-
-sheet_names = [
-    'Difficult_cases', 'Bench_only', 'ac_only',
-    'Driver_Online_In', 'Driver_Online_Out', 'Driver_Offline_In', 'Driver_Offline_Out',
-    'Guest_Online_In', 'Other']
-
-fail_case_sheet = ['Fail Cases Warren',
-                   'Fail Cases China', 'Cases for Lui Fei']
-
-fail_case_title = ['Date of failure', 'Ticket Filed', 'Original GM TC ID', 'Product Line', 'Case Location', 'Result Taipei', 'BUG ID',
-                   'Precondition', 'Test steps', 'Expected', 'Automation Comment', 'Result Beijing, Nanjing, Warren', 'Comment Beijing, Nanjing, Warren', 'Tester']
-
-titles = ['Original GM TC ID', 'Pass/Fail', 'Tester', 'Automation Comment', 'Bug ID', 'Note',
-          'Precondition', 'Test steps', 'Expected', 'Testing Objective', 'Phone', 'User', 'Online/Offline', 'Sign Status', 'Location',
-          'W50_result', 'W50_tester', 'W50_Automation_Comment']
+import json
 
 # the index of the precondition
 pre_index = 5
 
 
+def json_directory(json_name):
+    directory = '/Users/jeter/Documents/GitHub/test_cases_sorter/json_file/'
+    with open(directory + json_name) as f:
+        return json.load(f)
+
+
+data_sheet = json_directory('sheet_related.json')
+
+keywords = json_directory('keywords.json')
+
+
 def matcher_slice(keywords, cell_data):
-    sen = cell_data.lower()
+    sen = cell_data.replace('"', '').lower()
     for key in keywords:
         if re.search(key, sen):
             return True
@@ -47,22 +44,25 @@ class Tc_sorter:
         self.sheet = (load_workbook(self.test_case_list)).active
         print('{} loaded successfully'.format(self.test_case_list))
 
+        # Loading the resut from last week
         self.last_week_result = (
             load_workbook(self.last_week)).active
         print('{} loaded successfully'.format(self.last_week))
 
+        # Generate difficult case list
         self.difficult_list = str(difficult_list)
         self.dc_sheet = load_workbook(self.difficult_list).active
         print(print('{} loaded successfully'.format(self.difficult_list)))
 
         self.wb = Workbook()
         self.wb.active
-        for name in sheet_names:
-            self.wb.create_sheet(name, int((sheet_names).index(name)))
-            self.wb[name].append(titles)
-        for fail_name in fail_case_sheet:
+        for name in data_sheet['sheet_names']:
+            self.wb.create_sheet(
+                name, int((data_sheet['sheet_names']).index(name)))
+            self.wb[name].append(data_sheet['titles'])
+        for fail_name in data_sheet['fail_case_sheet']:
             self.wb.create_sheet(fail_name, -1)
-            self.wb[fail_name].append(fail_case_title)
+            self.wb[fail_name].append(data_sheet['fail_case_titles'])
         print('Output file initiallized')
 
     def difficult_cases(self):
@@ -90,8 +90,8 @@ class Tc_sorter:
         return cells
 
     def phone_type(self, cell_data):
-        iphone = ['iphone', 'cp', 'wcp', 'carplay', 'apple']
-        android = ['android', 'waa', 'aa']
+        iphone = keywords['iphone']
+        android = keywords['android']
         phone_requirement = [0, 0]
         for cell in cell_data[pre_index:pre_index+2]:
             if matcher_split(iphone, cell):
@@ -108,15 +108,14 @@ class Tc_sorter:
             cell_data.append(' ')
 
     def sign_status(self, cell_data):
-        sign_out = ['sign out', 'sign-out', 'signout',
-                    'signed out', 'no google user is logged  in', 'No user is signed in']
+        sign_out = keywords['sign_out']
         if matcher_slice(sign_out, cell_data[pre_index]):
             cell_data.append('sign_out')
         else:
             cell_data.append('sign_in')
 
     def connection(self, cell_data):
-        offline = ['offline']
+        offline = keywords['offline']
         if matcher_split(offline, cell_data[pre_index]):
             cell_data.append('Offline')
         else:
@@ -127,10 +126,10 @@ class Tc_sorter:
             cell_data.insert(1, '')
 
     def user(self, cell_data):
-        guest = ['guest']
-        non_guest = ['non-guest']
-        others = ['secondary', 'user 1', 'user 2', 'user1', 'user2']
-        primary = ['primary']
+        guest = keywords['guest']
+        non_guest = keywords['non_guest']
+        others = keywords['others']
+        primary = keywords['primary']
         if matcher_split(guest, cell_data[pre_index]) and matcher_slice(non_guest, cell_data[pre_index]) is False:
             cell_data.append('Guest')
         elif matcher_slice(others, cell_data[pre_index]) or matcher_slice(non_guest, cell_data[pre_index]):
@@ -141,11 +140,10 @@ class Tc_sorter:
             cell_data.append('Driver')
 
     def bench_only(self, cell_data):
-        press_button = ['long press', 'short press', 'press "end" key']
-        cluster = ['cluster', 'swc', 'ipc', 'clustor']
-        speed_limit = ['speed limit']
-        expection = ['short press power key', 'long press power key', 'long press power button', 'short press power button',
-                     'dlm', 'short press selection buttion on the rotary wheel']
+        press_button = keywords['push_button']
+        cluster = keywords['cluster']
+        speed_limit = keywords['speed_limit']
+        expection = keywords['expection']
         bench_only_case = False
         for cell in cell_data[pre_index:pre_index+3]:
             if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and matcher_slice(expection, cell) != True:
@@ -153,9 +151,8 @@ class Tc_sorter:
         return bench_only_case
 
     def ac_only(self, cell_data):
-        ac = ['a/c', 'temperature', 'climate',
-              'defroster', 'hvac']
-        ac_split = ['air', 'fan']
+        ac = keywords['ac']
+        ac_split = keywords['ac_split']
         ac_case = False
         for cell in cell_data[pre_index:pre_index+3]:
             if matcher_slice(ac, cell) or matcher_split(ac_split, cell):
@@ -263,7 +260,7 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('Original.xlsx',
-                    'W04_sorted.xlsx', 'W03_result.xlsx', 'track test.xlsx')
+testing = Tc_sorter('W51_test_plan.xlsx',
+                    'W04_sorted.xlsx', 'W51_result.xlsx', 'W51_difficult.xlsx')
 
 testing.sorting()
