@@ -80,6 +80,10 @@ class Tc_sorter:
                 break
         return difficult_cases[1:]
 
+    def Automation_cases(self):
+        auto_file = load_workbook('automation_cases.xlsx').active
+        return [tcid[0] for tcid in auto_file.iter_rows(max_col=1, values_only=True)]
+
     def cell_data(self, row):
         cells = []
         for cell in row:
@@ -227,6 +231,9 @@ class Tc_sorter:
             # Distributing the test case to the desinated sheet
             if cell_data[0] in difficult_cases_list:
                 self.wb['Difficult_cases'].append(cell_data)
+
+            elif cell_data[0] in self.Automation_cases():
+                self.wb['auto'].append(cell_data)
 
             elif self.bench_only(cell_data):
                 self.wb['Bench_only'].append(cell_data)
