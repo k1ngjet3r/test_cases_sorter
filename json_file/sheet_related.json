@@ -1,0 +1,55 @@
+{
+    "sheet_names": [
+        "Difficult_cases",
+        "Bench_only",
+        "ac_only",
+        "Driver_Online_In",
+        "Driver_Online_Out",
+        "Driver_Offline_In",
+        "Driver_Offline_Out",
+        "Guest_Online_In",
+        "Other",
+        "auto"
+    ],
+    "titles": [
+        "Original GM TC ID",
+        "Pass/Fail",
+        "Tester",
+        "Automation Comment",
+        "Bug ID",
+        "Note",
+        "Precondition",
+        "Test steps",
+        "Expected",
+        "Testing Objective",
+        "Phone",
+        "User",
+        "Online/Offline",
+        "Sign Status",
+        "Location",
+        "W50_result",
+        "W50_tester",
+        "W50_Automation_Comment"
+    ],
+    "fail_case_sheet": [
+        "Fail Cases Warren",
+        "Fail Cases China",
+        "Cases for Lui Fei"
+    ],
+    "fail_case_titles": [
+        "Date of failure",
+        "Ticket Filed",
+        "Original GM TC ID",
+        "Product Line",
+        "Case Location",
+        "Result Taipei",
+        "BUG ID",
+        "Precondition",
+        "Test steps",
+        "Expected",
+        "Automation Comment",
+        "Result Beijing, Nanjing, Warren",
+        "Comment Beijing, Nanjing, Warren",
+        "Tester"
+    ]
+}

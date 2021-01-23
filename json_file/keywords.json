@@ -1,0 +1,74 @@
+{
+    "iphone": [
+        "iphone",
+        "cp",
+        "wcp",
+        "carplay",
+        "apple"
+    ],
+    "android": [
+        "android",
+        "waa",
+        "aa"
+    ],
+    "sign_out": [
+        "sign out",
+        "sign-out",
+        "signout",
+        "signed out",
+        "no google user is logged  in",
+        "no user is signed in"
+    ],
+    "offline": [
+        "offline"
+    ],
+    "guest": [
+        "guest"
+    ],
+    "non_guest": [
+        "non-guest"
+    ],
+    "others": [
+        "secondary",
+        "user 1",
+        "user 2",
+        "user1",
+        "user2"
+    ],
+    "primary": [
+        "primary"
+    ],
+    "push_button": [
+        "long press",
+        "short press",
+        "press end key"
+    ],
+    "cluster": [
+        "cluster",
+        "clustor",
+        "swc",
+        "ipc"
+    ],
+    "speed_limit": [
+        "speed limit"
+    ],
+    "expection": [
+        "short press power key",
+        "long press power key",
+        "long press power button",
+        "short press power button",
+        "dlm",
+        "short press selection buttion on the rotary wheel"
+    ],
+    "ac": [
+        "a/c",
+        "temperature",
+        "climate",
+        "defroster",
+        "hvac"
+    ],
+    "ac_split": [
+        "air",
+        "fan"
+    ]
+}
