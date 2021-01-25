@@ -8,7 +8,8 @@ pre_index = 5
 
 
 def json_directory(json_name):
-    directory = '/Users/jeter/Documents/GitHub/test_cases_sorter/json_file/'
+    directory = 'C:\\Users\\Jeter\\OneDrive\\Documents\\GitHub\\test_cases_sorter\\json_file\\'
+    
     with open(directory + json_name) as f:
         return json.load(f)
 
@@ -267,7 +268,7 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W51_test_plan.xlsx',
-                    'W04_sorted.xlsx', 'W51_result.xlsx', 'W51_difficult.xlsx')
+testing = Tc_sorter('W05_list.xlsx',
+                    'W05_sorted.xlsx', 'W04_result.xlsx', 'Difficult_cases.xlsx')
 
 testing.sorting()
