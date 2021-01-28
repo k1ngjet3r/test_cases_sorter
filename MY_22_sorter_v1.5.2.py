@@ -150,7 +150,7 @@ class Tc_sorter:
         speed_limit = keywords['speed_limit']
         expection = keywords['expection']
         bench_only_case = False
-        for cell in cell_data[pre_index:pre_index+3]:
+        for cell in cell_data[pre_index:pre_index+4]:
             if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and matcher_slice(expection, cell) != True:
                 bench_only_case = True
         return bench_only_case
@@ -177,6 +177,14 @@ class Tc_sorter:
             last_week_cell = self.cell_data(last_week_row)
             last_week_dict[last_week_cell[0]] = last_week_cell[1:]
         return last_week_dict
+
+    def nav_case(self, cell_data):
+        # Formatting the TCID
+        tcid = [i.lower() for i in cell_data[0].split('_')]  
+        if 'maps' in tcid:
+            return True
+        else:
+            return False
 
     def sorting(self):
         print('Opening a new sheet...')
@@ -236,6 +244,9 @@ class Tc_sorter:
             elif cell_data[0] in self.Automation_cases():
                 self.wb['auto'].append(cell_data)
 
+            elif self.nav_case(cell_data):
+                self.wb['Nav'].append(cell_data)
+        
             elif self.bench_only(cell_data):
                 self.wb['Bench_only'].append(cell_data)
 

@@ -14,9 +14,16 @@ To make our life easier by avoiding sort the 1000+ test cases manually
 4. Execute the script and wait for the output file generated
 
 ## Version History
+* V1.5.2
+    * Isolate the navication-related cases to a new "Nav" sheet
+    * Include TC objective column for bench-only cases recognition
+
 * V1.5.1
     * Introduce JSON files for storing sheet-related data and keywords
     * Added new sheet for holding automation cases 
+
+* V1.5.0
+    * Broken version, DO NOT USE THIS VERSION!!!
 
 * V1.4.1
     * Fixed "carplay"-related cases did't have iphone label in the phone-type column
