@@ -1,2 +1,0 @@
-Date of failure, Ticket Filed, Original GM TC ID, Product Line, Case Location, Result Taipei, BUG ID, Precondition, Test steps, Expected, Automation Comment, Result Beijing, Nanjing, Warren, Comment_Beijing_Nanjing, Warren, Tester
-Fail Cases Warren, Fail Cases China, Cases for Lui Fei
