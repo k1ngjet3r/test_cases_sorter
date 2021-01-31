@@ -9,8 +9,10 @@
         "Driver_Offline_Out",
         "Guest_Online_In",
         "Other",
+        "Fuel_sim",
         "Nav",
-        "auto"
+        "auto",
+        "Call&SMS"
     ],
     "titles": [
         "Original GM TC ID",

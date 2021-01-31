@@ -70,5 +70,16 @@
     "ac_split": [
         "air",
         "fan"
+    ],
+    "call_sms": [
+        "sms",
+        "message",
+        "text",
+        "call"
+    ],
+    "fuel_sim": [
+        "how far can i drive",
+        "how much fuel is left in my car",
+        "what is the remaining range"
     ]
 }

@@ -9,7 +9,7 @@ pre_index = 5
 
 def json_directory(json_name):
     directory = 'C:\\Users\\Jeter\\OneDrive\\Documents\\GitHub\\test_cases_sorter\\json_file\\'
-    
+
     with open(directory + json_name) as f:
         return json.load(f)
 
@@ -149,20 +149,18 @@ class Tc_sorter:
         cluster = keywords['cluster']
         speed_limit = keywords['speed_limit']
         expection = keywords['expection']
-        bench_only_case = False
         for cell in cell_data[pre_index:pre_index+4]:
             if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and matcher_slice(expection, cell) != True:
-                bench_only_case = True
-        return bench_only_case
+                return True
+            return False
 
     def ac_only(self, cell_data):
         ac = keywords['ac']
         ac_split = keywords['ac_split']
-        ac_case = False
         for cell in cell_data[pre_index:pre_index+3]:
             if matcher_slice(ac, cell) or matcher_split(ac_split, cell):
-                ac_case = True
-        return ac_case
+                return True
+            return False
 
     def tc_location_dict(self):
         tc_location = load_workbook('TC_location.xlsx').active
@@ -180,11 +178,22 @@ class Tc_sorter:
 
     def nav_case(self, cell_data):
         # Formatting the TCID
-        tcid = [i.lower() for i in cell_data[0].split('_')]  
+        tcid = [i.lower() for i in cell_data[0].split('_')]
         if 'maps' in tcid:
             return True
-        else:
-            return False
+        return False
+
+    def call_SMS(self, cell_data):
+        callsms = keywords['call_sms']
+        if matcher_slice(callsms, cell_data[pre_index+1]):
+            return True
+        return False
+
+    def fuel_sim(self, cell_data):
+        fuel = keywords['fuel_sim']
+        if matcher_slice(fuel, cell_data[pre_index+1]):
+            return True
+        return False
 
     def sorting(self):
         print('Opening a new sheet...')
@@ -246,7 +255,13 @@ class Tc_sorter:
 
             elif self.nav_case(cell_data):
                 self.wb['Nav'].append(cell_data)
-        
+
+            elif self.fuel_sim(cell_data):
+                self.wb['Fuel_sim'].append(cell_data)
+
+            elif self.call_SMS(cell_data):
+                self.wb['Call&SMS'].append(cell_data)
+
             elif self.bench_only(cell_data):
                 self.wb['Bench_only'].append(cell_data)
 
