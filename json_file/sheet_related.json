@@ -9,6 +9,7 @@
         "Driver_Offline_Out",
         "Guest_Online_In",
         "Other",
+        "Nav",
         "auto"
     ],
     "titles": [
