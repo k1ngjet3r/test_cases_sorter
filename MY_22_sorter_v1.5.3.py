@@ -20,7 +20,7 @@ keywords = json_directory('keywords.json')
 
 
 def matcher_slice(keywords, cell_data):
-    sen = cell_data.replace('"', '').lower()
+    sen = str(cell_data).replace('"', '').lower()
     for key in keywords:
         if re.search(key, sen):
             return True
@@ -28,7 +28,7 @@ def matcher_slice(keywords, cell_data):
 
 
 def matcher_split(keywords, cell_data):
-    clean_sentance = re.sub(r'[^\w]', ' ', cell_data.lower())
+    clean_sentance = re.sub(r'[^\w]', ' ', str(cell_data).lower())
     word_list = clean_sentance.split()
     for key in keywords:
         if key in word_list:
@@ -177,6 +177,7 @@ class Tc_sorter:
         return last_week_dict
 
     def nav_case(self, cell_data):
+        # Finding the navigation-related cases using TCID
         # Formatting the TCID
         tcid = [i.lower() for i in cell_data[0].split('_')]
         if 'maps' in tcid:
@@ -294,7 +295,7 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W05_list.xlsx',
-                    'W05_sorted.xlsx', 'W04_result.xlsx', 'Difficult_cases.xlsx')
+testing = Tc_sorter('W06_list.xlsx',
+                    'W06_sorted.xlsx', 'W05_result.xlsx', 'W06_difficult.xlsx')
 
 testing.sorting()

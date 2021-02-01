@@ -41,7 +41,9 @@
     "push_button": [
         "long press",
         "short press",
-        "press end key"
+        "press end key",
+
+        "ptt"
     ],
     "cluster": [
         "cluster",
@@ -75,11 +77,13 @@
         "sms",
         "message",
         "text",
-        "call"
+        "call",
+        "dial"
     ],
     "fuel_sim": [
         "how far can i drive",
-        "how much fuel is left in my car",
-        "what is the remaining range"
+        "fuel",
+        "remaining range",
+        "gas level"
     ]
 }
