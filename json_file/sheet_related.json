@@ -30,12 +30,12 @@
         "Online/Offline",
         "Sign Status",
         "Location",
-        "W50_result",
-        "W50_tester",
-        "W50_Automation_Comment"
+        "Wn-1_result",
+        "Wn-1_tester",
+        "Wn-1_Automation_Comment"
     ],
     "fail_case_sheet": [
-        "Fail Cases Warren",
+        "Case need update",
         "Fail Cases China",
         "Cases for Lui Fei"
     ],
