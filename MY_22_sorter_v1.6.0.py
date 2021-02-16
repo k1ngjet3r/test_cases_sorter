@@ -208,7 +208,7 @@ class Tc_sorter:
         print('Opening a new sheet...')
         sheet = self.sheet
         print('Last week result loaded successfully')
-        difficult_cases_list = self.difficult_cases()
+        # difficult_cases_list = self.difficult_cases()
         print('Difficult case list generated')
         location_dict = self.tc_location_dict()
         print('Test case location dictionary generated')
@@ -304,6 +304,7 @@ class Tc_sorter:
 
 
 testing = Tc_sorter('W08_list_2.xlsx',
-                    'W08_sorted_1.xlsx', 'W06_result.xlsx')
+                    'W08_sorted.xlsx', 'W06_sorted.xlsx', continue_from=True
+                    )
 
 testing.sorting()
