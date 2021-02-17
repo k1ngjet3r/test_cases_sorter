@@ -9,7 +9,7 @@ pre_index = 5
 
 def json_directory(json_name):
     # directory = 'C:\\Users\\Jeter\\OneDrive\\Documents\\GitHub\\test_cases_sorter\\json_file\\'
-    directory = '/Users/jeter/Documents/GitHub/test_cases_sorter/json_file'
+    directory = '/Users/jeter/Documents/GitHub/test_cases_sorter/json_file/'
 
     with open(directory + json_name) as f:
         return json.load(f)
@@ -38,7 +38,7 @@ def matcher_split(keywords, cell_data):
 
 
 class Tc_sorter:
-    def __init__(self, test_case_list, output_name, last_week, difficult_list):
+    def __init__(self, test_case_list, output_name, last_week, continue_from=False):
         print('Initiallizing...')
         self.test_case_list = str(test_case_list)
         self.output_name = str(output_name)
@@ -48,39 +48,43 @@ class Tc_sorter:
 
         # Loading the resut from last week
         self.last_week_result = (
-            load_workbook(self.last_week)).active
+            load_workbook(self.last_week))
         print('{} loaded successfully'.format(self.last_week))
 
         # Generate difficult case list
-        self.difficult_list = str(difficult_list)
-        self.dc_sheet = load_workbook(self.difficult_list).active
-        print(print('{} loaded successfully'.format(self.difficult_list)))
+        # self.difficult_list = str(difficult_list)
+        # self.dc_sheet = load_workbook(self.difficult_list).active
+        # print(print('{} loaded successfully'.format(self.difficult_list)))
 
-        self.wb = Workbook()
-        # self.wb.active
-        for name in data_sheet['sheet_names']:
-            self.wb.create_sheet(
-                name, int((data_sheet['sheet_names']).index(name)))
-            self.wb[name].append(data_sheet['titles'])
-        for fail_name in data_sheet['fail_case_sheet']:
-            self.wb.create_sheet(fail_name, -1)
-            self.wb[fail_name].append(data_sheet['fail_case_titles'])
-        print('Output file initiallized')
+        if continue_from == False:
+            self.wb = Workbook()
+            # self.wb.active
+            for name in data_sheet['sheet_names']:
+                self.wb.create_sheet(
+                    name, int((data_sheet['sheet_names']).index(name)))
+                self.wb[name].append(data_sheet['titles'])
+            for fail_name in data_sheet['fail_case_sheet']:
+                self.wb.create_sheet(fail_name, -1)
+                self.wb[fail_name].append(data_sheet['fail_case_titles'])
+            print('Output file initiallized')
 
-    def difficult_cases(self):
-        difficult_cases = []
-        for row in self.dc_sheet.iter_rows(max_col=1, values_only=True):
-            cells = []
-            for cell in row:
-                if cell is None:
-                    cells.append('-')
-                else:
-                    cells.append(cell)
-            if cells[-1] != '-':
-                difficult_cases.append(cells[-1])
-            elif cells[-1] == '-':
-                break
-        return difficult_cases[1:]
+        else:
+            self.wb = load_workbook(self.output_name)
+
+    # def difficult_cases(self):
+    #     difficult_cases = []
+    #     for row in self.dc_sheet.iter_rows(max_col=1, values_only=True):
+    #         cells = []
+    #         for cell in row:
+    #             if cell is None:
+    #                 cells.append('-')
+    #             else:
+    #                 cells.append(cell)
+    #         if cells[-1] != '-':
+    #             difficult_cases.append(cells[-1])
+    #         elif cells[-1] == '-':
+    #             break
+    #     return difficult_cases[1:]
 
     def Automation_cases(self):
         auto_file = load_workbook('automation_cases.xlsx').active
@@ -136,9 +140,9 @@ class Tc_sorter:
         non_guest = keywords['non_guest']
         others = keywords['others']
         primary = keywords['primary']
-        if matcher_split(guest, cell_data[pre_index]) and matcher_slice(non_guest, cell_data[pre_index]) is False:
+        if (matcher_split(guest, cell_data[pre_index]) or matcher_split(guest, cell_data[pre_index+3])) and matcher_slice(non_guest, cell_data[pre_index]) is False:
             cell_data.append('Guest')
-        elif matcher_slice(others, cell_data[pre_index]) or matcher_slice(non_guest, cell_data[pre_index]):
+        elif matcher_slice(others, cell_data[pre_index]) or matcher_slice(non_guest, cell_data[pre_index]) or matcher_slice(others, cell_data[pre_index+3]):
             cell_data.append('Others')
         elif matcher_split(guest, cell_data[pre_index+1]) and (matcher_slice(others, cell_data[pre_index+1]) or matcher_split(primary, cell_data[pre_index+1])):
             cell_data.append('multiple')
@@ -204,7 +208,7 @@ class Tc_sorter:
         print('Opening a new sheet...')
         sheet = self.sheet
         print('Last week result loaded successfully')
-        difficult_cases_list = self.difficult_cases()
+        # difficult_cases_list = self.difficult_cases()
         print('Difficult case list generated')
         location_dict = self.tc_location_dict()
         print('Test case location dictionary generated')
@@ -214,7 +218,7 @@ class Tc_sorter:
 
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
-        for row in sheet.iter_rows(max_col=5, max_row=1651, values_only=True):
+        for row in sheet.iter_rows(max_col=5, values_only=True):
             print('Iterate case no. {}'.format(k))
             # turn the data into a list
             cell_data = []
@@ -252,7 +256,7 @@ class Tc_sorter:
             cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1]
 
             # Distributing the test case to the desinated sheet
-            if cell_data[0] in difficult_cases_list:
+            if cell_data[-3] == 'Fail':
                 self.wb['Difficult_cases'].append(cell_data)
 
             elif cell_data[0] in self.Automation_cases():
@@ -299,7 +303,8 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W06_list.xlsx',
-                    'W06_sorted.xlsx', 'W05_result.xlsx', 'W06_difficult.xlsx')
+testing = Tc_sorter('W08_list_2.xlsx',
+                    'W08_sorted.xlsx', 'W06_sorted.xlsx', continue_from=True
+                    )
 
 testing.sorting()

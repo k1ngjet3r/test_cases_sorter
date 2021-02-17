@@ -1,27 +1,32 @@
-from openpyxl import Workbook
-from openpyxl import load_workbook
+from openpyxl import Workbook, load_workbook
 
-select_sheet = load_workbook('W07_410.xlsx').active
 
-full_list_sheet = load_workbook('W08_testplan.xlsx').active
+class eliminator:
+    def __init__(self, partial_list, full_list, tcid_only=True):
+        self.partial_list = load_workbook(partial_list).active
+        self.full_list = load_workbook(full_list).active
+        if tcid_only == True:
+            self.max_column = 1
+        else:
+            self.max_column = 5
 
-wb = Workbook()
+    def differentiator(self):
+        wb = Workbook()
+        wb.create_sheet('intersection')
+        wb.create_sheet('symmetric difference')
 
-# wb = unselected_cases.active
+        partial_tcid = [row[0] for row in self.partial_list.iter_rows(
+            max_col=1, values_only=True)]
 
-wb.create_sheet('W07')
-wb.create_sheet('W06')
+        for row in self.full_list.iter_rows(max_col=self.max_column, values_only=True):
+            row_data = [i for i in row]
+            if row_data[0] in partial_tcid:
+                wb['intersection'].append(row_data)
+            else:
+                wb['symmetric difference'].append(row_data)
 
-selected_cases_list = []
+        wb.save('cases.xlsx')
 
-for item in select_sheet.rows:
-    selected_cases_list.append(item[0].value)
 
-for row in full_list_sheet.rows:
-    cell_data = [(i.value) for i in row]
-    if cell_data[0] not in selected_cases_list:
-        wb['W06'].append(cell_data)
-    else:
-        wb['W07'].append(cell_data)
-
-wb.save('unselect_cases.xlsx')
+eliminator('W07_result.xlsx', 'W08_list.xlsx',
+           tcid_only=False).differentiator()

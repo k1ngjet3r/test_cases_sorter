@@ -34,7 +34,8 @@
         "user 2",
         "user1",
         "user2",
-        "new google user"
+        "new google user",
+        "new user"
     ],
     "primary": [
         "primary"
@@ -43,7 +44,6 @@
         "long press",
         "short press",
         "press end key",
-
         "ptt"
     ],
     "cluster": [
