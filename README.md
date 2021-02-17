@@ -14,6 +14,12 @@ To make our life easier by avoiding sort the 1000+ test cases manually
 4. Execute the script and wait for the output file generated
 
 ## Version History
+* V1.6.0
+    * Update eli.py with new TCID-only or TCID with test detail functions
+    * Auto-generate the difficult case list without manually import the list by determine the last week's test result
+    * Add "continue" function for continue update the output file without generate a new file
+    * Isolate Call&SMS and fuel-sim cases for automation purpose
+
 * V1.5.2
     * Isolate the navication-related cases to a new "Nav" sheet
     * Include TC objective column for bench-only cases recognition
