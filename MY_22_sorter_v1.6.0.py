@@ -51,11 +51,6 @@ class Tc_sorter:
             load_workbook(self.last_week))
         print('{} loaded successfully'.format(self.last_week))
 
-        # Generate difficult case list
-        # self.difficult_list = str(difficult_list)
-        # self.dc_sheet = load_workbook(self.difficult_list).active
-        # print(print('{} loaded successfully'.format(self.difficult_list)))
-
         if continue_from == False:
             self.wb = Workbook()
             # self.wb.active
@@ -71,20 +66,6 @@ class Tc_sorter:
         else:
             self.wb = load_workbook(self.output_name)
 
-    # def difficult_cases(self):
-    #     difficult_cases = []
-    #     for row in self.dc_sheet.iter_rows(max_col=1, values_only=True):
-    #         cells = []
-    #         for cell in row:
-    #             if cell is None:
-    #                 cells.append('-')
-    #             else:
-    #                 cells.append(cell)
-    #         if cells[-1] != '-':
-    #             difficult_cases.append(cells[-1])
-    #         elif cells[-1] == '-':
-    #             break
-    #     return difficult_cases[1:]
 
     def Automation_cases(self):
         auto_file = load_workbook('automation_cases.xlsx').active
