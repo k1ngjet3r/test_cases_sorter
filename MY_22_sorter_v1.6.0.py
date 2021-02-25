@@ -19,6 +19,8 @@ data_sheet = json_directory('sheet_related.json')
 
 keywords = json_directory('keywords.json')
 
+auto_case_list = json_directory('auto_case_id.json')
+
 
 def matcher_slice(keywords, cell_data):
     sen = str(cell_data).replace('"', '').lower()
@@ -237,17 +239,20 @@ class Tc_sorter:
             cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1]
 
             # Distributing the test case to the desinated sheet
+
+            # Append the case to "difficult_cases" sheet based on last week's result
             if cell_data[-3] == 'Fail':
                 self.wb['Difficult_cases'].append(cell_data)
 
-            elif cell_data[0] in self.Automation_cases():
+            # Append the case to "auto" if the case ID is in the "auto_case_id.json"
+            elif cell_data[0] in auto_case_list['auto'] or cell_data[0] in auto_case_list['fuel_sim']:
                 self.wb['auto'].append(cell_data)
 
             elif self.nav_case(cell_data):
                 self.wb['Nav'].append(cell_data)
 
-            elif self.fuel_sim(cell_data):
-                self.wb['Fuel_sim'].append(cell_data)
+            # elif self.fuel_sim(cell_data):
+            #     self.wb['Fuel_sim'].append(cell_data)
 
             elif self.call_SMS(cell_data):
                 self.wb['Call&SMS'].append(cell_data)
