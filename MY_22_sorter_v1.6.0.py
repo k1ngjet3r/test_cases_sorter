@@ -289,8 +289,8 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W08.xlsx',
-                    'W09_sorted.xlsx', 'W08_sorted.xlsx', continue_from=True
+testing = Tc_sorter('W11_cases.xlsx',
+                    'W11_sorted.xlsx', 'W10_sorted.xlsx', continue_from=False
                     )
 
 testing.sorting()
