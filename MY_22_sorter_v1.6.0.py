@@ -254,11 +254,11 @@ class Tc_sorter:
             # elif self.fuel_sim(cell_data):
             #     self.wb['Fuel_sim'].append(cell_data)
 
-            elif self.call_SMS(cell_data):
-                self.wb['Call&SMS'].append(cell_data)
-
             elif self.bench_only(cell_data):
                 self.wb['Bench_only'].append(cell_data)
+
+            elif self.call_SMS(cell_data):
+                self.wb['Call&SMS'].append(cell_data)
 
             elif self.ac_only(cell_data):
                 self.wb['ac_only'].append(cell_data)
