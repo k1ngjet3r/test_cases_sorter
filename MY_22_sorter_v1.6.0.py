@@ -137,8 +137,8 @@ class Tc_sorter:
         cluster = keywords['cluster']
         speed_limit = keywords['speed_limit']
         expection = keywords['expection']
-        for cell in cell_data[pre_index:pre_index+4]:
-            if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and matcher_slice(expection, cell) != True:
+        for cell in cell_data[pre_index+1:pre_index+5]:
+            if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and not matcher_slice(expection, cell):
                 return True
             return False
 
@@ -236,6 +236,7 @@ class Tc_sorter:
                 else:
                     continue
 
+            # Forming the final format
             cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1]
 
             # Distributing the test case to the desinated sheet
@@ -260,8 +261,8 @@ class Tc_sorter:
             elif self.call_SMS(cell_data):
                 self.wb['Call&SMS'].append(cell_data)
 
-            elif self.ac_only(cell_data):
-                self.wb['ac_only'].append(cell_data)
+            # elif self.ac_only(cell_data):
+            #     self.wb['ac_only'].append(cell_data)
 
             else:
                 i = 11
@@ -289,8 +290,8 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W11_cases.xlsx',
-                    'W11_sorted.xlsx', 'W10_sorted.xlsx', continue_from=False
+testing = Tc_sorter('W11_cases_related.xlsx',
+                    'W12_sorted.xlsx', 'W11_sorted_1340.xlsx', continue_from=False
                     )
 
 testing.sorting()
