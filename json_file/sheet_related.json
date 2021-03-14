@@ -2,7 +2,6 @@
     "sheet_names": [
         "Difficult_cases",
         "Bench_only",
-        "ac_only",
         "Driver_Online_In",
         "Driver_Online_Out",
         "Driver_Offline_In",
@@ -12,7 +11,8 @@
         "Fuel_sim",
         "Nav",
         "auto",
-        "Call&SMS"
+        "Call&SMS",
+        "Logan"
     ],
     "titles": [
         "Original GM TC ID",

@@ -8,8 +8,8 @@ pre_index = 5
 
 
 def json_directory(json_name):
-    directory = 'C:\\Users\\Jeter\\OneDrive\\Documents\\GitHub\\test_cases_sorter\\json_file\\'
-    # directory = '/Users/jeter/Documents/GitHub/test_cases_sorter/json_file/'
+    # directory = 'C:\\Users\\Jeter\\OneDrive\\Documents\\GitHub\\test_cases_sorter\\json_file\\'
+    directory = '/Users/jeter/Documents/GitHub/test_cases_sorter/json_file/'
 
     with open(directory + json_name) as f:
         return json.load(f)
@@ -20,6 +20,11 @@ data_sheet = json_directory('sheet_related.json')
 keywords = json_directory('keywords.json')
 
 auto_case_list = json_directory('auto_case_id.json')
+
+# loading other list
+# logan_list_sheet = load_workbook('logan_list.xlsx').active
+# logan_list = [r[0] for r in logan_list_sheet.iter_rows(
+#     max_col=1, max_row=335, values_only=True)]
 
 
 def matcher_slice(keywords, cell_data):
@@ -67,7 +72,6 @@ class Tc_sorter:
 
         else:
             self.wb = load_workbook(self.output_name)
-
 
     def Automation_cases(self):
         auto_file = load_workbook('automation_cases.xlsx').active
@@ -242,6 +246,9 @@ class Tc_sorter:
             # Distributing the test case to the desinated sheet
 
             # Append the case to "difficult_cases" sheet based on last week's result
+            # if cell_data[0] in logan_list:
+            #     self.wb['Logan'].append(cell_data)
+
             if cell_data[-3] == 'Fail':
                 self.wb['Difficult_cases'].append(cell_data)
 
@@ -290,8 +297,8 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W11_cases_related.xlsx',
-                    'W12_sorted.xlsx', 'W11_sorted_1340.xlsx', continue_from=False
+testing = Tc_sorter('W10_cases_related.xlsx',
+                    'W12_sorted.xlsx', 'W10_sorted.xlsx', continue_from=False
                     )
 
 testing.sorting()
