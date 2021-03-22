@@ -90,5 +90,14 @@
         "fuel",
         "remaining range",
         "gas level"
+    ],
+    "did": [
+        "did",
+        "rid",
+        "msg="
+    ],
+    "user":[
+        "testapp",
+        "42be"
     ]
 }
