@@ -8,11 +8,11 @@
         "Driver_Offline_Out",
         "Guest_Online_In",
         "Other",
-        "Fuel_sim",
         "Nav",
         "auto",
         "Call&SMS",
-        "Logan"
+        "DID",
+        "User_Build"
     ],
     "titles": [
         "Original GM TC ID",

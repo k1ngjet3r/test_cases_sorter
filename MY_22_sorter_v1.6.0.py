@@ -8,8 +8,9 @@ pre_index = 5
 
 
 def json_directory(json_name):
-    directory = 'C:\\Users\\Jeter\\OneDrive\\Documents\\GitHub\\test_cases_sorter\\json_file\\'
+    # directory = 'C:\\Users\\Jeter\\OneDrive\\Documents\\GitHub\\test_cases_sorter\\json_file\\'
     # directory = '/Users/jeter/Documents/GitHub/test_cases_sorter/json_file/'
+    directory = 'C:\\Users\\GM-PC-03\\Documents\\Python\\test_cases_sorter\\json_file'
 
     with open(directory + json_name) as f:
         return json.load(f)
@@ -191,6 +192,21 @@ class Tc_sorter:
             return True
         return False
 
+    def did_case(self, cell_data):
+        did = keywords['did']
+        user = keywords['user']
+        # search DID-related case ID in test obnjective
+        if matcher_slice(did, cell_data[pre_index+3]) and not matcher_slice(user, cell_data[pre_index+3]):
+            return True
+        return False
+    
+    def user_build_only(self, cell_data):
+        user = keywords['user']
+        if matcher_slice(user, cell_data[pre_index+3]):
+            return True
+        return False
+
+
     def sorting(self):
         print('Opening a new sheet...')
         sheet = self.sheet
@@ -255,6 +271,12 @@ class Tc_sorter:
             # Append the case to "auto" if the case ID is in the "auto_case_id.json"
             elif cell_data[0] in auto_case_list['auto'] or cell_data[0] in auto_case_list['fuel_sim']:
                 self.wb['auto'].append(cell_data)
+
+            elif self.did_case(cell_data):
+                self.wb['DID'].append(cell_data)
+
+            elif self.user_build_only(cell_data):
+                self.wb['User_Build'].append(cell_data)
 
             elif self.nav_case(cell_data):
                 self.wb['Nav'].append(cell_data)
