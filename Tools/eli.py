@@ -27,5 +27,3 @@ class eliminator:
 
         wb.save('cases.xlsx')
 
-
-eliminator('W12_testplan.xlsx', 'W12_cases.xlsx', tcid_only=True).differentiator()
