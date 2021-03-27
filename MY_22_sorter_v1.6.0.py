@@ -8,11 +8,7 @@ pre_index = 5
 
 
 def json_directory(json_name):
-    # directory = 'C:\\Users\\Jeter\\OneDrive\\Documents\\GitHub\\test_cases_sorter\\json_file\\'
-    # directory = '/Users/jeter/Documents/GitHub/test_cases_sorter/json_file/'
-    directory = 'C:\\Users\\GM-PC-03\\Documents\\Python\\test_cases_sorter\\json_file'
-
-    with open(directory + json_name) as f:
+    with open('json_file\\' + json_name) as f:
         return json.load(f)
 
 
