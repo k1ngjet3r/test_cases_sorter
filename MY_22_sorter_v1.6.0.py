@@ -2,6 +2,8 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import re
 import json
+from matcher.matcher import matcher_split, matcher_slice
+
 
 # the index of the precondition
 pre_index = 5
@@ -22,24 +24,6 @@ auto_case_list = json_directory('auto_case_id.json')
 # logan_list_sheet = load_workbook('logan_list.xlsx').active
 # logan_list = [r[0] for r in logan_list_sheet.iter_rows(
 #     max_col=1, max_row=335, values_only=True)]
-
-
-def matcher_slice(keywords, cell_data):
-    sen = str(cell_data).replace('"', '').lower()
-    for key in keywords:
-        if re.search(key, sen):
-            return True
-    return False
-
-
-def matcher_split(keywords, cell_data):
-    clean_sentance = re.sub(r'[^\w]', ' ', str(cell_data).lower())
-    word_list = clean_sentance.split()
-    for key in keywords:
-        if key in word_list:
-            return True
-    return False
-
 
 class Tc_sorter:
     def __init__(self, test_case_list, output_name, last_week, continue_from=False):
@@ -315,8 +299,9 @@ class Tc_sorter:
         self.wb.save(self.output_name)
 
 
-testing = Tc_sorter('W14_cases.xlsx',
-                    'W14_sorted.xlsx', 'W13_sorted.xlsx', continue_from=False
-                    )
+if __name__ == '__main__':
+    testing = Tc_sorter('W13_cases.xlsx',
+                        'W13_sorted.xlsx', 'W12_sorted.xlsx', continue_from=False
+                        )
+    testing.sorting()
 
-testing.sorting()
