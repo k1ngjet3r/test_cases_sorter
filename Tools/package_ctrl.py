@@ -19,11 +19,23 @@ class pkg_ctrl:
     def comparision(self):
         wb = self.output_file.active
         id_list = self.case_list_2_list()
+        total = 0
+        matched = 0
+        not_matched = 0
         for case in self.package_design.iter_rows(max_col=6, values_only=True):
+            total += 1
+            print('Iterating case number {}'.format(total))
             if case[1].lower() in id_list:
+                matched += 1
                 wb.append(case)
+            else:
+                not_matched += 1
             self.output_file.save(self.output_name)
-                
 
-pkg = pkg_ctrl('Function Package Design.xlsx', 'MY22_scripts.xlsx', 'Auto_trial.xlsx')
+        print('[Summary]')
+        print('Iterate through {} cases'.format(total))
+        print('Matched cases: {}'.format(matched))
+        print('Not match: {}'.format(not_matched))
+
+pkg = pkg_ctrl('MY22_function_package_design.xlsx', 'MY22_partial_list.xlsx', 'MY22_intersect_cases.xlsx')
 pkg.comparision()
