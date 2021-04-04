@@ -364,11 +364,12 @@ class Tc_sorter:
         print('Adding data validation to output')
         self.cell_validation(data_sheet['sheet_names'], overall_num)
         self.wb.save(self.output_name)
+
+        print('Done')
         
 
 if __name__ == '__main__':
-    testing = Tc_sorter('W15_301_cases.xlsx',
-                        'W15_sorted_301.xlsx', 'W14_sorted.xlsx', continue_from=False
-                        )
+    # __init__(self, test_case_list, output_name, last_week, continue_from=False)
+    testing = Tc_sorter('W15_301_cases.xlsx', 'W15_sorted_301.xlsx', 'W14_sorted.xlsx', continue_from=False)
     testing.sorting()
 
