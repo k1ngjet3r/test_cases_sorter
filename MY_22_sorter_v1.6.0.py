@@ -8,6 +8,21 @@ from matcher.matcher import matcher_split, matcher_slice
 # the index of the precondition
 pre_index = 5
 
+# counter
+num_diff = 0
+num_ben = 0
+num_dri_on_in = 0
+num_dri_on_out = 0
+num_dri_off_in = 0
+num_dri_off_out = 0
+num_ges_on_in = 0
+num_other = 0
+num_nav = 0
+num_auto = 0
+num_callsms = 0
+num_did = 0
+num_user_build = 0
+overall = num_diff+num_ben+num_dri_on_in+num_dri_on_out+num_dri_off_in+num_dri_off_out+num_ges_on_in+num_other+num_nav+num_auto+num_callsms+num_did+num_user_build
 
 def json_directory(json_name):
     with open('json_file\\' + json_name) as f:
@@ -247,28 +262,35 @@ class Tc_sorter:
 
             if cell_data[-3] == 'Fail':
                 self.wb['Difficult_cases'].append(cell_data)
+                num_diff += 1
 
             # Append the case to "auto" if the case ID is in the "auto_case_id.json"
             elif cell_data[0] in auto_case_list['auto'] or cell_data[0] in auto_case_list['fuel_sim']:
                 self.wb['auto'].append(cell_data)
+                num_auto += 1
 
             elif self.did_case(cell_data):
                 self.wb['DID'].append(cell_data)
+                num_did += 1
 
             elif self.user_build_only(cell_data):
                 self.wb['User_Build'].append(cell_data)
+                num_user_build += 1
 
             elif self.nav_case(cell_data):
                 self.wb['Nav'].append(cell_data)
+                num_nav += 1
 
             # elif self.fuel_sim(cell_data):
             #     self.wb['Fuel_sim'].append(cell_data)
 
             elif self.bench_only(cell_data):
                 self.wb['Bench_only'].append(cell_data)
+                num_ben += 1
 
             elif self.call_SMS(cell_data):
                 self.wb['Call&SMS'].append(cell_data)
+                num_callsms += 1
 
             # elif self.ac_only(cell_data):
             #     self.wb['ac_only'].append(cell_data)
@@ -277,26 +299,45 @@ class Tc_sorter:
                 i = 11
                 if cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Driver_Online_In'].append(cell_data)
+                    num_dri_on_in += 1
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_out':
                     self.wb['Driver_Online_Out'].append(cell_data)
+                    num_dri_on_out += 1
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_in':
                     self.wb['Driver_Offline_In'].append(cell_data)
+                    num_dri_off_in += 1
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_out':
                     self.wb['Driver_Offline_Out'].append(cell_data)
+                    num_dri_off_out += 1
 
                 elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Guest_Online_In'].append(cell_data)
-                elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_out':
-                    self.wb['Guest_Online_Out'].append(cell_data)
-                elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_in':
-                    self.wb['Guest_Offline_In'].append(cell_data)
-                elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_out':
-                    self.wb['Guest_Offline_Out'].append(cell_data)
+                    num_ges_on_in += 1
+
+
                 else:
                     self.wb['Other'].append(cell_data)
+                    num_other += 1
 
         print('Saving the file named {}'.format(self.output_name))
         self.wb.save(self.output_name)
+        print('[SUMMARY]')
+        print(
+            'Difficult_cases: {}'.format(num_diff),
+            'Bench_only: {}'.format(num_ben),
+            'Driver_Online_In: {}'.format(num_dri_on_in),
+            'Driver_Online_Out: {}'.format(num_dri_on_out),
+            'Driver_Offline_In: {}'.format(num_dri_off_out),
+            'Driver_Offline_Out: {}'.format(num_dri_off_out),
+            'Guest_online_In: {}'.format(num_ges_on_in),
+            'Other: {}'.format(num_other),
+            'Nav: {}'.format(num_nav),
+            'auto: {}'.format(num_auto),
+            'call&SMS: {}'.format(num_callsms),
+            'DID: {}'.format(num_did),
+            'User_Build: {}'.format(num_user_build)
+        )
+        print('Overall: {}'.format(overall))
 
 
 if __name__ == '__main__':
