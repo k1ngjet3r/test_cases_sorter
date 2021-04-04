@@ -8,11 +8,9 @@ from openpyxl.worksheet.datavalidation import DataValidation
 # the index of the precondition
 pre_index = 5
 
-
 def json_directory(json_name):
     with open('json_file\\' + json_name) as f:
         return json.load(f)
-
 
 data_sheet = json_directory('sheet_related.json')
 
