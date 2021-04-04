@@ -3,26 +3,11 @@ from openpyxl import Workbook
 import re
 import json
 from matcher.matcher import matcher_split, matcher_slice
-
+from openpyxl.worksheet.datavalidation import DataValidation
 
 # the index of the precondition
 pre_index = 5
 
-# counter
-num_diff = 0
-num_ben = 0
-num_dri_on_in = 0
-num_dri_on_out = 0
-num_dri_off_in = 0
-num_dri_off_out = 0
-num_ges_on_in = 0
-num_other = 0
-num_nav = 0
-num_auto = 0
-num_callsms = 0
-num_did = 0
-num_user_build = 0
-overall = num_diff+num_ben+num_dri_on_in+num_dri_on_out+num_dri_off_in+num_dri_off_out+num_ges_on_in+num_other+num_nav+num_auto+num_callsms+num_did+num_user_build
 
 def json_directory(json_name):
     with open('json_file\\' + json_name) as f:
@@ -54,6 +39,9 @@ class Tc_sorter:
             load_workbook(self.last_week))
         print('{} loaded successfully'.format(self.last_week))
 
+        self.result_dv = DataValidation(type='list', formula1='"Pass, Fail, Hold, Invalid"', allow_blank=True)
+        self.executer_dv = DataValidation(type='list', formula1='"maggie.chang,yvonne.chien,logan.chang,jeter.lin,jack.hsu,joan.chen,mark.mo,sarah.chiang"', allow_blank=True)
+
         if continue_from == False:
             self.wb = Workbook()
             # self.wb.active
@@ -69,6 +57,21 @@ class Tc_sorter:
         else:
             self.wb = load_workbook(self.output_name)
 
+    def cell_validation(self, sheetname_list, num_list):
+        for name, num in zip(sheetname_list, num_list):
+            if num >=2:
+                result_cell = "B2:B{}".format(num+1)
+                tester_cell = "C2:C{}".format(num+1)
+
+                result_dv = DataValidation(type='list', formula1='"Pass, Fail, Hold, Invalid"', allow_blank=True)
+                executer_dv = DataValidation(type='list', formula1='"maggie.chang,yvonne.chien,logan.chang,jeter.lin,jack.hsu,joan.chen,mark.mo,sarah.chiang"', allow_blank=True)
+
+                self.wb[name].add_data_validation(result_dv)
+                self.wb[name].add_data_validation(executer_dv)
+                
+                result_dv.add(result_cell)
+                executer_dv.add(tester_cell)
+        
     def Automation_cases(self):
         auto_file = load_workbook('automation_cases.xlsx').active
         return [tcid[0] for tcid in auto_file.iter_rows(max_col=1, values_only=True)]
@@ -201,7 +204,6 @@ class Tc_sorter:
             return True
         return False
 
-
     def sorting(self):
         print('Opening a new sheet...')
         sheet = self.sheet
@@ -213,6 +215,23 @@ class Tc_sorter:
         print('Iterating through the test plan......')
 
         k = 1
+
+        # counter
+        num_diff = 0
+        num_ben = 0
+        num_dri_on_in = 0
+        num_dri_on_out = 0
+        num_dri_off_in = 0
+        num_dri_off_out = 0
+        num_ges_on_in = 0
+        num_other = 0
+        num_nav = 0
+        num_auto = 0
+        num_callsms = 0
+        num_did = 0
+        num_user_build = 0
+        
+
 
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
@@ -323,26 +342,33 @@ class Tc_sorter:
         self.wb.save(self.output_name)
         print('[SUMMARY]')
         print(
-            'Difficult_cases: {}'.format(num_diff),
-            'Bench_only: {}'.format(num_ben),
-            'Driver_Online_In: {}'.format(num_dri_on_in),
-            'Driver_Online_Out: {}'.format(num_dri_on_out),
-            'Driver_Offline_In: {}'.format(num_dri_off_out),
-            'Driver_Offline_Out: {}'.format(num_dri_off_out),
-            'Guest_online_In: {}'.format(num_ges_on_in),
-            'Other: {}'.format(num_other),
-            'Nav: {}'.format(num_nav),
-            'auto: {}'.format(num_auto),
-            'call&SMS: {}'.format(num_callsms),
-            'DID: {}'.format(num_did),
-            'User_Build: {}'.format(num_user_build)
+            'Difficult_cases: {}\n'.format(num_diff),
+            'Bench_only: {}\n'.format(num_ben),
+            'Driver_Online_In: {}\n'.format(num_dri_on_in),
+            'Driver_Online_Out: {}\n'.format(num_dri_on_out),
+            'Driver_Offline_In: {}\n'.format(num_dri_off_out),
+            'Driver_Offline_Out: {}\n'.format(num_dri_off_out),
+            'Guest_online_In: {}\n'.format(num_ges_on_in),
+            'Other: {}\n'.format(num_other),
+            'Nav: {}\n'.format(num_nav),
+            'auto: {}\n'.format(num_auto),
+            'call&SMS: {}\n'.format(num_callsms),
+            'DID: {}\n'.format(num_did),
+            'User_Build: {}\n'.format(num_user_build)
         )
+        overall = num_diff+num_ben+num_dri_on_in+num_dri_on_out+num_dri_off_in+num_dri_off_out+num_ges_on_in+num_other+num_nav+num_auto+num_callsms+num_did+num_user_build
         print('Overall: {}'.format(overall))
 
+        overall_num = [num_diff, num_ben, num_dri_on_in, num_dri_on_out, num_dri_off_in, num_dri_off_out, num_ges_on_in, num_other, num_nav, num_auto, num_callsms, num_did, num_user_build]
+
+        print('Adding data validation to output')
+        self.cell_validation(data_sheet['sheet_names'], overall_num)
+        self.wb.save(self.output_name)
+        
 
 if __name__ == '__main__':
-    testing = Tc_sorter('W13_cases.xlsx',
-                        'W13_sorted.xlsx', 'W12_sorted.xlsx', continue_from=False
+    testing = Tc_sorter('W15_301_cases.xlsx',
+                        'W15_sorted_301.xlsx', 'W14_sorted.xlsx', continue_from=False
                         )
     testing.sorting()
 
