@@ -1,9 +1,10 @@
 from openpyxl import load_workbook
-from openpyxl import Workbook
+from openpyxl import Workbook, formatting, styles
 import re
 import json
 from matcher.matcher import matcher_split, matcher_slice
 from openpyxl.worksheet.datavalidation import DataValidation
+from openpyxl.formatting.rule import CellIsRule
 
 # the index of the precondition
 pre_index = 5
@@ -69,6 +70,25 @@ class Tc_sorter:
                 
                 result_dv.add(result_cell)
                 executer_dv.add(tester_cell)
+        
+    def conditional_formatting(self, sheetname_list, num_list):
+        green = 'D9EAD3'
+        green_fill = styles.PatternFill(start_color=green, end_color=green, fill_type='solid')
+        blue = 'CFE2F3'
+        blue_fill = styles.PatternFill(start_color=blue, end_color=blue, fill_type='solid')
+        red = 'F4CCCC'
+        red_fill = styles.PatternFill(start_color=red, end_color=red, fill_type='solid')
+        gray = 'CCCCCC'
+        gray_fill = styles.PatternFill(start_color=gray, end_color=gray, fill_type='solid')
+
+        results = ['Pass', 'Fail', 'Hold', 'Invalid']
+        colors = [green_fill, red_fill, blue_fill, gray_fill]
+        for name, num in zip(sheetname_list, num_list):
+            if num >= 2:
+                result_cell = "B2:B{}".format(num+1)
+                for r, c in zip(results, colors):
+                    self.wb[name].conditional_formatting.add(result_cell, CellIsRule(operator='containsText', formula=['Pass'], fill=c))
+        self.wb.save(self.output_name)
         
     def Automation_cases(self):
         auto_file = load_workbook('automation_cases.xlsx').active
@@ -362,6 +382,9 @@ class Tc_sorter:
         print('Adding data validation to output')
         self.cell_validation(data_sheet['sheet_names'], overall_num)
         self.wb.save(self.output_name)
+
+        print('Conditional Formatting the cell')
+        self.conditional_formatting(data_sheet['sheet_names'], overall_num)
 
         print('Done')
         
