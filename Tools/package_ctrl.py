@@ -37,5 +37,5 @@ class pkg_ctrl:
         print('Matched cases: {}'.format(matched))
         print('Not match: {}'.format(not_matched))
 
-pkg = pkg_ctrl('MY22_function_package_design.xlsx', 'MY22_partial_list.xlsx', 'MY22_intersect_cases.xlsx')
+pkg = pkg_ctrl('MY23_package_design.xlsx', 'MY23_cases.xlsx', 'MY23_intersect_cases.xlsx')
 pkg.comparision()

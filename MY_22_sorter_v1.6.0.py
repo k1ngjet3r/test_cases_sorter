@@ -87,7 +87,7 @@ class Tc_sorter:
             if num >= 2:
                 result_cell = "B2:B{}".format(num+1)
                 for r, c in zip(results, colors):
-                    self.wb[name].conditional_formatting.add(result_cell, CellIsRule(operator='containsText', formula=['Pass'], fill=c))
+                    self.wb[name].conditional_formatting.add(result_cell, CellIsRule(operator='containsText', formula=[r], fill=c))
         self.wb.save(self.output_name)
         
     def Automation_cases(self):
