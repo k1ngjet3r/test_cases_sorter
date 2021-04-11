@@ -5,13 +5,16 @@ import json
 from matcher.matcher import matcher_split, matcher_slice
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule
+from auto_case_list_gen import auto_case_list
 
 # the index of the precondition
 pre_index = 5
 
+
 def json_directory(json_name):
     with open('json_file\\' + json_name) as f:
         return json.load(f)
+
 
 data_sheet = json_directory('sheet_related.json')
 
@@ -23,6 +26,7 @@ auto_case_list = json_directory('auto_case_id.json')
 # logan_list_sheet = load_workbook('logan_list.xlsx').active
 # logan_list = [r[0] for r in logan_list_sheet.iter_rows(
 #     max_col=1, max_row=335, values_only=True)]
+
 
 class Tc_sorter:
     def __init__(self, test_case_list, output_name, last_week, continue_from=False):
@@ -38,8 +42,10 @@ class Tc_sorter:
             load_workbook(self.last_week))
         print('{} loaded successfully'.format(self.last_week))
 
-        self.result_dv = DataValidation(type='list', formula1='"Pass, Fail, Hold, Invalid"', allow_blank=True)
-        self.executer_dv = DataValidation(type='list', formula1='"maggie.chang,yvonne.chien,logan.chang,jeter.lin,jack.hsu,joan.chen,mark.mo,sarah.chiang"', allow_blank=True)
+        self.result_dv = DataValidation(
+            type='list', formula1='"Pass, Fail, Hold, Invalid"', allow_blank=True)
+        self.executer_dv = DataValidation(
+            type='list', formula1='"maggie.chang,yvonne.chien,logan.chang,jeter.lin,jack.hsu,joan.chen,mark.mo,sarah.chiang"', allow_blank=True)
 
         if continue_from == False:
             self.wb = Workbook()
@@ -58,28 +64,34 @@ class Tc_sorter:
 
     def cell_validation(self, sheetname_list, num_list):
         for name, num in zip(sheetname_list, num_list):
-            if num >=2:
+            if num >= 2:
                 result_cell = "B2:B{}".format(num+1)
                 tester_cell = "C2:C{}".format(num+1)
 
-                result_dv = DataValidation(type='list', formula1='"Pass, Fail, Hold, Invalid"', allow_blank=True)
-                executer_dv = DataValidation(type='list', formula1='"maggie.chang,yvonne.chien,logan.chang,jeter.lin,jack.hsu,joan.chen,mark.mo,sarah.chiang"', allow_blank=True)
+                result_dv = DataValidation(
+                    type='list', formula1='"Pass, Fail, Hold, Invalid"', allow_blank=True)
+                executer_dv = DataValidation(
+                    type='list', formula1='"maggie.chang,yvonne.chien,logan.chang,jeter.lin,jack.hsu,joan.chen,mark.mo,sarah.chiang"', allow_blank=True)
 
                 self.wb[name].add_data_validation(result_dv)
                 self.wb[name].add_data_validation(executer_dv)
-                
+
                 result_dv.add(result_cell)
                 executer_dv.add(tester_cell)
-        
+
     def conditional_formatting(self, sheetname_list, num_list):
         green = 'D9EAD3'
-        green_fill = styles.PatternFill(start_color=green, end_color=green, fill_type='solid')
+        green_fill = styles.PatternFill(
+            start_color=green, end_color=green, fill_type='solid')
         blue = 'CFE2F3'
-        blue_fill = styles.PatternFill(start_color=blue, end_color=blue, fill_type='solid')
+        blue_fill = styles.PatternFill(
+            start_color=blue, end_color=blue, fill_type='solid')
         red = 'F4CCCC'
-        red_fill = styles.PatternFill(start_color=red, end_color=red, fill_type='solid')
+        red_fill = styles.PatternFill(
+            start_color=red, end_color=red, fill_type='solid')
         gray = 'CCCCCC'
-        gray_fill = styles.PatternFill(start_color=gray, end_color=gray, fill_type='solid')
+        gray_fill = styles.PatternFill(
+            start_color=gray, end_color=gray, fill_type='solid')
 
         results = ['Pass', 'Fail', 'Hold', 'Invalid']
         colors = [green_fill, red_fill, blue_fill, gray_fill]
@@ -87,9 +99,10 @@ class Tc_sorter:
             if num >= 2:
                 result_cell = "B2:B{}".format(num+1)
                 for r, c in zip(results, colors):
-                    self.wb[name].conditional_formatting.add(result_cell, CellIsRule(operator='containsText', formula=[r], fill=c))
+                    self.wb[name].conditional_formatting.add(
+                        result_cell, CellIsRule(operator='containsText', formula=[r], fill=c))
         self.wb.save(self.output_name)
-        
+
     def Automation_cases(self):
         auto_file = load_workbook('automation_cases.xlsx').active
         return [tcid[0] for tcid in auto_file.iter_rows(max_col=1, values_only=True)]
@@ -215,7 +228,7 @@ class Tc_sorter:
         if matcher_slice(did, cell_data[pre_index+3]) and not matcher_slice(user, cell_data[pre_index+3]):
             return True
         return False
-    
+
     def user_build_only(self, cell_data):
         user = keywords['user']
         if matcher_slice(user, cell_data[pre_index+3]):
@@ -248,8 +261,6 @@ class Tc_sorter:
         num_callsms = 0
         num_did = 0
         num_user_build = 0
-        
-
 
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
@@ -351,7 +362,6 @@ class Tc_sorter:
                     self.wb['Guest_Online_In'].append(cell_data)
                     num_ges_on_in += 1
 
-
                 else:
                     self.wb['Other'].append(cell_data)
                     num_other += 1
@@ -374,10 +384,12 @@ class Tc_sorter:
             'DID: {}\n'.format(num_did),
             'User_Build: {}\n'.format(num_user_build)
         )
-        overall = num_diff+num_ben+num_dri_on_in+num_dri_on_out+num_dri_off_in+num_dri_off_out+num_ges_on_in+num_other+num_nav+num_auto+num_callsms+num_did+num_user_build
+        overall = num_diff+num_ben+num_dri_on_in+num_dri_on_out+num_dri_off_in+num_dri_off_out + \
+            num_ges_on_in+num_other+num_nav+num_auto+num_callsms+num_did+num_user_build
         print('Overall: {}'.format(overall))
 
-        overall_num = [num_diff, num_ben, num_dri_on_in, num_dri_on_out, num_dri_off_in, num_dri_off_out, num_ges_on_in, num_other, num_nav, num_auto, num_callsms, num_did, num_user_build]
+        overall_num = [num_diff, num_ben, num_dri_on_in, num_dri_on_out, num_dri_off_in, num_dri_off_out,
+                       num_ges_on_in, num_other, num_nav, num_auto, num_callsms, num_did, num_user_build]
 
         print('Adding data validation to output')
         self.cell_validation(data_sheet['sheet_names'], overall_num)
@@ -387,10 +399,10 @@ class Tc_sorter:
         self.conditional_formatting(data_sheet['sheet_names'], overall_num)
 
         print('Done')
-        
+
 
 if __name__ == '__main__':
     # __init__(self, test_case_list, output_name, last_week, continue_from=False)
-    testing = Tc_sorter('W15_301_cases.xlsx', 'W15_sorted_301.xlsx', 'W14_sorted.xlsx', continue_from=False)
+    testing = Tc_sorter('W15_301_cases.xlsx', 'W15_sorted_301.xlsx',
+                        'W14_sorted.xlsx', continue_from=False)
     testing.sorting()
-
