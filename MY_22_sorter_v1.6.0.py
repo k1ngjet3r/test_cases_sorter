@@ -235,6 +235,9 @@ class Tc_sorter:
             return True
         return False
 
+    def generate_auto_list(self):
+        auto_case_list(self.output_name)
+
     def sorting(self):
         print('Opening a new sheet...')
         sheet = self.sheet
@@ -398,6 +401,9 @@ class Tc_sorter:
         print('Conditional Formatting the cell')
         self.conditional_formatting(data_sheet['sheet_names'], overall_num)
 
+        print('Generating automation case list...')
+        self.generate_auto_list()
+        
         print('Done')
 
 
