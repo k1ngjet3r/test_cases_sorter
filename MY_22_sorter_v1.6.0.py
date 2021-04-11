@@ -20,7 +20,6 @@ def json_directory(json_name):
 # logan_list = [r[0] for r in logan_list_sheet.iter_rows(
 #     max_col=1, max_row=335, values_only=True)]
 
-
 class Tc_sorter:
     def __init__(self, test_case_list, last_week, continue_from=False):
         print('Initiallizing...')
@@ -403,7 +402,6 @@ class Tc_sorter:
         self.generate_auto_list()
 
         print('Done')
-
 
 if __name__ == '__main__':
     # __init__(self, test_case_list, output_name, last_week, continue_from=False)
