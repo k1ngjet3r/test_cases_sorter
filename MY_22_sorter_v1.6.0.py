@@ -5,7 +5,7 @@ import json
 from matcher.matcher import matcher_split, matcher_slice
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule
-from auto_case_list_gen import auto_case_list
+from auto_case_list_gen import auto_case_list_gen
 
 # the index of the precondition
 pre_index = 5
@@ -15,13 +15,6 @@ def json_directory(json_name):
     with open('json_file\\' + json_name) as f:
         return json.load(f)
 
-
-data_sheet = json_directory('sheet_related.json')
-
-keywords = json_directory('keywords.json')
-
-auto_case_list = json_directory('auto_case_id.json')
-
 # loading other list
 # logan_list_sheet = load_workbook('logan_list.xlsx').active
 # logan_list = [r[0] for r in logan_list_sheet.iter_rows(
@@ -29,13 +22,18 @@ auto_case_list = json_directory('auto_case_id.json')
 
 
 class Tc_sorter:
-    def __init__(self, test_case_list, output_name, last_week, continue_from=False):
+    def __init__(self, test_case_list, last_week, continue_from=False):
         print('Initiallizing...')
         self.test_case_list = str(test_case_list)
-        self.output_name = str(output_name)
+        self.output_name = test_case_list[:3] + '_sorted.xlsx'
         self.last_week = str(last_week)
         self.sheet = (load_workbook(self.test_case_list)).active
         print('{} loaded successfully'.format(self.test_case_list))
+
+        # Loading JSON file
+        self.data_sheet = json_directory('sheet_related.json')
+        self.keywords = json_directory('self.keywords.json')
+        self.auto_case_list = json_directory('auto_case_id.json')
 
         # Loading the resut from last week
         self.last_week_result = (
@@ -50,13 +48,13 @@ class Tc_sorter:
         if continue_from == False:
             self.wb = Workbook()
             # self.wb.active
-            for name in data_sheet['sheet_names']:
+            for name in self.data_sheet['sheet_names']:
                 self.wb.create_sheet(
-                    name, int((data_sheet['sheet_names']).index(name)))
-                self.wb[name].append(data_sheet['titles'])
-            for fail_name in data_sheet['fail_case_sheet']:
+                    name, int((self.data_sheet['sheet_names']).index(name)))
+                self.wb[name].append(self.data_sheet['titles'])
+            for fail_name in self.data_sheet['fail_case_sheet']:
                 self.wb.create_sheet(fail_name, -1)
-                self.wb[fail_name].append(data_sheet['fail_case_titles'])
+                self.wb[fail_name].append(self.data_sheet['fail_case_titles'])
             print('Output file initiallized')
 
         else:
@@ -117,8 +115,8 @@ class Tc_sorter:
         return cells
 
     def phone_type(self, cell_data):
-        iphone = keywords['iphone']
-        android = keywords['android']
+        iphone = self.keywords['iphone']
+        android = self.keywords['android']
         phone_requirement = [0, 0]
         for cell in cell_data[pre_index:pre_index+2]:
             if matcher_split(iphone, cell):
@@ -135,14 +133,14 @@ class Tc_sorter:
             cell_data.append(' ')
 
     def sign_status(self, cell_data):
-        sign_out = keywords['sign_out']
+        sign_out = self.keywords['sign_out']
         if matcher_slice(sign_out, cell_data[pre_index]):
             cell_data.append('sign_out')
         else:
             cell_data.append('sign_in')
 
     def connection(self, cell_data):
-        offline = keywords['offline']
+        offline = self.keywords['offline']
         if matcher_split(offline, cell_data[pre_index]):
             cell_data.append('Offline')
         else:
@@ -153,10 +151,10 @@ class Tc_sorter:
             cell_data.insert(1, '')
 
     def user(self, cell_data):
-        guest = keywords['guest']
-        non_guest = keywords['non_guest']
-        others = keywords['others']
-        primary = keywords['primary']
+        guest = self.keywords['guest']
+        non_guest = self.keywords['non_guest']
+        others = self.keywords['others']
+        primary = self.keywords['primary']
         if (matcher_split(guest, cell_data[pre_index]) or matcher_split(guest, cell_data[pre_index+3])) and matcher_slice(non_guest, cell_data[pre_index]) is False:
             cell_data.append('Guest')
         elif matcher_slice(others, cell_data[pre_index]) or matcher_slice(non_guest, cell_data[pre_index]) or matcher_slice(others, cell_data[pre_index+3]):
@@ -167,18 +165,18 @@ class Tc_sorter:
             cell_data.append('Driver')
 
     def bench_only(self, cell_data):
-        press_button = keywords['push_button']
-        cluster = keywords['cluster']
-        speed_limit = keywords['speed_limit']
-        expection = keywords['expection']
+        press_button = self.keywords['push_button']
+        cluster = self.keywords['cluster']
+        speed_limit = self.keywords['speed_limit']
+        expection = self.keywords['expection']
         for cell in cell_data[pre_index+1:pre_index+5]:
             if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and not matcher_slice(expection, cell):
                 return True
             return False
 
     def ac_only(self, cell_data):
-        ac = keywords['ac']
-        ac_split = keywords['ac_split']
+        ac = self.keywords['ac']
+        ac_split = self.keywords['ac_split']
         for cell in cell_data[pre_index:pre_index+3]:
             if matcher_slice(ac, cell) or matcher_split(ac_split, cell):
                 return True
@@ -210,33 +208,33 @@ class Tc_sorter:
         return False
 
     def call_SMS(self, cell_data):
-        callsms = keywords['call_sms']
+        callsms = self.keywords['call_sms']
         if matcher_slice(callsms, cell_data[pre_index+1]):
             return True
         return False
 
     def fuel_sim(self, cell_data):
-        fuel = keywords['fuel_sim']
+        fuel = self.keywords['fuel_sim']
         if matcher_slice(fuel, cell_data[pre_index+1]):
             return True
         return False
 
     def did_case(self, cell_data):
-        did = keywords['did']
-        user = keywords['user']
+        did = self.keywords['did']
+        user = self.keywords['user']
         # search DID-related case ID in test obnjective
         if matcher_slice(did, cell_data[pre_index+3]) and not matcher_slice(user, cell_data[pre_index+3]):
             return True
         return False
 
     def user_build_only(self, cell_data):
-        user = keywords['user']
+        user = self.keywords['user']
         if matcher_slice(user, cell_data[pre_index+3]):
             return True
         return False
 
     def generate_auto_list(self):
-        auto_case_list(self.output_name)
+        auto_case_list_gen(self.output_name)
 
     def sorting(self):
         print('Opening a new sheet...')
@@ -316,7 +314,7 @@ class Tc_sorter:
                 num_diff += 1
 
             # Append the case to "auto" if the case ID is in the "auto_case_id.json"
-            elif cell_data[0] in auto_case_list['auto'] or cell_data[0] in auto_case_list['fuel_sim']:
+            elif cell_data[0] in self.auto_case_list['auto'] or cell_data[0] in self.auto_case_list['fuel_sim']:
                 self.wb['auto'].append(cell_data)
                 num_auto += 1
 
@@ -395,20 +393,19 @@ class Tc_sorter:
                        num_ges_on_in, num_other, num_nav, num_auto, num_callsms, num_did, num_user_build]
 
         print('Adding data validation to output')
-        self.cell_validation(data_sheet['sheet_names'], overall_num)
+        self.cell_validation(self.data_sheet['sheet_names'], overall_num)
         self.wb.save(self.output_name)
 
         print('Conditional Formatting the cell')
-        self.conditional_formatting(data_sheet['sheet_names'], overall_num)
+        self.conditional_formatting(self.data_sheet['sheet_names'], overall_num)
 
         print('Generating automation case list...')
         self.generate_auto_list()
-        
+
         print('Done')
 
 
 if __name__ == '__main__':
     # __init__(self, test_case_list, output_name, last_week, continue_from=False)
-    testing = Tc_sorter('W15_301_cases.xlsx', 'W15_sorted_301.xlsx',
-                        'W14_sorted.xlsx', continue_from=False)
+    testing = Tc_sorter('W15_301_cases.xlsx', 'W14_sorted.xlsx', continue_from=False)
     testing.sorting()

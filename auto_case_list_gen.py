@@ -2,7 +2,7 @@ from openpyxl import load_workbook, Workbook
 
 
 def auto_case_list(input_name):
-    output_name = input_name[:3] + 'auto_case'
+    output_name = input_name[:3] + 'auto_case.xlsx'
 
     # Loading the full-list file
     full_list = load_workbook(input_name)['auto']
