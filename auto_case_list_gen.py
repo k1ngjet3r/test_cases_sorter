@@ -1,7 +1,7 @@
 from openpyxl import load_workbook, Workbook
 
 
-def auto_case_list(input_name):
+def auto_case_list_gen(input_name):
     output_name = input_name[:3] + 'auto_case.xlsx'
 
     # Loading the full-list file

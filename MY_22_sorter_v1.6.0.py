@@ -24,14 +24,14 @@ class Tc_sorter:
     def __init__(self, test_case_list, last_week, continue_from=False):
         print('Initiallizing...')
         self.test_case_list = str(test_case_list)
-        self.output_name = test_case_list[:3] + '_sorted.xlsx'
+        self.output_name = test_case_list[:3] + '_Main_sorted.xlsx'
         self.last_week = str(last_week)
         self.sheet = (load_workbook(self.test_case_list)).active
         print('{} loaded successfully'.format(self.test_case_list))
 
         # Loading JSON file
         self.data_sheet = json_directory('sheet_related.json')
-        self.keywords = json_directory('self.keywords.json')
+        self.keywords = json_directory('keywords.json')
         self.auto_case_list = json_directory('auto_case_id.json')
 
         # Loading the resut from last week
@@ -405,5 +405,5 @@ class Tc_sorter:
 
 if __name__ == '__main__':
     # __init__(self, test_case_list, output_name, last_week, continue_from=False)
-    testing = Tc_sorter('W15_301_cases.xlsx', 'W14_sorted.xlsx', continue_from=False)
+    testing = Tc_sorter('W16_288_main_cases.xlsx', 'W15_main.xlsx', continue_from=False)
     testing.sorting()
