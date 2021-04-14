@@ -2,8 +2,11 @@ from openpyxl import load_workbook, Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
 class pkg_ctrl:
-    def __init__(self, package_design, case_list, output_name):
-        self.package_design = load_workbook(package_design).active
+    def __init__(self, package_design, case_list, output_name, sheetname=False):
+        if sheetname == True:
+            self.package_design = load_workbook(package_design)['Function Package Design']
+        else:
+            self.package_design = load_workbook(package_design).active
         self.case_list = load_workbook(case_list).active
         self.output_file = Workbook()
         self.output_name = output_name
@@ -37,5 +40,5 @@ class pkg_ctrl:
         print('Matched cases: {}'.format(matched))
         print('Not match: {}'.format(not_matched))
 
-pkg = pkg_ctrl('MY23_package_design.xlsx', 'MY23_cases.xlsx', 'MY23_intersect_cases.xlsx')
+pkg = pkg_ctrl('Package-Design-MY22-GB10-TT.xlsx', 'MY22_optimized_case_list.xlsx', 'MY22_intersect_cases.xlsx',sheetname=True )
 pkg.comparision()
