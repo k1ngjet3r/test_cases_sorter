@@ -12,7 +12,7 @@ pre_index = 5
 
 
 def json_directory(json_name):
-    with open('json_file\\' + json_name) as f:
+    with open('json\\' + json_name) as f:
         return json.load(f)
 
 # loading other list
@@ -228,8 +228,15 @@ class Tc_sorter:
 
     def user_build_only(self, cell_data):
         user = self.keywords['user']
-        if matcher_slice(user, cell_data[pre_index+3]):
+        if matcher_slice(user, cell_data[pre_index+3]) or matcher_slice(user, cell_data[pre_index]):
             return True
+        return False
+
+    def screen_size_13(self, cell_data):
+        thirdteen_inch = self.keywords['13_inch']
+        for i in range(4):
+            if matcher_slice(thirdteen_inch, cell_data[pre_index+i]):
+                return True
         return False
 
     def generate_auto_list(self):
@@ -261,6 +268,7 @@ class Tc_sorter:
         num_callsms = 0
         num_did = 0
         num_user_build = 0
+        num_13_inch = 0
 
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
