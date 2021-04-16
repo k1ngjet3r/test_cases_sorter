@@ -2,9 +2,11 @@ from openpyxl import Workbook, load_workbook
 
 
 class eliminator:
-    def __init__(self, partial_list, full_list, tcid_only=True):
-        self.partial_list = load_workbook(partial_list)['Main']
-        self.full_list = load_workbook(full_list)['Production']
+    def __init__(self, wb, tcid_only=True):
+        self.name = wb
+        self.wb = load_workbook(wb)
+        self.partial_list = self.wb['Production']
+        self.full_list = self.wb['Signed_case_list']
         if tcid_only == True:
             self.max_column = 1
         else:
@@ -47,5 +49,29 @@ class eliminator:
         print('Matched: {}'.format(matched))
         print('Not Matched: {}'.format(not_matched))
 
+    def differentiator_same_sheet(self):
+        self.wb.create_sheet('Production_with_script')
+        current = 1
+        matched = 0
+
+        partial_tcid = [row[0].lower() for row in self.partial_list.iter_rows(
+            max_col=1, values_only=True)]
+
+        for row in self.full_list.iter_rows(max_col=1, values_only=True):
+            try:
+                print('iterate case number {}'.format(current))
+                current += 1
+                if row[0].lower() in partial_tcid:
+                    matched += 1
+                    self.wb['Production_with_script'].append(row)
+                    self.wb.save(self.name)
+            except:
+                break
+        # self.wb.save(self.name)
+        print('Matched: {}'.format(matched))
+                
+
+            
+
 if __name__ == '__main__':
-    eliminator('MY22_Scope.xlsx', 'MY22_Scope.xlsx').differentiator_counter()
+    eliminator('MY22_Scope.xlsx').differentiator_same_sheet()

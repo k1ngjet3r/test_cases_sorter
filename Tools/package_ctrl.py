@@ -1,3 +1,4 @@
+from re import match
 from openpyxl import load_workbook, Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
@@ -15,7 +16,7 @@ class pkg_ctrl:
     def case_list_2_list(self):
         id_list = []
         for id in self.case_list.iter_rows(max_col=1, values_only=True):
-            if id[0] != None:
+            if id[0] != None or id[0] != '':
                 id_list.append(id[0].lower())
         return id_list
 
@@ -30,6 +31,7 @@ class pkg_ctrl:
             print('Iterating case number {}'.format(total))
             if case[1].lower() in id_list:
                 matched += 1
+                print('Matched count: {}'.format(matched))
                 wb.append(case)
             else:
                 not_matched += 1
@@ -40,5 +42,6 @@ class pkg_ctrl:
         print('Matched cases: {}'.format(matched))
         print('Not match: {}'.format(not_matched))
 
-pkg = pkg_ctrl('Package-Design-MY22-GB10-TT.xlsx', 'MY22_optimized_case_list.xlsx', 'MY22_intersect_cases.xlsx',sheetname=True )
-pkg.comparision()
+if __name__ == '__main__':
+    pkg = pkg_ctrl('Package-Design-MY22-GB10-TT.xlsx', 'MY22_signed_intersect_cases.xlsx', 'MY22_signed_package.xlsx',sheetname=True)
+    pkg.comparision()

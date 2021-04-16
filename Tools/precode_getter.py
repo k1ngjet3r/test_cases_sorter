@@ -1,6 +1,6 @@
 from openpyxl import load_workbook
 
-wb = load_workbook('Phase_1.xlsx')['Wireless_Android_auto_1']
+wb = load_workbook('Phase_1.xlsx')['Phone_projection_1']
 
 precode_list = []
 
