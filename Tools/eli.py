@@ -50,7 +50,7 @@ class eliminator:
         print('Not Matched: {}'.format(not_matched))
 
     def differentiator_same_sheet(self):
-        self.wb.create_sheet('Production_with_script')
+        self.wb.create_sheet('Production_with_script_detail')
         current = 1
         matched = 0
 
