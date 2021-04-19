@@ -445,7 +445,7 @@ class Tc_sorter:
         print('Done')
 
 if __name__ == '__main__':
-    # __init__(self, test_case_list, output_name, last_week, continue_from=False)
-    testing = Tc_sorter('W16_Production_Line_cases.xlsx', 'W15_sorted.xlsx', continue_from=False)
+    # __init__(self, test_case_list, last_week, continue_from=False)
+    testing = Tc_sorter('W17_production_cases.xlsx', 'W17_production_sorted.xlsx', continue_from=False)
     testing.sorting()
   
