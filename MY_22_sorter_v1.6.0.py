@@ -2,10 +2,10 @@ from openpyxl import load_workbook
 from openpyxl import Workbook, formatting, styles
 import re
 import json
-from matcher.matcher import matcher_split, matcher_slice
+from func.matcher import matcher_split, matcher_slice
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule
-from auto_case_list_gen import auto_case_list_gen
+from func.auto_case_list_gen import auto_case_list_gen
 
 # the index of the precondition
 pre_index = 5
