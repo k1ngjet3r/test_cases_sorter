@@ -98,7 +98,9 @@
     ],
     "user":[
         "testapp",
-        "42be"
+        "42be",
+        "app-release apk",
+        "diagnostic"
     ],
     "13_inch":[
         "13\"",

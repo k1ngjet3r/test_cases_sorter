@@ -9,10 +9,13 @@
         "Guest_Online_In",
         "Other",
         "Nav",
-        "auto",
         "Call&SMS",
         "DID",
-        "User_Build"
+        "User_Build",
+        "trailer",
+        "13_inch",
+        "auto",
+        "automation"
     ],
     "titles": [
         "Original GM TC ID",

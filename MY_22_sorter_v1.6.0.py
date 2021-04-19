@@ -19,6 +19,15 @@ def json_directory(json_name):
 # logan_list_sheet = load_workbook('logan_list.xlsx').active
 # logan_list = [r[0] for r in logan_list_sheet.iter_rows(
 #     max_col=1, max_row=335, values_only=True)]
+# Loading automation case list
+auto_sheet = load_workbook('Phase_1.xlsx')['Phone_projection_1']
+auto_list = []
+for row in auto_sheet.iter_rows(max_col=1, values_only=True):
+    if row[0] != 'TCID' and row[0] != None and row[0] != '':
+        try:
+            auto_list.append(row[0].lower())
+        except:
+            break
 
 class Tc_sorter:
     def __init__(self, test_case_list, last_week, continue_from=False):
@@ -239,6 +248,13 @@ class Tc_sorter:
                 return True
         return False
 
+    def trailer_case(self, cell_data):
+        trailer_kw = self.keywords['trailer']
+        for i in range(4):
+            if matcher_slice(trailer_kw, cell_data[pre_index+i]):
+                return True
+        return False
+
     def generate_auto_list(self):
         auto_case_list_gen(self.output_name)
 
@@ -269,6 +285,8 @@ class Tc_sorter:
         num_did = 0
         num_user_build = 0
         num_13_inch = 0
+        num_trailer = 0
+        num_automation = 0
 
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
@@ -320,6 +338,10 @@ class Tc_sorter:
                 self.wb['Difficult_cases'].append(cell_data)
                 num_diff += 1
 
+            elif cell_data[0] in auto_list:
+                self.wb['automation'].append(cell_data)
+                num_automation += 1
+
             # Append the case to "auto" if the case ID is in the "auto_case_id.json"
             elif cell_data[0] in self.auto_case_list['auto'] or cell_data[0] in self.auto_case_list['fuel_sim']:
                 self.wb['auto'].append(cell_data)
@@ -347,6 +369,14 @@ class Tc_sorter:
             elif self.call_SMS(cell_data):
                 self.wb['Call&SMS'].append(cell_data)
                 num_callsms += 1
+            
+            elif self.trailer_case(cell_data):
+                self.wb['trailer'].append(cell_data)
+                num_trailer += 1
+
+            elif self.screen_size_13(cell_data):
+                self.wb['13_inch']
+                num_13_inch += 1
 
             # elif self.ac_only(cell_data):
             #     self.wb['ac_only'].append(cell_data)
@@ -390,7 +420,10 @@ class Tc_sorter:
             'auto: {}\n'.format(num_auto),
             'call&SMS: {}\n'.format(num_callsms),
             'DID: {}\n'.format(num_did),
-            'User_Build: {}\n'.format(num_user_build)
+            'User_Build: {}\n'.format(num_user_build),
+            'trailer: {}\n'.format(num_trailer),
+            '13_inch: {}\n'.format(num_13_inch),
+            'Automation: {}\n'.format(num_automation)
         )
         overall = num_diff+num_ben+num_dri_on_in+num_dri_on_out+num_dri_off_in+num_dri_off_out + \
             num_ges_on_in+num_other+num_nav+num_auto+num_callsms+num_did+num_user_build
@@ -415,3 +448,4 @@ if __name__ == '__main__':
     # __init__(self, test_case_list, output_name, last_week, continue_from=False)
     testing = Tc_sorter('W16_Production_Line_cases.xlsx', 'W15_sorted.xlsx', continue_from=False)
     testing.sorting()
+  
