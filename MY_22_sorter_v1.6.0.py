@@ -33,7 +33,7 @@ class Tc_sorter:
     def __init__(self, test_case_list, last_week, continue_from=False):
         print('Initiallizing...')
         self.test_case_list = str(test_case_list)
-        self.output_name = test_case_list[:3] + '_Production_sorted.xlsx'
+        self.output_name = test_case_list[:3] + 'Main_sorted.xlsx'
         self.last_week = str(last_week)
         self.sheet = (load_workbook(self.test_case_list)).active
         print('{} loaded successfully'.format(self.test_case_list))
@@ -338,7 +338,7 @@ class Tc_sorter:
                 self.wb['Difficult_cases'].append(cell_data)
                 num_diff += 1
 
-            elif cell_data[0] in auto_list:
+            elif cell_data[0].lower() in auto_list:
                 self.wb['automation'].append(cell_data)
                 num_automation += 1
 
@@ -404,7 +404,7 @@ class Tc_sorter:
                     self.wb['Other'].append(cell_data)
                     num_other += 1
 
-        print('Saving the file named {}'.format(self.output_name))
+        print('Saving the file named {}\n'.format(self.output_name))
         self.wb.save(self.output_name)
         print('[SUMMARY]')
         print(
@@ -426,7 +426,7 @@ class Tc_sorter:
             'Automation: {}\n'.format(num_automation)
         )
         overall = num_diff+num_ben+num_dri_on_in+num_dri_on_out+num_dri_off_in+num_dri_off_out + \
-            num_ges_on_in+num_other+num_nav+num_auto+num_callsms+num_did+num_user_build
+            num_ges_on_in+num_other+num_nav+num_auto+num_callsms+num_did+num_user_build+num_13_inch+num_trailer+num_automation
         print('Overall: {}'.format(overall))
 
         overall_num = [num_diff, num_ben, num_dri_on_in, num_dri_on_out, num_dri_off_in, num_dri_off_out,
@@ -446,6 +446,6 @@ class Tc_sorter:
 
 if __name__ == '__main__':
     # __init__(self, test_case_list, last_week, continue_from=False)
-    testing = Tc_sorter('W17_production_cases.xlsx', 'W17_production_sorted.xlsx', continue_from=False)
+    testing = Tc_sorter('W17_358_MainLine_cases.xlsx', 'Logan不要拉拉拉拉拉_W16_Main_sorted.xlsx', continue_from=False)
     testing.sorting()
   
