@@ -19,15 +19,16 @@ def json_directory(json_name):
 # logan_list_sheet = load_workbook('logan_list.xlsx').active
 # logan_list = [r[0] for r in logan_list_sheet.iter_rows(
 #     max_col=1, max_row=335, values_only=True)]
+
 # Loading automation case list
-auto_sheet = load_workbook('Phase_1.xlsx')['Phone_projection_1']
-auto_list = []
-for row in auto_sheet.iter_rows(max_col=1, values_only=True):
-    if row[0] != 'TCID' and row[0] != None and row[0] != '':
-        try:
-            auto_list.append(row[0].lower())
-        except:
-            break
+# auto_sheet = load_workbook('Phase_1.xlsx')['Phone_projection_1']
+# auto_list = []
+# for row in auto_sheet.iter_rows(max_col=1, values_only=True):
+#     if row[0] != 'TCID' and row[0] != None and row[0] != '':
+#         try:
+#             auto_list.append(row[0].lower())
+#         except:
+#             break
 
 class Tc_sorter:
     def __init__(self, test_case_list, last_week, continue_from=False):
@@ -271,22 +272,28 @@ class Tc_sorter:
         k = 1
 
         # counter
-        num_diff = 0
-        num_ben = 0
-        num_dri_on_in = 0
-        num_dri_on_out = 0
-        num_dri_off_in = 0
-        num_dri_off_out = 0
-        num_ges_on_in = 0
-        num_other = 0
-        num_nav = 0
-        num_auto = 0
-        num_callsms = 0
-        num_did = 0
-        num_user_build = 0
-        num_13_inch = 0
-        num_trailer = 0
-        num_automation = 0
+        
+        # num_diff = 0
+        # num_ben = 0
+        # num_dri_on_in = 0
+        # num_dri_on_out = 0
+        # num_dri_off_in = 0
+        # num_dri_off_out = 0
+        # num_ges_on_in = 0
+        # num_other = 0
+        # num_nav = 0
+        # num_auto = 0
+        # num_callsms = 0
+        # num_did = 0
+        # num_user_build = 0
+        # num_13_inch = 0
+        # num_trailer = 0
+        # num_automation = 0
+        overall_num = ['num_diff', 'num_ben', 'num_dri_on_in', 'num_dri_on_out', 'num_dri_off_in', 'num_dri_off_out',
+                       'num_ges_on_in', 'num_other', 'num_nav', 'num_auto', 'num_callsms', 'num_did', 'num_user_build', 'num_13_inch', 'num_trailer', 'num_automation']
+        
+        name_and_num = {name: 0 for name in overall_num}
+
 
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
@@ -336,47 +343,47 @@ class Tc_sorter:
 
             if cell_data[-3] == 'Fail':
                 self.wb['Difficult_cases'].append(cell_data)
-                num_diff += 1
+                name_and_num['num_diff'] += 1
 
-            elif cell_data[0].lower() in auto_list:
-                self.wb['automation'].append(cell_data)
-                num_automation += 1
+            # elif cell_data[0].lower() in auto_list:
+            #     self.wb['automation'].append(cell_data)
+            #     num_automation += 1
 
             # Append the case to "auto" if the case ID is in the "auto_case_id.json"
             elif cell_data[0] in self.auto_case_list['auto'] or cell_data[0] in self.auto_case_list['fuel_sim']:
                 self.wb['auto'].append(cell_data)
-                num_auto += 1
+                name_and_num['num_auto'] += 1
 
             elif self.did_case(cell_data):
                 self.wb['DID'].append(cell_data)
-                num_did += 1
+                name_and_num['num_did'] += 1
 
             elif self.user_build_only(cell_data):
                 self.wb['User_Build'].append(cell_data)
-                num_user_build += 1
+                name_and_num['num_user_build'] += 1
 
             elif self.nav_case(cell_data):
                 self.wb['Nav'].append(cell_data)
-                num_nav += 1
+                name_and_num['num_nav'] += 1
 
             # elif self.fuel_sim(cell_data):
             #     self.wb['Fuel_sim'].append(cell_data)
 
             elif self.bench_only(cell_data):
                 self.wb['Bench_only'].append(cell_data)
-                num_ben += 1
+                name_and_num['num_ben'] += 1
 
             elif self.call_SMS(cell_data):
                 self.wb['Call&SMS'].append(cell_data)
-                num_callsms += 1
+                name_and_num['num_callsms'] += 1
             
             elif self.trailer_case(cell_data):
                 self.wb['trailer'].append(cell_data)
-                num_trailer += 1
+                name_and_num['num_trailer'] += 1
 
             elif self.screen_size_13(cell_data):
                 self.wb['13_inch']
-                num_13_inch += 1
+                name_and_num['num_13_inch'] += 1
 
             # elif self.ac_only(cell_data):
             #     self.wb['ac_only'].append(cell_data)
@@ -385,52 +392,38 @@ class Tc_sorter:
                 i = 11
                 if cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Driver_Online_In'].append(cell_data)
-                    num_dri_on_in += 1
+                    name_and_num['num_dri_on_in'] += 1
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_out':
                     self.wb['Driver_Online_Out'].append(cell_data)
-                    num_dri_on_out += 1
+                    name_and_num['num_dri_on_out'] += 1
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_in':
                     self.wb['Driver_Offline_In'].append(cell_data)
-                    num_dri_off_in += 1
+                    name_and_num['num_dri_off_in'] += 1
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_out':
                     self.wb['Driver_Offline_Out'].append(cell_data)
-                    num_dri_off_out += 1
+                    name_and_num['num_dri_off_out'] += 1
 
                 elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Guest_Online_In'].append(cell_data)
-                    num_ges_on_in += 1
+                    name_and_num['num_ges_on_in'] += 1
 
                 else:
                     self.wb['Other'].append(cell_data)
-                    num_other += 1
+                    name_and_num['num_other'] += 1
 
         print('Saving the file named {}\n'.format(self.output_name))
         self.wb.save(self.output_name)
+        print('===============================================')
         print('[SUMMARY]')
-        print(
-            'Difficult_cases: {}\n'.format(num_diff),
-            'Bench_only: {}\n'.format(num_ben),
-            'Driver_Online_In: {}\n'.format(num_dri_on_in),
-            'Driver_Online_Out: {}\n'.format(num_dri_on_out),
-            'Driver_Offline_In: {}\n'.format(num_dri_off_out),
-            'Driver_Offline_Out: {}\n'.format(num_dri_off_out),
-            'Guest_online_In: {}\n'.format(num_ges_on_in),
-            'Other: {}\n'.format(num_other),
-            'Nav: {}\n'.format(num_nav),
-            'auto: {}\n'.format(num_auto),
-            'call&SMS: {}\n'.format(num_callsms),
-            'DID: {}\n'.format(num_did),
-            'User_Build: {}\n'.format(num_user_build),
-            'trailer: {}\n'.format(num_trailer),
-            '13_inch: {}\n'.format(num_13_inch),
-            'Automation: {}\n'.format(num_automation)
-        )
-        overall = num_diff+num_ben+num_dri_on_in+num_dri_on_out+num_dri_off_in+num_dri_off_out + \
-            num_ges_on_in+num_other+num_nav+num_auto+num_callsms+num_did+num_user_build+num_13_inch+num_trailer+num_automation
+        overall = 0
+        for name in name_and_num:
+            print('{}: {}'.format(name, name_and_num[name]))
+            overall += int(name_and_num[name])
+        
         print('Overall: {}'.format(overall))
 
-        overall_num = [num_diff, num_ben, num_dri_on_in, num_dri_on_out, num_dri_off_in, num_dri_off_out,
-                       num_ges_on_in, num_other, num_nav, num_auto, num_callsms, num_did, num_user_build]
+                       
+    
 
         print('Adding data validation to output')
         self.cell_validation(self.data_sheet['sheet_names'], overall_num)
