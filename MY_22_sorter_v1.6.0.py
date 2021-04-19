@@ -272,28 +272,10 @@ class Tc_sorter:
         k = 1
 
         # counter
-        
-        # num_diff = 0
-        # num_ben = 0
-        # num_dri_on_in = 0
-        # num_dri_on_out = 0
-        # num_dri_off_in = 0
-        # num_dri_off_out = 0
-        # num_ges_on_in = 0
-        # num_other = 0
-        # num_nav = 0
-        # num_auto = 0
-        # num_callsms = 0
-        # num_did = 0
-        # num_user_build = 0
-        # num_13_inch = 0
-        # num_trailer = 0
-        # num_automation = 0
         overall_num = ['num_diff', 'num_ben', 'num_dri_on_in', 'num_dri_on_out', 'num_dri_off_in', 'num_dri_off_out',
                        'num_ges_on_in', 'num_other', 'num_nav', 'num_auto', 'num_callsms', 'num_did', 'num_user_build', 'num_13_inch', 'num_trailer', 'num_automation']
         
         name_and_num = {name: 0 for name in overall_num}
-
 
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
@@ -421,9 +403,8 @@ class Tc_sorter:
             overall += int(name_and_num[name])
         
         print('Overall: {}'.format(overall))
-
-                       
-    
+        print('===============================================')
+                    
 
         print('Adding data validation to output')
         self.cell_validation(self.data_sheet['sheet_names'], overall_num)
