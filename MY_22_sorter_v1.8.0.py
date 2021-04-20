@@ -1,11 +1,11 @@
 from openpyxl import load_workbook
 from openpyxl import Workbook, formatting, styles
-import re
 import json
-from func.matcher import matcher_split, matcher_slice
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule
 from func.auto_case_list_gen import auto_case_list_gen
+from func.div import *
+from func.detail import *
 
 # the index of the precondition
 pre_index = 5
@@ -110,10 +110,7 @@ class Tc_sorter:
                         result_cell, CellIsRule(operator='containsText', formula=[r], fill=c))
         self.wb.save(self.output_name)
 
-    def Automation_cases(self):
-        auto_file = load_workbook('automation_cases.xlsx').active
-        return [tcid[0] for tcid in auto_file.iter_rows(max_col=1, values_only=True)]
-
+ 
     def cell_data(self, row):
         cells = []
         for cell in row:
@@ -123,79 +120,11 @@ class Tc_sorter:
                 cells.append(cell)
         return cells
 
-    def phone_type(self, cell_data):
-        iphone = self.keywords['iphone']
-        android = self.keywords['android']
-        phone_requirement = [0, 0]
-        for cell in cell_data[pre_index:pre_index+2]:
-            if matcher_split(iphone, cell):
-                phone_requirement[0] = 1
-            if matcher_slice(android, cell):
-                phone_requirement[1] = 1
-        if phone_requirement == [1, 0]:
-            cell_data.append('iPhone')
-        elif phone_requirement == [0, 1]:
-            cell_data.append('Android')
-        elif phone_requirement == [1, 1]:
-            cell_data.append('Both')
-        else:
-            cell_data.append(' ')
-
-    def sign_status(self, cell_data):
-        sign_out = self.keywords['sign_out']
-        if matcher_slice(sign_out, cell_data[pre_index]):
-            cell_data.append('sign_out')
-        else:
-            cell_data.append('sign_in')
-
-    def connection(self, cell_data):
-        offline = self.keywords['offline']
-        if matcher_split(offline, cell_data[pre_index]):
-            cell_data.append('Offline')
-        else:
-            cell_data.append('Online')
 
     def formatter(self, cell_data):
         for _ in range(4):
             cell_data.insert(1, '')
 
-    def user(self, cell_data):
-        guest = self.keywords['guest']
-        non_guest = self.keywords['non_guest']
-        others = self.keywords['others']
-        primary = self.keywords['primary']
-        if (matcher_split(guest, cell_data[pre_index]) or matcher_split(guest, cell_data[pre_index+3])) and matcher_slice(non_guest, cell_data[pre_index]) is False:
-            cell_data.append('Guest')
-        elif matcher_slice(others, cell_data[pre_index]) or matcher_slice(non_guest, cell_data[pre_index]) or matcher_slice(others, cell_data[pre_index+3]):
-            cell_data.append('Others')
-        elif matcher_split(guest, cell_data[pre_index+1]) and (matcher_slice(others, cell_data[pre_index+1]) or matcher_split(primary, cell_data[pre_index+1])):
-            cell_data.append('multiple')
-        else:
-            cell_data.append('Driver')
-
-    def bench_only(self, cell_data):
-        press_button = self.keywords['push_button']
-        cluster = self.keywords['cluster']
-        speed_limit = self.keywords['speed_limit']
-        expection = self.keywords['expection']
-        for cell in cell_data[pre_index+1:pre_index+5]:
-            if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and not matcher_slice(expection, cell):
-                return True
-            return False
-
-    def ac_only(self, cell_data):
-        ac = self.keywords['ac']
-        ac_split = self.keywords['ac_split']
-        for cell in cell_data[pre_index:pre_index+3]:
-            if matcher_slice(ac, cell) or matcher_split(ac_split, cell):
-                return True
-            return False
-
-    def tc_location_dict(self):
-        tc_location = load_workbook('TC_location.xlsx').active
-        # stored the data in a dictionary {test_case: location}
-        return {TCID: location for (TCID, location) in tc_location.iter_rows(
-            max_col=2, values_only=True) if TCID is not None}
 
     def last_week_result_dict(self):
         last_week_dict = {}
@@ -208,53 +137,6 @@ class Tc_sorter:
                         last_week_dict[last_week_cell[0]] = last_week_cell[1:]
         return last_week_dict
 
-    def nav_case(self, cell_data):
-        # Finding the navigation-related cases using TCID
-        # Formatting the TCID
-        tcid = [i.lower() for i in cell_data[0].split('_')]
-        if 'maps' in tcid:
-            return True
-        return False
-
-    def call_SMS(self, cell_data):
-        callsms = self.keywords['call_sms']
-        if matcher_slice(callsms, cell_data[pre_index+1]):
-            return True
-        return False
-
-    def fuel_sim(self, cell_data):
-        fuel = self.keywords['fuel_sim']
-        if matcher_slice(fuel, cell_data[pre_index+1]):
-            return True
-        return False
-
-    def did_case(self, cell_data):
-        did = self.keywords['did']
-        user = self.keywords['user']
-        # search DID-related case ID in test obnjective
-        if matcher_slice(did, cell_data[pre_index+3]) and not matcher_slice(user, cell_data[pre_index+3]):
-            return True
-        return False
-
-    def user_build_only(self, cell_data):
-        user = self.keywords['user']
-        if matcher_slice(user, cell_data[pre_index+3]) or matcher_slice(user, cell_data[pre_index]):
-            return True
-        return False
-
-    def screen_size_13(self, cell_data):
-        thirdteen_inch = self.keywords['13_inch']
-        for i in range(4):
-            if matcher_slice(thirdteen_inch, cell_data[pre_index+i]):
-                return True
-        return False
-
-    def trailer_case(self, cell_data):
-        trailer_kw = self.keywords['trailer']
-        for i in range(4):
-            if matcher_slice(trailer_kw, cell_data[pre_index+i]):
-                return True
-        return False
 
     def generate_auto_list(self):
         auto_case_list_gen(self.output_name)
@@ -273,7 +155,7 @@ class Tc_sorter:
 
         # counter
         overall_num = ['num_diff', 'num_ben', 'num_dri_on_in', 'num_dri_on_out', 'num_dri_off_in', 'num_dri_off_out',
-                       'num_ges_on_in', 'num_other', 'num_nav', 'num_auto', 'num_callsms', 'num_did', 'num_user_build', 'num_13_inch', 'num_trailer', 'num_automation']
+                       'num_ges_on_in', 'num_usb_update','num_other', 'num_nav', 'num_auto', 'num_callsms', 'num_did', 'num_user_build', 'num_13_inch', 'num_trailer', 'num_automation']
         
         name_and_num = {name: 0 for name in overall_num}
 
@@ -292,15 +174,16 @@ class Tc_sorter:
             # adding 'pass/fail', 'Tester', 'Automation_comment', 'bug ID', 'Note' to the list
             self.formatter(cell_data)
             # determine the phone type
-            self.phone_type(cell_data)
+            phone_type(cell_data)
             # determine the user type
-            self.user(cell_data)
+            user(cell_data)
             # determine online/offline
-            self.connection(cell_data)
+            connection(cell_data)
             # determine sign-in/sign-out
-            self.sign_status(cell_data)
+            sign_status(cell_data)
             k += 1
 
+            # finding the case's origin
             if cell_data[0] in location_dict:
                 cell_data.append(location_dict[cell_data[0]])
             else:
@@ -311,18 +194,16 @@ class Tc_sorter:
             for i in range(4):
                 if cell_data[0] in last_week_dict:
                     cell_data.append(last_week_dict[cell_data[0]][i])
-                else:
-                    continue
 
             # Forming the final format
             cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1]
 
             # Distributing the test case to the desinated sheet
 
-            # Append the case to "difficult_cases" sheet based on last week's result
             # if cell_data[0] in logan_list:
             #     self.wb['Logan'].append(cell_data)
 
+            # Append the case to "difficult_cases" sheet based on last week's result
             if cell_data[-3] == 'Fail':
                 self.wb['Difficult_cases'].append(cell_data)
                 name_and_num['num_diff'] += 1
@@ -336,34 +217,38 @@ class Tc_sorter:
                 self.wb['auto'].append(cell_data)
                 name_and_num['num_auto'] += 1
 
-            elif self.did_case(cell_data):
+            elif did_case(cell_data):
                 self.wb['DID'].append(cell_data)
                 name_and_num['num_did'] += 1
 
-            elif self.user_build_only(cell_data):
+            elif user_build_only(cell_data):
                 self.wb['User_Build'].append(cell_data)
                 name_and_num['num_user_build'] += 1
 
-            elif self.nav_case(cell_data):
+            elif usb_update(cell_data):
+                self.wb['usb_update'].append(cell_data)
+                name_and_num['num_usb_update'] += 1
+
+            elif nav_case(cell_data):
                 self.wb['Nav'].append(cell_data)
                 name_and_num['num_nav'] += 1
 
             # elif self.fuel_sim(cell_data):
             #     self.wb['Fuel_sim'].append(cell_data)
 
-            elif self.bench_only(cell_data):
+            elif bench_only(cell_data):
                 self.wb['Bench_only'].append(cell_data)
                 name_and_num['num_ben'] += 1
 
-            elif self.call_SMS(cell_data):
+            elif call_SMS(cell_data):
                 self.wb['Call&SMS'].append(cell_data)
                 name_and_num['num_callsms'] += 1
             
-            elif self.trailer_case(cell_data):
+            elif trailer_case(cell_data):
                 self.wb['trailer'].append(cell_data)
                 name_and_num['num_trailer'] += 1
 
-            elif self.screen_size_13(cell_data):
+            elif screen_size_13(cell_data):
                 self.wb['13_inch']
                 name_and_num['num_13_inch'] += 1
 
@@ -384,17 +269,16 @@ class Tc_sorter:
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_out':
                     self.wb['Driver_Offline_Out'].append(cell_data)
                     name_and_num['num_dri_off_out'] += 1
-
                 elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Guest_Online_In'].append(cell_data)
                     name_and_num['num_ges_on_in'] += 1
-
                 else:
                     self.wb['Other'].append(cell_data)
                     name_and_num['num_other'] += 1
 
         print('Saving the file named {}\n'.format(self.output_name))
         self.wb.save(self.output_name)
+
         print('===============================================')
         print('[SUMMARY]')
         overall = 0
