@@ -15,7 +15,7 @@ def move_to_destination(target):
 
 
 if __name__ == '__main__':
-    case_list = load_workbook('Phase_1.xlsx')['Phone_projection_1']
+    case_list = load_workbook('Phase_1.xlsx')['Wireless_Android_auto_1']
     search_path = 'C:\\Users\\GM-PC-03\\Desktop\\Automation\\Gerrit\\src\\1080p_tt\\scripts\\bj'
     current = 1
     found = 0
