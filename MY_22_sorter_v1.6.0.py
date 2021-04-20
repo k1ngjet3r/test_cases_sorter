@@ -34,7 +34,7 @@ class Tc_sorter:
     def __init__(self, test_case_list, last_week, continue_from=False):
         print('Initiallizing...')
         self.test_case_list = str(test_case_list)
-        self.output_name = test_case_list[:3] + 'Main_sorted.xlsx'
+        self.output_name = test_case_list[:3] + '______Production_sorted.xlsx'
         self.last_week = str(last_week)
         self.sheet = (load_workbook(self.test_case_list)).active
         print('{} loaded successfully'.format(self.test_case_list))
@@ -420,6 +420,6 @@ class Tc_sorter:
 
 if __name__ == '__main__':
     # __init__(self, test_case_list, last_week, continue_from=False)
-    testing = Tc_sorter('W17_358_MainLine_cases.xlsx', 'Logan不要拉拉拉拉拉_W16_Main_sorted.xlsx', continue_from=False)
+    testing = Tc_sorter('W17_production_cases.xlsx', 'W16_production_line_sorteds.xlsx', continue_from=False)
     testing.sorting()
   
