@@ -6,6 +6,7 @@ from openpyxl.formatting.rule import CellIsRule
 from func.auto_case_list_gen import auto_case_list_gen
 from func.div import *
 from func.detail import *
+from dump_tcid import *
 
 # the index of the precondition
 pre_index = 5
@@ -69,7 +70,8 @@ class Tc_sorter:
         else:
             self.wb = load_workbook(self.output_name)
 
-    def cell_validation(self, sheetname_list, num_list):
+    def cell_validation(self, sheetname_list, name_and_num_dict):
+        num_list = [i for i in name_and_num_dict.values()]
         for name, num in zip(sheetname_list, num_list):
             if num >= 2:
                 result_cell = "B2:B{}".format(num+1)
@@ -86,7 +88,8 @@ class Tc_sorter:
                 result_dv.add(result_cell)
                 executer_dv.add(tester_cell)
 
-    def conditional_formatting(self, sheetname_list, num_list):
+    def conditional_formatting(self, sheetname_list, name_and_num_dict):
+        num_list = [i for i in name_and_num_dict.values()]
         green = 'D9EAD3'
         green_fill = styles.PatternFill(
             start_color=green, end_color=green, fill_type='solid')
@@ -110,7 +113,6 @@ class Tc_sorter:
                         result_cell, CellIsRule(operator='containsText', formula=[r], fill=c))
         self.wb.save(self.output_name)
 
- 
     def cell_data(self, row):
         cells = []
         for cell in row:
@@ -120,11 +122,9 @@ class Tc_sorter:
                 cells.append(cell)
         return cells
 
-
     def formatter(self, cell_data):
         for _ in range(4):
             cell_data.insert(1, '')
-
 
     def last_week_result_dict(self):
         last_week_dict = {}
@@ -137,9 +137,22 @@ class Tc_sorter:
                         last_week_dict[last_week_cell[0]] = last_week_cell[1:]
         return last_week_dict
 
-
     def generate_auto_list(self):
         auto_case_list_gen(self.output_name)
+
+    def sorted_manually(self, cell_data, name_and_num):
+        Dump('W17_Main_sorted.xlsx').dump()
+        tcid_and_sheet = json_directory('tcid_and_sheet.json')
+
+        # Sorting the case based on organized sheet dict
+        for sheet_name in tcid_and_sheet:
+            if cell_data[0] in tcid_and_sheet[sheet_name]:
+                sheet_name = sheet_name.lower()
+                self.wb[sheet_name].append(cell_data)
+                name_and_num[sheet_name] += 1
+                return True
+        return False
+
 
     def sorting(self):
         print('Opening a new sheet...')
@@ -152,12 +165,11 @@ class Tc_sorter:
         print('Iterating through the test plan......')
 
         k = 1
-
-        # counter
-        overall_num = ['num_diff', 'num_ben', 'num_dri_on_in', 'num_dri_on_out', 'num_dri_off_in', 'num_dri_off_out',
-                       'num_ges_on_in', 'num_usb_update','num_other', 'num_nav', 'num_auto', 'num_callsms', 'num_did', 'num_user_build', 'num_13_inch', 'num_trailer', 'num_automation']
         
-        name_and_num = {name: 0 for name in overall_num}
+        # counter
+        # overall_num = [i for i in self.data_sheet['sheet_names']]
+        
+        name_and_num = {name: 0 for name in self.data_sheet['sheet_names']}
 
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
@@ -206,51 +218,55 @@ class Tc_sorter:
             # Append the case to "difficult_cases" sheet based on last week's result
             if cell_data[-3] == 'Fail':
                 self.wb['Difficult_cases'].append(cell_data)
-                name_and_num['num_diff'] += 1
+                name_and_num['Difficult_cases'] += 1
+                break
 
             # elif cell_data[0].lower() in auto_list:
             #     self.wb['automation'].append(cell_data)
             #     num_automation += 1
 
+            elif self.sorted_manually(cell_data, name_and_num):
+                pass
+
             # Append the case to "auto" if the case ID is in the "auto_case_id.json"
             elif cell_data[0] in self.auto_case_list['auto'] or cell_data[0] in self.auto_case_list['fuel_sim']:
                 self.wb['auto'].append(cell_data)
-                name_and_num['num_auto'] += 1
+                name_and_num['auto'] += 1
 
             elif did_case(cell_data):
-                self.wb['DID'].append(cell_data)
-                name_and_num['num_did'] += 1
+                self.wb['did'].append(cell_data)
+                name_and_num['did'] += 1
 
             elif user_build_only(cell_data):
-                self.wb['User_Build'].append(cell_data)
-                name_and_num['num_user_build'] += 1
+                self.wb['user_build'].append(cell_data)
+                name_and_num['user_build'] += 1
 
             elif usb_update(cell_data):
                 self.wb['usb_update'].append(cell_data)
-                name_and_num['num_usb_update'] += 1
+                name_and_num['usb_update'] += 1
 
             elif nav_case(cell_data):
                 self.wb['Nav'].append(cell_data)
-                name_and_num['num_nav'] += 1
+                name_and_num['Nav'] += 1
 
             # elif self.fuel_sim(cell_data):
             #     self.wb['Fuel_sim'].append(cell_data)
 
             elif bench_only(cell_data):
                 self.wb['Bench_only'].append(cell_data)
-                name_and_num['num_ben'] += 1
+                name_and_num['Bench_only'] += 1
 
             elif call_SMS(cell_data):
                 self.wb['Call&SMS'].append(cell_data)
-                name_and_num['num_callsms'] += 1
+                name_and_num['Call'] += 1
             
             elif trailer_case(cell_data):
                 self.wb['trailer'].append(cell_data)
-                name_and_num['num_trailer'] += 1
+                name_and_num['trailer'] += 1
 
             elif screen_size_13(cell_data):
                 self.wb['13_inch']
-                name_and_num['num_13_inch'] += 1
+                name_and_num['13_inch'] += 1
 
             # elif self.ac_only(cell_data):
             #     self.wb['ac_only'].append(cell_data)
@@ -259,22 +275,22 @@ class Tc_sorter:
                 i = 11
                 if cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Driver_Online_In'].append(cell_data)
-                    name_and_num['num_dri_on_in'] += 1
+                    name_and_num['Driver_Online_In'] += 1
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_out':
                     self.wb['Driver_Online_Out'].append(cell_data)
-                    name_and_num['num_dri_on_out'] += 1
+                    name_and_num['Driver_Online_Out'] += 1
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_in':
                     self.wb['Driver_Offline_In'].append(cell_data)
-                    name_and_num['num_dri_off_in'] += 1
+                    name_and_num['Driver_Offline_In'] += 1
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_out':
                     self.wb['Driver_Offline_Out'].append(cell_data)
-                    name_and_num['num_dri_off_out'] += 1
+                    name_and_num['Driver_Offline_Out'] += 1
                 elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
                     self.wb['Guest_Online_In'].append(cell_data)
-                    name_and_num['num_ges_on_in'] += 1
+                    name_and_num['Guest_Online_In'] += 1
                 else:
                     self.wb['Other'].append(cell_data)
-                    name_and_num['num_other'] += 1
+                    name_and_num['Other'] += 1
 
         print('Saving the file named {}\n'.format(self.output_name))
         self.wb.save(self.output_name)
@@ -283,19 +299,19 @@ class Tc_sorter:
         print('[SUMMARY]')
         overall = 0
         for name in name_and_num:
-            print('{}: {}'.format(name, name_and_num[name]))
+            print('num_{}: {}'.format(name, name_and_num[name]))
             overall += int(name_and_num[name])
         
-        print('Overall: {}'.format(overall))
+        print('Overall Sum: {}'.format(overall))
         print('===============================================')
                     
 
         print('Adding data validation to output')
-        self.cell_validation(self.data_sheet['sheet_names'], overall_num)
+        self.cell_validation(self.data_sheet['sheet_names'], name_and_num)
         self.wb.save(self.output_name)
 
         print('Conditional Formatting the cell')
-        self.conditional_formatting(self.data_sheet['sheet_names'], overall_num)
+        self.conditional_formatting(self.data_sheet['sheet_names'], name_and_num)
 
         print('Generating automation case list...')
         self.generate_auto_list()

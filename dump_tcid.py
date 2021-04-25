@@ -1,5 +1,5 @@
 from openpyxl import load_workbook
-import json
+import json, shutil
 
 
 class Dump:
@@ -23,6 +23,8 @@ class Dump:
     def dump(self):
         with open('json\\tcid_and_sheet.json', 'w') as outfile:
             json.dump(self.intel(), outfile)
+
+        shutil.move('C:\\Users\\GM-PC-03\\Documents\\Python\\k1ngjet3r\\test_cases_sorter\\tcid_and_sheet.json', 'C:\\Users\\GM-PC-03\\Documents\\Python\\k1ngjet3r\\test_cases_sorter\\json\\tcid_and_sheet.json')
 
 
 if __name__ == '__main__':

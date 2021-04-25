@@ -104,7 +104,7 @@
         "rid",
         "msg="
     ],
-    "user":[
+    "user_build":[
         "testapp",
         "42be",
         "app-release apk",
@@ -117,7 +117,7 @@
     "trailer":[
         "trailer"
     ],
-    "usb_updatte":[
+    "usb_update":[
         "usb update",
         "usbupdate"
     ]
