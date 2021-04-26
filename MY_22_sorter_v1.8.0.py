@@ -226,7 +226,7 @@ class Tc_sorter:
             #     num_automation += 1
 
             elif self.sorted_manually(cell_data, name_and_num):
-                pass
+                continue
 
             # Append the case to "auto" if the case ID is in the "auto_case_id.json"
             elif cell_data[0] in self.auto_case_list['auto'] or cell_data[0] in self.auto_case_list['fuel_sim']:
