@@ -59,14 +59,14 @@ def fuel_sim(cell_data):
 
 def did_case(cell_data):
     did = keywords['did']
-    user = keywords['user']
+    user = keywords['user_build']
     # search DID-related case ID in test obnjective
     if matcher_slice(did, cell_data[pre_index+3]) and not matcher_slice(user, cell_data[pre_index+3]):
         return True
     return False
 
 def user_build_only(cell_data):
-    user = keywords['user']
+    user = keywords['user_build']
     if matcher_slice(user, cell_data[pre_index+3]) or matcher_slice(user, cell_data[pre_index]):
         return True
     return False

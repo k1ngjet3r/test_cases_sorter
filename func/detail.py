@@ -56,7 +56,7 @@ def connection(cell_data):
     else:
         cell_data.append('Online')
 
-def user(self, cell_data):
+def user(cell_data):
     guest = keywords['guest']
     non_guest = keywords['non_guest']
     others = keywords['others']

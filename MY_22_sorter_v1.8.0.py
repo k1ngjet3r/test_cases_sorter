@@ -45,6 +45,9 @@ class Tc_sorter:
         self.keywords = json_directory('keywords.json')
         self.auto_case_list = json_directory('auto_case_id.json')
 
+        Dump('W17_Main_sorted.xlsx').dump()
+        self.tcid_and_sheet = json_directory('tcid_and_sheet.json')
+
         # Loading the resut from last week
         self.last_week_result = (
             load_workbook(self.last_week))
@@ -141,12 +144,9 @@ class Tc_sorter:
         auto_case_list_gen(self.output_name)
 
     def sorted_manually(self, cell_data, name_and_num):
-        Dump('W17_Main_sorted.xlsx').dump()
-        tcid_and_sheet = json_directory('tcid_and_sheet.json')
-
         # Sorting the case based on organized sheet dict
-        for sheet_name in tcid_and_sheet:
-            if cell_data[0] in tcid_and_sheet[sheet_name]:
+        for sheet_name in self.tcid_and_sheet:
+            if cell_data[0] in self.tcid_and_sheet[sheet_name]:
                 sheet_name = sheet_name.lower()
                 self.wb[sheet_name].append(cell_data)
                 name_and_num[sheet_name] += 1
@@ -160,7 +160,7 @@ class Tc_sorter:
         print('Last week result loaded successfully')
         # difficult_cases_list = self.difficult_cases()
         print('Difficult case list generated')
-        location_dict = self.tc_location_dict()
+        location_dict = tc_location_dict()
         print('Test case location dictionary generated')
         print('Iterating through the test plan......')
 
@@ -225,8 +225,13 @@ class Tc_sorter:
             #     self.wb['automation'].append(cell_data)
             #     num_automation += 1
 
-            elif self.sorted_manually(cell_data, name_and_num):
-                continue
+            elif cell_data[0] in self.tcid_and_sheet['DID']:
+                self.wb['did'].append(cell_data)
+                name_and_num['did'] += 1
+
+            elif cell_data[0] in self.tcid_and_sheet['User_Build']:
+                self.wb['user_build'].append(cell_data)
+                name_and_num['user_build'] += 1
 
             # Append the case to "auto" if the case ID is in the "auto_case_id.json"
             elif cell_data[0] in self.auto_case_list['auto'] or cell_data[0] in self.auto_case_list['fuel_sim']:
@@ -258,7 +263,7 @@ class Tc_sorter:
 
             elif call_SMS(cell_data):
                 self.wb['Call&SMS'].append(cell_data)
-                name_and_num['Call'] += 1
+                name_and_num['Call&SMS'] += 1
             
             elif trailer_case(cell_data):
                 self.wb['trailer'].append(cell_data)
@@ -320,6 +325,6 @@ class Tc_sorter:
 
 if __name__ == '__main__':
     # __init__(self, test_case_list, last_week, continue_from=False)
-    testing = Tc_sorter('W17_358_MainLine_cases.xlsx', 'Logan不要拉拉拉拉拉_W16_Main_sorted.xlsx', continue_from=False)
+    testing = Tc_sorter('W18_production_cases.xlsx', 'W17_Production_sorted.xlsx', continue_from=False)
     testing.sorting()
   
