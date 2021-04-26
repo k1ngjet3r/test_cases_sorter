@@ -34,7 +34,7 @@ class Tc_sorter:
     def __init__(self, test_case_list, last_week, continue_from=False):
         print('Initiallizing...')
         self.test_case_list = str(test_case_list)
-        self.output_name = test_case_list[:3] + '______Production_sorted.xlsx'
+        self.output_name = test_case_list[:3] + '_Main_sorted.xlsx'
         self.last_week = str(last_week)
         self.sheet = (load_workbook(self.test_case_list)).active
         print('{} loaded successfully'.format(self.test_case_list))
@@ -364,7 +364,7 @@ class Tc_sorter:
                 name_and_num['num_trailer'] += 1
 
             elif self.screen_size_13(cell_data):
-                self.wb['13_inch']
+                self.wb['13_inch'].append(cell_data)
                 name_and_num['num_13_inch'] += 1
 
             # elif self.ac_only(cell_data):
@@ -406,12 +406,14 @@ class Tc_sorter:
         print('===============================================')
                     
 
+        num_list = [i for i in name_and_num.values()]
+
         print('Adding data validation to output')
-        self.cell_validation(self.data_sheet['sheet_names'], overall_num)
+        self.cell_validation(self.data_sheet['sheet_names'], num_list)
         self.wb.save(self.output_name)
 
         print('Conditional Formatting the cell')
-        self.conditional_formatting(self.data_sheet['sheet_names'], overall_num)
+        self.conditional_formatting(self.data_sheet['sheet_names'], num_list)
 
         print('Generating automation case list...')
         self.generate_auto_list()
@@ -420,6 +422,6 @@ class Tc_sorter:
 
 if __name__ == '__main__':
     # __init__(self, test_case_list, last_week, continue_from=False)
-    testing = Tc_sorter('W17_production_cases.xlsx', 'W16_production_line_sorteds.xlsx', continue_from=False)
+    testing = Tc_sorter('W18_Main_cases.xlsx', 'W17_Main_sorted.xlsx', continue_from=False)
     testing.sorting()
   
