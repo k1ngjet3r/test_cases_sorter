@@ -45,7 +45,7 @@ class Tc_sorter:
         self.keywords = json_directory('keywords.json')
         self.auto_case_list = json_directory('auto_case_id.json')
 
-        Dump('W17_Main_sorted.xlsx').dump()
+        # Dump('W17_Main_sorted.xlsx').dump()
         self.tcid_and_sheet = json_directory('tcid_and_sheet.json')
 
         # Loading the resut from last week
@@ -153,7 +153,6 @@ class Tc_sorter:
                 return True
         return False
 
-
     def sorting(self):
         print('Opening a new sheet...')
         sheet = self.sheet
@@ -174,7 +173,7 @@ class Tc_sorter:
         # Iterate through the unprocessd test cases
         # Only getting the first 5 values of each row (tc, precondition, test_steps, expected_result, test_objective}
         for row in sheet.iter_rows(max_col=5, values_only=True):
-            print('Iterate case no. {}'.format(k))
+            print('Iterate case no. {}: {}'.format(k, row[0]))
             # turn the data into a list
             cell_data = []
             for cell in row:
@@ -206,6 +205,8 @@ class Tc_sorter:
             for i in range(4):
                 if cell_data[0] in last_week_dict:
                     cell_data.append(last_week_dict[cell_data[0]][i])
+                else:
+                    cell_data.append(' ')
 
             # Forming the final format
             cell_data = cell_data[:5] + [cell_data[-1]] + cell_data[5:-1]
@@ -219,7 +220,6 @@ class Tc_sorter:
             if cell_data[-3] == 'Fail':
                 self.wb['Difficult_cases'].append(cell_data)
                 name_and_num['Difficult_cases'] += 1
-                break
 
             # elif cell_data[0].lower() in auto_list:
             #     self.wb['automation'].append(cell_data)
