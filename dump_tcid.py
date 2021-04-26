@@ -7,7 +7,7 @@ class Dump:
         self.wb = load_workbook(file_name)
 
     def intel(self):
-        target_sheet = ['trailer', 'DID', 'User_Build']
+        target_sheet = ['DID', 'User_Build']
         intel = {}
         for sheet in target_sheet:
             print('generate the {} list'.format(sheet))
