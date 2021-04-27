@@ -29,12 +29,11 @@ class Dump:
             tcid_dict = self.intel(sheet_list)
             for tcid in tcid_dict:
                 json_file[tcid] = tcid_dict[tcid]
-        # print(json_file)
-        # json_obj = json.dumps(json_file)
+
         with open('json\\locked_tcid.json', 'w') as outfile:
             json.dump(json_file, outfile)
-            
-            
+
+
 
 if __name__ == '__main__':
     Dump('W17_Main_sorted.xlsx').dump(['DID', 'User_Build'])

@@ -1,7 +1,7 @@
 {
     "sheet_names": [
         "Difficult_cases",
-        "Bench_only",
+        "Bench_Only",
         "Driver_Online_In",
         "Driver_Online_Out",
         "Driver_Offline_In",
@@ -10,13 +10,13 @@
         "Other",
         "Nav",
         "Call&SMS",
-        "did",
-        "user_build",
-        "usb_update",
-        "trailer",
+        "DID",
+        "User_Build",
+        "Usb_udate",
+        "Trailer",
         "13_inch",
-        "auto",
-        "automation"
+        "Auto",
+        "Automation"
     ],
     "titles": [
         "Original GM TC ID",
