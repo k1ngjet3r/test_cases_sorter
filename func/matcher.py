@@ -1,7 +1,8 @@
 import re
 
 def matcher_slice(keywords, cell_data):
-    sen = str(cell_data).replace('"', '').lower()
+    sen = str(cell_data).lower()
+    # sen = str(cell_data).replace('"', '').lower()
     for key in keywords:
         if re.search(key, sen):
             return True
