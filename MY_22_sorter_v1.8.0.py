@@ -30,6 +30,7 @@ def json_directory(json_name):
 #         except:
 #             break
 
+
 class Tc_sorter:
     def __init__(self, test_case_list, last_week, continue_from=False):
         print('Initiallizing...')
@@ -159,7 +160,7 @@ class Tc_sorter:
         print('Last week result loaded successfully')
         # difficult_cases_list = self.difficult_cases()
         print('Difficult case list generated')
-        location_dict = tc_location_dict()
+        location_dict = json('tc_location.json')
         print('Test case location dictionary generated')
         print('Iterating through the test plan......')
 
@@ -310,20 +311,22 @@ class Tc_sorter:
         print('Overall Sum: {}'.format(overall))
         print('===============================================')
 
-
         print('Adding data validation to output')
         self.cell_validation(self.data_sheet['sheet_names'], name_and_num)
         self.wb.save(self.output_name)
 
         print('Conditional Formatting the cell')
-        self.conditional_formatting(self.data_sheet['sheet_names'], name_and_num)
+        self.conditional_formatting(
+            self.data_sheet['sheet_names'], name_and_num)
 
         print('Generating automation case list...')
         self.generate_auto_list()
 
         print('Done')
 
+
 if __name__ == '__main__':
     # __init__(self, test_case_list, last_week, continue_from=False)
-    testing = Tc_sorter('W18_production_cases.xlsx', 'W17_Production_sorted.xlsx', continue_from=False)
+    testing = Tc_sorter('W18_production_cases.xlsx',
+                        'W17_Production_sorted.xlsx', continue_from=False)
     testing.sorting()
