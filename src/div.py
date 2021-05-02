@@ -1,5 +1,5 @@
 from openpyxl import load_workbook
-from func.matcher import *
+from src.matcher import *
 import json
 
 # the index of the precondition
@@ -89,5 +89,12 @@ def usb_update(cell_data):
     usb_update_kw = keywords['usb_update']
     for i in range(4):
         if matcher_slice(usb_update_kw, cell_data[pre_index+i]):
+            return True
+    return False
+
+def tja(cell_data):
+    tja_kw = keywords['tja']
+    for i in range(4):
+        if matcher_slice(tja_kw, cell_data[pre_index+i]):
             return True
     return False
