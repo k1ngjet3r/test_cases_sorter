@@ -13,7 +13,7 @@ def formater(text):
 
 
 def auto_case_list_gen(input_name):
-    output_name = input_name[:-11] + '_auto_case.xlsx'
+    output_name = input_name[:-11] + 'auto_case.xlsx'
 
     # Loading the full-list file
     full_list = load_workbook(input_name)['Auto']
