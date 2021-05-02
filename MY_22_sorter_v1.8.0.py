@@ -240,19 +240,19 @@ class Tc_sorter:
                 self.wb['phone_projection_1'].append(cell_data)
                 name_and_num['phone_projection_1'] += 1
 
-            elif cell_data[0] in self.locked_tcid['DID']:
+            elif cell_data[0].lower() in [i.lower() for i in self.locked_tcid['DID']]:
                 self.wb['DID'].append(cell_data)
                 name_and_num['DID'] += 1
 
-            elif cell_data[0] in self.locked_tcid['User_Build']:
+            elif cell_data[0].lower() in [i.lower() for i in self.locked_tcid['User_Build']]:
                 self.wb['User_Build'].append(cell_data)
                 name_and_num['User_Build'] += 1
 
-            elif cell_data[0] in self.locked_tcid['Security_Lock']:
+            elif cell_data[0].lower() in [i.lower() for i in self.locked_tcid['Security_Lock']]:
                 self.wb['Security_Lock'].append(cell_data)
                 name_and_num['Security_Lock'] += 1
 
-            elif cell_data[0] in self.locked_tcid['Google_Setup_wizard']:
+            elif cell_data[0].lower() in [i.lower() for i in self.locked_tcid['Google_Setup_wizard']]:
                 self.wb['Google_Setup_wizard'].append(cell_data)
                 name_and_num['Google_Setup_wizard'] += 1
 
@@ -297,7 +297,7 @@ class Tc_sorter:
                 name_and_num['Trailer'] += 1
 
             elif screen_size_13(cell_data):
-                self.wb['13_inch']
+                self.wb['13_inch'].append(cell_data)
                 name_and_num['13_inch'] += 1
 
             # elif self.ac_only(cell_data):
@@ -317,9 +317,9 @@ class Tc_sorter:
                 elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_out':
                     self.wb['Driver_Offline_Out'].append(cell_data)
                     name_and_num['Driver_Offline_Out'] += 1
-                elif cell_data[i] == 'Guest' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
-                    self.wb['Guest_Online_In'].append(cell_data)
-                    name_and_num['Guest_Online_In'] += 1
+                elif cell_data[i] == 'Guest':
+                    self.wb['Guest'].append(cell_data)
+                    name_and_num['Guest'] += 1
                 else:
                     self.wb['Other'].append(cell_data)
                     name_and_num['Other'] += 1
