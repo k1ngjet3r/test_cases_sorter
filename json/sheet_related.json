@@ -6,7 +6,7 @@
         "Driver_Online_Out",
         "Driver_Offline_In",
         "Driver_Offline_Out",
-        "Guest_Online_In",
+        "Guest",
         "Other",
         "Nav",
         "Call&SMS",

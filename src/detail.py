@@ -5,13 +5,16 @@ import json
 # the index of the precondition
 pre_index = 5
 
+
 def json_directory(json_name):
     with open('json\\' + json_name) as f:
         return json.load(f)
 
+
 data_sheet = json_directory('sheet_related.json')
 keywords = json_directory('keywords.json')
 auto_case_list = json_directory('auto_case_id.json')
+
 
 def tc_location_dict():
     tc_location = load_workbook('TC_location.xlsx').active
@@ -20,6 +23,8 @@ def tc_location_dict():
         max_col=2, values_only=True) if TCID is not None}
 
 # Determine the phone type (iPhone or Android)
+
+
 def phone_type(cell_data):
     iphone = keywords['iphone']
     android = keywords['android']
@@ -39,15 +44,16 @@ def phone_type(cell_data):
         cell_data.append(' ')
 
 # Determine the sign-in or -out
+
+
 def sign_status(cell_data):
     sign_out = keywords['sign_out']
     sign_in = keywords['sign_in']
     if matcher_slice(sign_out, cell_data[pre_index]):
         cell_data.append('sign_out')
-    elif matcher_slice(sign_in, cell_data[pre_index]):
-        cell_data.append('sign_in')
     else:
-        cell_data.append(' ')
+        cell_data.append('sign_in')
+
 
 def connection(cell_data):
     offline = keywords['offline']
@@ -55,6 +61,7 @@ def connection(cell_data):
         cell_data.append('Offline')
     else:
         cell_data.append('Online')
+
 
 def user(cell_data):
     guest = keywords['guest']
