@@ -44,9 +44,8 @@ class Tc_sorter:
         self.data_sheet = json_directory('sheet_related.json')
         self.keywords = json_directory('keywords.json')
         self.auto_case_list = json_directory('auto_case_id.json')
-
-        # Dump('W17_Main_sorted.xlsx').dump()
-        self.tcid_and_sheet = json_directory('locked_tcid.json')
+        self.locked_tcid = json_directory('locked_tcid.json')
+        self.auto_packages = json_directory('auto_packages.json')
 
         # Loading the resut from last week
         self.last_week_result = (
@@ -145,9 +144,9 @@ class Tc_sorter:
 
     def sorted_manually(self, cell_data, name_and_num):
         # Sorting the case based on organized sheet dict
-        tcid_and_sheet = json_directory('tcid_and_sheet.json')
-        for sheet_name in tcid_and_sheet:
-            if cell_data[0] in tcid_and_sheet[sheet_name]:
+        locked_tcid = json_directory('locked_tcid.json')
+        for sheet_name in locked_tcid:
+            if cell_data[0] in locked_tcid[sheet_name]:
                 sheet_name = sheet_name.lower()
                 self.wb[sheet_name.lower()].append(cell_data)
                 name_and_num[sheet_name] += 1
@@ -225,12 +224,27 @@ class Tc_sorter:
             # elif cell_data[0].lower() in auto_list:
             #     self.wb['automation'].append(cell_data)
             #     num_automation += 1
+            elif cell_data[0].lower() in [i.lower() for i in self.auto_packages['SQ_trailer_suv']]:
+                self.wb['SQ_trailer_suv'].append(cell_data)
+                name_and_num['SQ_trailer_suv'] += 1
 
-            elif cell_data[0] in self.tcid_and_sheet['DID']:
+            elif cell_data[0].lower() in [i.lower() for i in self.auto_packages['SQ_waa_1']]:
+                self.wb['SQ_waa_1'].append(cell_data)
+                name_and_num['SQ_waa_1'] += 1
+
+            elif cell_data[0].lower() in [i.lower() for i in self.auto_packages['waa_1']]:
+                self.wb['waa_1'].append(cell_data)
+                name_and_num['waa_1'] += 1
+
+            elif cell_data[0].lower() in [i.lower() for i in self.auto_packages['phone_projection_1']]:
+                self.wb['phone_projection_1'].append(cell_data)
+                name_and_num['phone_projection_1'] += 1
+
+            elif cell_data[0] in self.locked_tcid['DID']:
                 self.wb['DID'].append(cell_data)
                 name_and_num['DID'] += 1
 
-            elif cell_data[0] in self.tcid_and_sheet['User_Build']:
+            elif cell_data[0] in self.locked_tcid['User_Build']:
                 self.wb['User_Build'].append(cell_data)
                 name_and_num['User_Build'] += 1
 
