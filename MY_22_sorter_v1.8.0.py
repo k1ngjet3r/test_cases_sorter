@@ -3,9 +3,9 @@ from openpyxl import Workbook, formatting, styles
 import json
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule
-from func.auto_case_list_gen import auto_case_list_gen
-from func.div import *
-from func.detail import *
+from src.auto_case_list_gen import auto_case_list_gen
+from src.div import *
+from src.detail import *
 
 # the index of the precondition
 pre_index = 5
@@ -35,7 +35,7 @@ class Tc_sorter:
     def __init__(self, test_case_list, last_week, continue_from=False):
         print('Initiallizing...')
         self.test_case_list = str(test_case_list)
-        self.output_name = test_case_list[:3] + 'Main_sorted.xlsx'
+        self.output_name = test_case_list[:-10] + 'sorted.xlsx'
         self.last_week = str(last_week)
         self.sheet = (load_workbook(self.test_case_list)).active
         print('{} loaded successfully'.format(self.test_case_list))
@@ -160,7 +160,7 @@ class Tc_sorter:
         print('Last week result loaded successfully')
         # difficult_cases_list = self.difficult_cases()
         print('Difficult case list generated')
-        location_dict = json('tc_location.json')
+        location_dict = tc_location_dict()
         print('Test case location dictionary generated')
         print('Iterating through the test plan......')
 
@@ -247,6 +247,10 @@ class Tc_sorter:
                 self.wb['User_Build'].append(cell_data)
                 name_and_num['User_Build'] += 1
 
+            elif tja(cell_data):
+                self.wb['TJA'].append(cell_data)
+                name_and_num['TJA'] += 1
+
             elif usb_update(cell_data):
                 self.wb['Usb_update'].append(cell_data)
                 name_and_num['Usb_update'] += 1
@@ -327,6 +331,10 @@ class Tc_sorter:
 
 if __name__ == '__main__':
     # __init__(self, test_case_list, last_week, continue_from=False)
-    testing = Tc_sorter('W18_production_cases.xlsx',
-                        'W17_Production_sorted.xlsx', continue_from=False)
+    testing = Tc_sorter('W19_production_cases.xlsx',
+                        'W18_Production_sorted.xlsx', continue_from=False)
+    testing.sorting()
+
+    testing = Tc_sorter('W19_Main_cases.xlsx',
+                        'W18_Main_sorted.xlsx', continue_from=False)
     testing.sorting()
