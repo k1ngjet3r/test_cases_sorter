@@ -46,7 +46,7 @@ class Tc_sorter:
         self.auto_case_list = json_directory('auto_case_id.json')
 
         # Dump('W17_Main_sorted.xlsx').dump()
-        self.tcid_and_sheet = json_directory('tcid_and_sheet.json')
+        self.tcid_and_sheet = json_directory('locked_tcid.json')
 
         # Loading the resut from last week
         self.last_week_result = (
