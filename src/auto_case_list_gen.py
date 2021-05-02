@@ -13,10 +13,10 @@ def formater(text):
 
 
 def auto_case_list_gen(input_name):
-    output_name = input_name[:3] + '_auto_case.xlsx'
+    output_name = input_name[:-11] + '_auto_case.xlsx'
 
     # Loading the full-list file
-    full_list = load_workbook(input_name)['auto']
+    full_list = load_workbook(input_name)['Auto']
 
     # Creating the automation-related cases spreadsheet
     wb = Workbook()

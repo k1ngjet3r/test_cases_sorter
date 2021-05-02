@@ -40,7 +40,7 @@
         "tc_gb_did_physical_734",
         "tc_gb_did_physical_735"
     ],
-    "Security Lock": [
+    "Security_Lock": [
         "tc_mfl_217869_userprofile_0001",
         "tc_pinui_switchuser_001",
         "tc_pinui_switchuser_004",
@@ -70,7 +70,7 @@
         "tc_projection_wiredcarplay_multi_user_004",
         "tc_projection_wirelesscarplay_multi_user_011"
     ],
-    "Google Setup wizard": [
+    "Google_Setup_wizard": [
         "tc_gas_suw_0021",
         "tc_gas_suw_0022",
         "tc_gas_suw_0023",

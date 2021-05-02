@@ -248,6 +248,14 @@ class Tc_sorter:
                 self.wb['User_Build'].append(cell_data)
                 name_and_num['User_Build'] += 1
 
+            elif cell_data[0] in self.locked_tcid['Security_Lock']:
+                self.wb['Security_Lock'].append(cell_data)
+                name_and_num['Security_Lock'] += 1
+
+            elif cell_data[0] in self.locked_tcid['Google_Setup_wizard']:
+                self.wb['Google_Setup_wizard'].append(cell_data)
+                name_and_num['Google_Setup_wizard'] += 1
+
             # Append the case to "auto" if the case ID is in the "auto_case_id.json"
             elif cell_data[0] in self.auto_case_list['Auto'] or cell_data[0] in self.auto_case_list['fuel_sim']:
                 self.wb['Auto'].append(cell_data)
