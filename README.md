@@ -14,6 +14,12 @@ To make our life easier by avoiding sort the 1000+ test cases manually
 4. Execute the script and wait for the output file generated
 
 ## Version History
+* V1.8.0
+    * Isolate the functions to a separate directory for easy maintence
+    * Remove the need of generate the test cases' location dictionary every single use by generate tc_location.json to store the data
+    * Adding the locked tcid json generator for manually sorted cases
+    * Automaticially adding the cell validation to cell 
+
 * V1.6.0
     * Update eli.py with new TCID-only or TCID with test detail functions
     * Auto-generate the difficult case list without manually import the list by determine the last week's test result

@@ -19,6 +19,14 @@
         "no google user is logged  in",
         "no user is signed in"
     ],
+    "sign_in": [
+        "signed in",
+        "sign in",
+        "signedin",
+        "sign-in",
+        "signin",
+        "signedin"
+    ],
     "offline": [
         "offline"
     ],
@@ -96,7 +104,7 @@
         "rid",
         "msg="
     ],
-    "user":[
+    "user_build":[
         "testapp",
         "42be",
         "app-release apk",
@@ -108,5 +116,12 @@
     ],
     "trailer":[
         "trailer"
+    ],
+    "usb_update":[
+        "usb update",
+        "usbupdate"
+    ],
+    "tja":[
+        "tja"
     ]
 }
