@@ -1,3 +1,8 @@
+'''
+    Welcome to tc_sorter v1.8.0
+    Created by Jeter Lin
+'''
+
 from openpyxl import load_workbook
 from openpyxl import Workbook, formatting, styles
 import json
