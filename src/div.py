@@ -27,7 +27,7 @@ def bench_only(cell_data):
     for cell in cell_data[pre_index+1:pre_index+5]:
         if (matcher_slice(press_button, cell) or matcher_slice(cluster, cell) or matcher_slice(speed_limit, cell)) and not matcher_slice(expection, cell):
             return True
-        return False
+    return False
 
 def ac_only(cell_data):
     ac = keywords['ac']
@@ -35,7 +35,7 @@ def ac_only(cell_data):
     for cell in cell_data[pre_index:pre_index+3]:
         if matcher_slice(ac, cell) or matcher_split(ac_split, cell):
             return True
-        return False
+    return False
 
 def nav_case(cell_data):
     # Finding the navigation-related cases using TCID

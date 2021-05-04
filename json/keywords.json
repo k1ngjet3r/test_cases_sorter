@@ -51,8 +51,6 @@
     "push_button": [
         "short press  vr  key",
         "long press  vr  key",
-        "long press",
-        "short press",
         "press  end  key",
         "press PTT button",
         "ptt",
@@ -123,5 +121,8 @@
     ],
     "tja":[
         "tja"
+    ],
+    "Nav":[
+        "maps"
     ]
 }
