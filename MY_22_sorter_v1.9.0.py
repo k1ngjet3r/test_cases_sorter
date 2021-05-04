@@ -245,6 +245,14 @@ class Tc_sorter:
                 self.wb['phone_projection_1'].append(cell_data)
                 name_and_num['phone_projection_1'] += 1
 
+
+
+
+
+
+
+
+
             elif cell_data[0].lower() in [i.lower() for i in self.locked_tcid['DID']]:
                 self.wb['DID'].append(cell_data)
                 name_and_num['DID'] += 1
@@ -260,6 +268,11 @@ class Tc_sorter:
             elif cell_data[0].lower() in [i.lower() for i in self.locked_tcid['Google_Setup_Wizard']]:
                 self.wb['Google_Setup_Wizard'].append(cell_data)
                 name_and_num['Google_Setup_Wizard'] += 1
+
+
+
+
+
 
             # Append the case to "auto" if the case ID is in the "auto_case_id.json"
             elif cell_data[0] in self.auto_case_list['Auto'] or cell_data[0] in self.auto_case_list['fuel_sim']:

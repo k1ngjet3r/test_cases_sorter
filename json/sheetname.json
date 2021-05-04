@@ -1,3 +1,46 @@
 {
-    "13_inch": {"mode": "", "number": }
+    "TJA": {
+        "mode": "keywords_with_range",
+        "number": 4,
+        "keyword": ["tja"],
+        "type": "range"
+    },
+    "Usb_Update": {
+        "mode": "keywords_with_range",
+        "number": 4,
+        "keyword": ["usb_update"],
+        "type":"range"
+    },
+    "Nav": {
+        "mode": "locked_tcid",
+        "keyword": "Nav"
+    },
+    "Bench_Only": {
+        "mode": "keywords_with_range",
+        "number": 5,
+        "keyword": [
+            "push_button",
+            "cluster",
+            "speed_limit"
+        ],
+        "type":"range"
+    },
+    "Call&SMS": {
+        "mode": "keywords_with_range",
+        "number": 2,
+        "keyword": ["call_sms"],
+        "type": "single"
+    },
+    "Trailer": {
+        "mode": "keywords_with_range",
+        "number": 4,
+        "keyword": ["trailer"],
+        "type":"range"
+    },
+    "13_inch": {
+        "mode": "keywords_with_range",
+        "number": 4,
+        "keyword": ["13_inch"],
+        "type":"range"
+    }
 }
