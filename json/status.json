@@ -1,0 +1,7 @@
+{
+    "Driver_Online_In": ["Driver", "Online", "sign_in"],
+    "Driver_Online_Out": ["Driver", "Online", "sign_out"],
+    "Driver_Offline_In": ["Driver", "Offline", "sign_in"],
+    "Driver_Offline_Out": ["Driver", "offline", "sign_out"],
+    "Guest": ["Guest"]
+}

@@ -11,6 +11,7 @@ from openpyxl.formatting.rule import CellIsRule
 from src.auto_case_list_gen import auto_case_list_gen
 from src.div import *
 from src.detail import *
+from src.new_div import Div
 
 # the index of the precondition
 pre_index = 5
@@ -226,100 +227,15 @@ class Tc_sorter:
                 self.wb['Difficult_cases'].append(cell_data)
                 name_and_num['Difficult_cases'] += 1
 
-            # elif cell_data[0].lower() in auto_list:
-            #     self.wb['automation'].append(cell_data)
-            #     num_automation += 1
-            elif cell_data[0].lower() in [i.lower() for i in self.auto_packages['SQ_trailer_suv']]:
-                self.wb['SQ_trailer_suv'].append(cell_data)
-                name_and_num['SQ_trailer_suv'] += 1
-
-            elif cell_data[0].lower() in [i.lower() for i in self.auto_packages['SQ_waa_1']]:
-                self.wb['SQ_waa_1'].append(cell_data)
-                name_and_num['SQ_waa_1'] += 1
-
-            elif cell_data[0].lower() in [i.lower() for i in self.auto_packages['waa_1']]:
-                self.wb['waa_1'].append(cell_data)
-                name_and_num['waa_1'] += 1
-
-            elif cell_data[0].lower() in [i.lower() for i in self.auto_packages['phone_projection_1']]:
-                self.wb['phone_projection_1'].append(cell_data)
-                name_and_num['phone_projection_1'] += 1
-
-
-
-
-
-
-
-
-
-            elif cell_data[0].lower() in [i.lower() for i in self.locked_tcid['DID']]:
-                self.wb['DID'].append(cell_data)
-                name_and_num['DID'] += 1
-
-            elif cell_data[0].lower() in [i.lower() for i in self.locked_tcid['User_Build']]:
-                self.wb['User_Build'].append(cell_data)
-                name_and_num['User_Build'] += 1
-
-            elif cell_data[0].lower() in [i.lower() for i in self.locked_tcid['Security_Lock']]:
-                self.wb['Security_Lock'].append(cell_data)
-                name_and_num['Security_Lock'] += 1
-
-            elif cell_data[0].lower() in [i.lower() for i in self.locked_tcid['Google_Setup_Wizard']]:
-                self.wb['Google_Setup_Wizard'].append(cell_data)
-                name_and_num['Google_Setup_Wizard'] += 1
-
-
-
-
-
-
-            # Append the case to "auto" if the case ID is in the "auto_case_id.json"
             elif cell_data[0] in self.auto_case_list['Auto'] or cell_data[0] in self.auto_case_list['fuel_sim']:
                 self.wb['Auto'].append(cell_data)
                 name_and_num['Auto'] += 1
 
-            elif did_case(cell_data):
-                self.wb['DID'].append(cell_data)
-                name_and_num['DID'] += 1
+            elif Div(cell_data).directing() != None:
+                sheetname = Div(cell_data).directing()
+                self.wb[sheetname].append(cell_data)
+                name_and_num[sheetname] += 1
 
-            elif user_build_only(cell_data):
-                self.wb['User_Build'].append(cell_data)
-                name_and_num['User_Build'] += 1
-
-            elif tja(cell_data):
-                self.wb['TJA'].append(cell_data)
-                name_and_num['TJA'] += 1
-
-            elif usb_update(cell_data):
-                self.wb['Usb_update'].append(cell_data)
-                name_and_num['Usb_update'] += 1
-
-            elif nav_case(cell_data):
-                self.wb['Nav'].append(cell_data)
-                name_and_num['Nav'] += 1
-
-            # elif self.fuel_sim(cell_data):
-            #     self.wb['Fuel_sim'].append(cell_data)
-
-            elif bench_only(cell_data):
-                self.wb['Bench_Only'].append(cell_data)
-                name_and_num['Bench_Only'] += 1
-
-            elif call_SMS(cell_data):
-                self.wb['Call&SMS'].append(cell_data)
-                name_and_num['Call&SMS'] += 1
-
-            elif trailer_case(cell_data):
-                self.wb['Trailer'].append(cell_data)
-                name_and_num['Trailer'] += 1
-
-            elif screen_size_13(cell_data):
-                self.wb['13_inch'].append(cell_data)
-                name_and_num['13_inch'] += 1
-
-            # elif self.ac_only(cell_data):
-            #     self.wb['ac_only'].append(cell_data)
 
             else:
                 i = 11
