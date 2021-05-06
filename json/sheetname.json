@@ -2,7 +2,7 @@
     "TJA": {
         "mode": "keywords_with_range",
         "number": 4,
-        "keyword": ["tja"],
+        "keyword": ["TJA"],
         "type": "range"
     },
     "Usb_Update": {

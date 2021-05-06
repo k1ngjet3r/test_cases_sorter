@@ -224,8 +224,8 @@ class Tc_sorter:
 
             # Append the case to "difficult_cases" sheet based on last week's result
             if cell_data[-3] == 'Fail':
-                self.wb['Difficult_cases'].append(cell_data)
-                name_and_num['Difficult_cases'] += 1
+                self.wb['Difficult_Cases'].append(cell_data)
+                name_and_num['Difficult_Cases'] += 1
 
             elif cell_data[0] in self.auto_case_list['Auto'] or cell_data[0] in self.auto_case_list['fuel_sim']:
                 self.wb['Auto'].append(cell_data)
@@ -236,27 +236,10 @@ class Tc_sorter:
                 self.wb[sheetname].append(cell_data)
                 name_and_num[sheetname] += 1
 
-
             else:
-                i = 11
-                if cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_in':
-                    self.wb['Driver_Online_In'].append(cell_data)
-                    name_and_num['Driver_Online_In'] += 1
-                elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Online' and cell_data[i+2] == 'sign_out':
-                    self.wb['Driver_Online_Out'].append(cell_data)
-                    name_and_num['Driver_Online_Out'] += 1
-                elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_in':
-                    self.wb['Driver_Offline_In'].append(cell_data)
-                    name_and_num['Driver_Offline_In'] += 1
-                elif cell_data[i] == 'Driver' and cell_data[i+1] == 'Offline' and cell_data[i+2] == 'sign_out':
-                    self.wb['Driver_Offline_Out'].append(cell_data)
-                    name_and_num['Driver_Offline_Out'] += 1
-                elif cell_data[i] == 'Guest':
-                    self.wb['Guest'].append(cell_data)
-                    name_and_num['Guest'] += 1
-                else:
-                    self.wb['Other'].append(cell_data)
-                    name_and_num['Other'] += 1
+                sheetname = Div(cell_data).status_det()
+                self.wb[sheetname].append(cell_data)
+                name_and_num[sheetname]
 
         print('Saving the file named {}\n'.format(self.output_name))
         self.wb.save(self.output_name)
@@ -289,10 +272,10 @@ class Tc_sorter:
 
 if __name__ == '__main__':
     # __init__(self, test_case_list, last_week, continue_from=False)
-    testing = Tc_sorter('W19_production_cases.xlsx',
-                        'W18_Production_sorted.xlsx', continue_from=False)
-    testing.sorting()
+    # testing = Tc_sorter('W19_production_cases.xlsx',
+    #                     'W18_Production_sorted.xlsx', continue_from=False)
+    # testing.sorting()
 
-    testing = Tc_sorter('W19_Main_cases.xlsx',
-                        'W18_Main_sorted.xlsx', continue_from=False)
+    testing = Tc_sorter('W17_Main_cases.xlsx',
+                        'W16_Main_sorted.xlsx', continue_from=False)
     testing.sorting()
